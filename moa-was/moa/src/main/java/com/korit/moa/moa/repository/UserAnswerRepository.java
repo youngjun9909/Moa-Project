@@ -26,5 +26,5 @@ public interface UserAnswerRepository extends JpaRepository<UserAnswer, Long> {
     List<Object[]> findParticipationStatus(@Param("userId") String userId);
 
     UserAnswer findByGroupIdAndUserId(Long groupId, @NotBlank String userId);
-    
+
 }

@@ -67,7 +67,7 @@ export interface Report {
 }
 
 export interface Review {
-  reviewId: number | null;
+  reviewId: number | undefined;
   userId: string;
   groupId: number;
   groupName: string;

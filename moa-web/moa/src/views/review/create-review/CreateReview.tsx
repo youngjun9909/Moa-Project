@@ -21,8 +21,9 @@ function CreateReview() {
   const [modalMessage, setModalMessage] = useState<string>("");
   const [postClear, setPostClear] = useState<boolean>(false);
   const [reviewImg, setReviewImg] = useState<any>(null);
+  const [firstGroup, setFirstGroup] = useState<number>();
   const [reviewData, setReviewData] = useState<Review>({
-    reviewId: null,
+    reviewId: firstGroup,
     userId: userId,
     groupId: 0,
     groupName: "",
@@ -31,24 +32,48 @@ function CreateReview() {
     reviewImage: null,
   });
 
+  useEffect(() => {
+    if (groupList.length > 0) {
+      const firstGroupId = groupList[0].groupId;
+      setFirstGroup(firstGroupId);
+      setReviewData((prev) => ({
+        ...prev,
+        groupId: firstGroupId, 
+        groupName: groupList[0].groupTitle,
+      }));
+    }
+  }, [groupList]);
+  
+  
+  useEffect(() => {
+    if (firstGroup) {
+      setReviewData((prev) => ({
+        ...prev,
+        groupId: firstGroup, 
+      }));
+    }
+  }, [firstGroup]);
+  
+  
+  
+
   const backPage = () => {
     navigate(-1);
   };
 
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedGroupId = e.target.value;
-    const selectedGroup = groupList.find(
-      (group) => group.groupId === parseInt(selectedGroupId)
-    );
-
+    const selectedGroupId = parseInt(e.target.value);
+    const selectedGroup = groupList.find((group) => group.groupId === selectedGroupId);
+  
     if (selectedGroup) {
-      setReviewData({
-        ...reviewData,
+      setReviewData((prev) => ({
+        ...prev,
         groupId: selectedGroup.groupId,
         groupName: selectedGroup.groupTitle,
-      });
+      }));
     }
   };
+  
 
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const element = e.target;
@@ -91,7 +116,7 @@ function CreateReview() {
 
   const handleReset = () => {
     setReviewData({
-      reviewId: null,
+      reviewId: firstGroup,
       userId: userId,
       groupId: 0,
       groupName: "",
@@ -120,6 +145,8 @@ function CreateReview() {
     });
 
     try {
+      console.log("보내는 groupId:", reviewData.groupId);
+
       const response = await axios.post(
         CREATE_REVIEW_POST_API,
         reviewDataForm,
