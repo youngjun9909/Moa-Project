@@ -1,0 +1,191 @@
+.deletContainer {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #333;
+  margin-top: 100px;
+}
+
+.deleteSection {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.deleteTitle {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+  text-align: center;
+}
+
+.deleteList {
+  list-style-type: disc;
+  padding-left: 20px;
+  margin-bottom: 20px;
+  color: #555;
+}
+
+.deleteList > li {
+  margin-bottom: 10px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.deleteConfirmText {
+  font-size: 16px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.deleteConfirmationForm {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.deleteConfirmationCheckbox {
+  margin-right: 10px;
+  width: 18px;
+  height: 18px;
+}
+
+.deleteConfirmationLabel {
+  font-size: 14px;
+  color: #555;
+}
+
+.deleteNextBtn,
+.deleteRedirectBtn {
+  background-color: #FF7B54;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 12px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.1s ease;
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.deletnextBtn:hover,
+.deleteRedirectBtn:hover {
+  background-color: #e6691e;
+}
+
+.deleteErrorSection {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.deleteErrorMessage {
+  color: #ff0000;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.withdrawalPage {
+  margin: 0;
+  padding: 0;
+  color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 200px;
+}
+
+.confirmationSection {
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.sectionTitle {
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  color: #333;
+  text-align: center;
+  border-bottom: 2px solid #FF7B54;
+  padding-bottom: 10px;
+}
+
+.passwordInput {
+  width: calc(100% - 20px);
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  background-color: #eee;
+  text-align: center;
+  color: #333;
+}
+
+.withdrawalButton {
+  background-color: #FF7B54;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 12px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.3s ease;
+  width: 100%;
+}
+
+.withdrawalButton:hover {
+  background-color: #e6691e;
+}
+
+.errorSection {
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.errorMessage {
+  font-size: 16px;
+  color: #ff0000;
+  margin-bottom: 20px;
+}
+
+.redirectButton {
+  background-color: #ff7f27;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 12px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.3s ease;
+  width: 100%;
+}
+
+.redirectButton:hover {
+  background-color: #e6691e;
+}
