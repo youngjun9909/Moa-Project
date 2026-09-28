@@ -3,12 +3,12 @@ import { css } from "@emotion/react";
 export const fullDiv = css`
   box-sizing: border-box;
   margin: 0;
-  padding: 50px 250px;
-  width: 100vw;
+  padding: clamp(12px, 4vw, 48px);
+  width: 100%;
   height: 100vh;
   display: flex;
   flex-direction: row;
-  background-color: #eee;
+  background-color: var(--moa-bg);
   overflow: hidden;
   
 
@@ -17,4 +17,10 @@ export const fullDiv = css`
   }
   scrollbar-width: none;
   -ms-overflow-style: none;
+
+  @media (max-width: 720px) {
+    padding: 0;
+    height: auto;
+    min-height: 100vh;
+  }
 `;

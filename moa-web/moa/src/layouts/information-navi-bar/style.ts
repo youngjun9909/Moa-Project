@@ -3,16 +3,16 @@ import { css } from "@emotion/react";
 
 export const infoNaviBar = css`
   box-sizing: border-box;
-  padding: 10px;
-  height: 80px;
+  padding: 12px 20px;
+  height: 76px;
   width: 100%;
   overflow: hidden;
-  background-color: #E7E7E7;
-  border-radius: 0px 10px 0px 0px;
+  background-color: var(--moa-surface);
+  border-bottom: 1px solid var(--moa-line);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  min-width: 765px;
+  min-width: 0;
 `;
 
 export const userInfoBox = css`
@@ -47,7 +47,7 @@ export const userImg = css`
 `;
 
 export const userNameBox = css`
-  color: #0a3140;
+  color: var(--moa-ink);
   font-weight: 600;
   padding: 10px;
 `;
@@ -60,7 +60,7 @@ export const userBox = css`
   align-items: center;
   gap: 10px;
   padding: 10px 20px;
-  background-color: #E7E7E7;
+  background-color: var(--moa-surface-muted);
   margin: 0 10px;
   border-radius: 5px;
   cursor: pointer;
@@ -180,4 +180,37 @@ export const naviModal = css`
   border-Radius: 10px;
   box-Shadow: 3;
   padding: 2;
+`;
+
+export const responsiveInfo = css`
+  @media (max-width: 720px) {
+    ${infoNaviBar} {
+      height: auto;
+      min-height: 64px;
+      padding: 10px 12px;
+      gap: 8px;
+    }
+
+    ${naviBox} {
+      gap: 4px;
+      overflow-x: auto;
+    }
+
+    ${fontSt} {
+      display: none;
+    }
+
+    ${naviDiv} {
+      padding: 8px;
+    }
+
+    ${userBox} {
+      margin: 0;
+      padding: 6px;
+    }
+
+    ${userNameBox} {
+      display: none;
+    }
+  }
 `;

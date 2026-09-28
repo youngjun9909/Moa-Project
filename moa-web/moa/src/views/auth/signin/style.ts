@@ -1,8 +1,8 @@
 import { css } from '@emotion/react';
 
 export const fullBox = css`
-  height: 80%;
-  margin: 2%;
+  min-height: 100%;
+  padding: 48px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -10,7 +10,7 @@ export const fullBox = css`
 `;
 
 export const innerBox = css`
-  width: 50%;
+  width: min(100%, 420px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -32,11 +32,11 @@ export const innerBox = css`
 `;
 
 export const topInput = (hasError: boolean) => css`
-  width: 60%;
+  width: 100%;
   height: 40px;
   font-size: 17px;
   padding-left: 10px;
-  border-radius: 5px 5px 0 0 ;
+  border-radius: 10px 10px 0 0;
   border: 1px solid ${hasError ? "#E50914" : "#ccc"};
 
   &:focus {
@@ -48,11 +48,11 @@ export const topInput = (hasError: boolean) => css`
 `;
 
 export const bottomInput = (hasError: boolean) => css`
-  width: 60%;
+  width: 100%;
   height: 40px;
   font-size: 17px;
   padding-left: 10px;
-  border-radius: 0 0 5px 5px;
+  border-radius: 0 0 10px 10px;
   border: 1px solid ${hasError ? "#E50914" : "#ccc"};
   border-top:  1px solid ${hasError ? "#E50914" : "#fff"};
   margin-bottom: 10px;
@@ -68,13 +68,13 @@ export const bottomInput = (hasError: boolean) => css`
 
 
 export const signInBtn = css`
-  width: 63%;
+  width: 100%;
   margin-top: 50px;
   font-size: 17px;
   border-radius: 5px;
   border: none;
   padding: 10px 10px;
-  background-color: #FF7B54;
+  background-color: var(--moa-primary);
   color: #fff;
   cursor: pointer;
   &:hover, :active{
@@ -86,7 +86,7 @@ export const signInBtn = css`
 
 export const linkBox = css`
   margin-top: 25px;
-  width: 60%;
+  width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -121,7 +121,7 @@ export const anotherSignInBox = css`
   flex-direction: row;
   align-items: center;
   border: 1px solid #aaa;
-  width: 63%;
+  width: 100%;
   height: 40px;
   margin-top: 20px;
   border-radius: 5px;

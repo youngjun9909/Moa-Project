@@ -10,6 +10,7 @@ import com.korit.moa.moa.entity.userList.UserList;
 import com.korit.moa.moa.repository.UserListRepository;
 import com.korit.moa.moa.repository.UserRepository;
 import com.korit.moa.moa.service.UserListService;
+import com.korit.moa.moa.service.GroupAuthorizationService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ public class UserListServiceImplement implements UserListService {
 
     private final UserListRepository userListRepository;
     private  final UserRepository userRepository;
+    private final GroupAuthorizationService groupAuthorizationService;
 
     @Override
     public ResponseDto<List<GroupResponseDto>> getMyGroups(String userId) {
@@ -79,10 +81,13 @@ public class UserListServiceImplement implements UserListService {
     }
 
     @Override
-    public ResponseDto<UserLevelResponseDto> putUserLevel(Long groupId, UserLevelRequestDto dto) {
+    public ResponseDto<UserLevelResponseDto> putUserLevel(Long groupId, String managerId, UserLevelRequestDto dto) {
         UserLevelResponseDto data = null;
         UserLevel userLevel = dto.getUserLevel();
         String userId =  dto.getUserId();
+        if (!groupAuthorizationService.isManager(groupId, managerId)) {
+            return ResponseDto.setFailed(ResponseMessage.NO_PERMISSION);
+        }
         if(userLevel .equals("관리자")) {
             return ResponseDto.setFailed(ResponseMessage.NO_PERMISSION);
         }
@@ -105,7 +110,10 @@ public class UserListServiceImplement implements UserListService {
     }
 
     @Override
-    public ResponseDto<Void> deleteUser(Long groupId, String userId) {
+    public ResponseDto<Void> deleteUser(Long groupId, String managerId, String userId) {
+        if (!groupAuthorizationService.isManager(groupId, managerId)) {
+            return ResponseDto.setFailed(ResponseMessage.NO_PERMISSION);
+        }
         try{
 
             Optional<User> userOptional = userRepository.findByUserId(userId);

@@ -6,6 +6,7 @@ import com.korit.moa.moa.dto.group.request.RequestGroupDto;
 import com.korit.moa.moa.dto.group.response.HomeGroupResponseDto;
 import com.korit.moa.moa.dto.group.response.ResponseGroupDto;
 import com.korit.moa.moa.dto.group.response.SearchResponseDto;
+import com.korit.moa.moa.dto.group.response.PagedGroupResponseDto;
 import com.korit.moa.moa.entity.meetingGroup.GroupCategory;
 import com.korit.moa.moa.entity.meetingGroup.GroupTypeCategory;
 import com.korit.moa.moa.entity.meetingGroup.MeetingGroup;
@@ -18,6 +19,7 @@ import com.korit.moa.moa.repository.MeetingGroupRepository;
 import com.korit.moa.moa.repository.UserListRepository;
 import com.korit.moa.moa.repository.UserRepository;
 import com.korit.moa.moa.service.ImgFileService;
+import com.korit.moa.moa.service.GroupAuthorizationService;
 import com.korit.moa.moa.service.MeetingGroupService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +42,7 @@ public class MeetingGroupServiceImplement implements MeetingGroupService {
     public final UserListRepository userListRepository;
     public final UserRepository userRepository;
     private final ImgFileService imgFileService;
+    private final GroupAuthorizationService groupAuthorizationService;
 
     @Override
     public ResponseDto<ResponseGroupDto> createGroupMeeting(String userId, RequestGroupDto dto) {
@@ -132,11 +139,14 @@ public class MeetingGroupServiceImplement implements MeetingGroupService {
     }
 
     @Override
-    public ResponseDto<ResponseGroupDto> updateMeetingGroupId(Long groupId, RequestGroupDto dto) {
+    public ResponseDto<ResponseGroupDto> updateMeetingGroupId(Long groupId, String userId, RequestGroupDto dto) {
         ResponseGroupDto data = null;
 
         if (groupId == null ){
             return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_GROUP);
+        }
+        if (!groupAuthorizationService.isManager(groupId, userId)) {
+            return ResponseDto.setFailed(ResponseMessage.NO_PERMISSION);
         }
 
         try {
@@ -185,9 +195,12 @@ public class MeetingGroupServiceImplement implements MeetingGroupService {
 
     @Override
     @Transactional
-    public ResponseDto<Void> deleteMeetingGroupId( Long groupId) {
+    public ResponseDto<Void> deleteMeetingGroupId(Long groupId, String userId) {
         if(groupId == null){
             return ResponseDto.setFailed(ResponseMessage.MESSAGE_SEND_FAIL);
+        }
+        if (!groupAuthorizationService.isManager(groupId, userId)) {
+            return ResponseDto.setFailed(ResponseMessage.NO_PERMISSION);
         }
         try {
             Optional<MeetingGroup> optionalMeetingGroup = meetingGroupRepository.findById(groupId);
@@ -258,64 +271,41 @@ public class MeetingGroupServiceImplement implements MeetingGroupService {
     }
 
     @Override
-    public ResponseDto<List<SearchResponseDto>> findByGroupTitle(String keyword) {
-        List<SearchResponseDto> data = null;
+    public ResponseDto<PagedGroupResponseDto> findByGroupTitle(String keyword, int page, int size, String sortBy) {
 
         if (keyword == null || keyword.trim().isEmpty()) {
             return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_DATA);
         }
 
         try {
-            Optional<List<MeetingGroup>> optionalMeetingGroups = meetingGroupRepository.findByGroupTitle(keyword);
-
-            if(optionalMeetingGroups.isPresent()) {
-                List<MeetingGroup> meetingGroups = optionalMeetingGroups.get();
-
-                data = meetingGroups.stream()
-                        .map(SearchResponseDto::new)
-                        .collect(Collectors.toList());
-            } else {
-                return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_GROUP);
-            }
+            Page<MeetingGroup> groups = meetingGroupRepository.findByGroupTitle(keyword, createPageable(page, size, sortBy));
+            return ResponseDto.setSuccess(ResponseMessage.SUCCESS, toPagedResponse(groups, page, size));
         } catch(Exception e) {
             e.printStackTrace();
             return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
         }
 
-        return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
     }
 
     @Override
-    public ResponseDto<List<SearchResponseDto>> findByGroupType(GroupTypeCategory groupType) {
-        String groupTypes  = groupType.toString();
-
-        List<SearchResponseDto> data = null;
-
-        if(groupTypes == null) {
+    public ResponseDto<PagedGroupResponseDto> findByGroupType(GroupTypeCategory groupType, int page, int size, String sortBy) {
+        if (groupType == null) {
             return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_DATA);
         }
 
         try {
-            Optional<List<MeetingGroup>> optionalMeetingGroups = meetingGroupRepository.findByGroupType(groupType);
-
-            if(optionalMeetingGroups.isPresent()) {
-                List<MeetingGroup> meetingGroups = optionalMeetingGroups.get();
-                data = meetingGroups.stream()
-                        .map(SearchResponseDto::new)
-                        .collect(Collectors.toList());
-            }
-
+            Page<MeetingGroup> groups = meetingGroupRepository.findByGroupType(
+                    groupType, createPageable(page, size, sortBy));
+            return ResponseDto.setSuccess(ResponseMessage.SUCCESS, toPagedResponse(groups, page, size));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
         }
-        return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
     }
 
     @Override
-    public ResponseDto<List<SearchResponseDto>> findByGroupCategoryAndRegion(
-            GroupCategory groupCategory, String region) {
-        List<SearchResponseDto> data = null;
+    public ResponseDto<PagedGroupResponseDto> findByGroupCategoryAndRegion(
+            GroupCategory groupCategory, String region, int page, int size, String sortBy) {
 
         if (groupCategory == null) {
             return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_DATA);
@@ -325,23 +315,34 @@ public class MeetingGroupServiceImplement implements MeetingGroupService {
         }
 
         try {
-            Optional<List<MeetingGroup>> optionalMeetingGroups = meetingGroupRepository
-                    .findByGroupCategoryAndRegion(groupCategory, region);
-
-            if(optionalMeetingGroups.isPresent()) {
-                List<MeetingGroup> meetingGroups = optionalMeetingGroups.get();
-
-                data = meetingGroups.stream()
-                        .map(SearchResponseDto::new)
-                        .collect(Collectors.toList());
-            } else {
-                return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_GROUP);
-            }
+            Page<MeetingGroup> groups = meetingGroupRepository.findByGroupCategoryAndRegion(
+                    groupCategory, region, createPageable(page, size, sortBy));
+            return ResponseDto.setSuccess(ResponseMessage.SUCCESS, toPagedResponse(groups, page, size));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.setFailed(ResponseMessage.DATABASE_ERROR);
         }
-        return ResponseDto.setSuccess(ResponseMessage.SUCCESS, data);
+    }
+
+    private Pageable createPageable(int page, int size, String sortBy) {
+        int safePage = Math.max(page, 1) - 1;
+        int safeSize = Math.min(Math.max(size, 1), 50);
+        Sort sort = switch (sortBy == null ? "default" : sortBy) {
+            case "recent", "past" -> Sort.by("groupDate");
+            default -> Sort.by("groupId");
+        };
+        if ("recent".equals(sortBy)) {
+            sort = sort.descending();
+        }
+        return PageRequest.of(safePage, safeSize, sort);
+    }
+
+    private PagedGroupResponseDto toPagedResponse(Page<MeetingGroup> groups, int page, int size) {
+        List<SearchResponseDto> data = groups.getContent().stream()
+                .map(SearchResponseDto::new)
+                .collect(Collectors.toList());
+        return new PagedGroupResponseDto(data, Math.max(page, 1), Math.min(Math.max(size, 1), 50),
+                groups.getTotalPages(), groups.getTotalElements());
     }
 
     @Override

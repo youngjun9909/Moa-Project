@@ -7,6 +7,7 @@ export const mainContainer = css`
   flex-grow: 1;
   flex-direction: column;
   position: relative;
+  min-width: 0;
 
   ::-webkit-scrollbar {
     display: none;

@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import java.util.List;
 import java.util.Map;
@@ -26,27 +27,33 @@ public class BlackListController {
     private static final String POST_BLACK_LIST = "/{groupId}";
 
     @GetMapping(GET_BLACK_LIST)
-    public ResponseEntity<ResponseDto<List<ResponseGetBlackListDto>>> getBlackList(@PathVariable Long groupId) {
-        ResponseDto<List<ResponseGetBlackListDto>> response = blackListService.getBlackList(groupId);
+    public ResponseEntity<ResponseDto<List<ResponseGetBlackListDto>>> getBlackList(
+            @PathVariable Long groupId,
+            @AuthenticationPrincipal String managerId
+    ) {
+        ResponseDto<List<ResponseGetBlackListDto>> response = blackListService.getBlackList(groupId, managerId);
         HttpStatus status = response.isResult() ? HttpStatus.OK: HttpStatus.BAD_REQUEST;
         return  ResponseEntity.status(status).body(response);
     }
 
     @PostMapping(POST_BLACK_LIST)
     public ResponseEntity<ResponseDto<ResponseBlackListDto>> postBlackList(
-            @PathVariable Long groupId, @RequestBody Map<String, String> reqBody
+            @PathVariable Long groupId,
+            @AuthenticationPrincipal String managerId,
+            @RequestBody Map<String, String> reqBody
     ) {
-        ResponseDto<ResponseBlackListDto> response = blackListService.postBlackList(groupId, reqBody.get("userId"));
+        ResponseDto<ResponseBlackListDto> response = blackListService.postBlackList(groupId, managerId, reqBody.get("userId"));
         HttpStatus status = response.isResult() ? HttpStatus.OK: HttpStatus.BAD_REQUEST;
         return  ResponseEntity.status(status).body(response);
     }
 
     @DeleteMapping
     public ResponseEntity<ResponseDto<Void>> deleteBlackList(
+            @AuthenticationPrincipal String managerId,
             @RequestParam  Long groupId,
             @RequestParam String userId
     ) {
-        ResponseDto<Void> response = blackListService.deleteBlackList(groupId, userId);
+        ResponseDto<Void> response = blackListService.deleteBlackList(groupId, managerId, userId);
         HttpStatus status = response.isResult() ? HttpStatus.OK: HttpStatus.BAD_REQUEST;
         return  ResponseEntity.status(status).body(response);
     }

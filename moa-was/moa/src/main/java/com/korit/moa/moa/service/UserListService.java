@@ -14,9 +14,9 @@ public interface UserListService {
 
     ResponseDto<Void> deleteUserList(String userId, Long groupId);
 
-    ResponseDto<UserLevelResponseDto> putUserLevel(Long groupId , UserLevelRequestDto dto);
+    ResponseDto<UserLevelResponseDto> putUserLevel(Long groupId, String managerId, UserLevelRequestDto dto);
 
-    ResponseDto<Void> deleteUser(Long groupId, String userId);
+    ResponseDto<Void> deleteUser(Long groupId, String managerId, String userId);
 
     ResponseDto<List<UserGenderRatioResponseDto>> getUserListGender(Long groupId);
 

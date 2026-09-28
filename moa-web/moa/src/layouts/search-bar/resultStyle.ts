@@ -5,11 +5,12 @@ export const container = css`
   margin: 0px auto;
   margin-top: 50px;
   max-width: 600px;
-  min-width: 400px;
+  min-width: 0;
 `;
 
 export const resultLine = css`
   width: 100%;
+  padding: 24px clamp(16px, 4vw, 40px) 48px;
   border: 1px solid #eee;
   margin-top: 10px;
 `;

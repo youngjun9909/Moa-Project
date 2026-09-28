@@ -15,9 +15,9 @@ public interface UserAnswerService {
 
     ResponseDto<List<UserAnswer>> getUserAnswer(Long groupId);
 
-    ResponseDto<Void> approveUserAnswer(Long groupId, RequestDeleteUserAnswerDto dto);
+    ResponseDto<Void> approveUserAnswer(Long groupId, String managerId, RequestDeleteUserAnswerDto dto);
 
-    ResponseDto<Boolean> refuseRequestUserAnswer (Long groupId, RequestDeleteUserAnswerDto dto);
+    ResponseDto<Boolean> refuseRequestUserAnswer(Long groupId, String managerId, RequestDeleteUserAnswerDto dto);
 
     ResponseDto<ResponseUserAnswerDto> createUserAnswer(String userId, UserAnswerRequestDto dto, Long answerId);
 

@@ -28,7 +28,10 @@ function usePaginationScrollSearchHook<T>({
       const response = await axios.get(apiUrl, {
         params: { page, limit, sortBy, ...updatedParams },
       });
-      const newData = response.data.data;
+      const pageData = response.data.data;
+      const newData: MeetingGroup[] = Array.isArray(pageData)
+        ? pageData
+        : pageData.data || [];
 
       const sortedData = [...newData].sort((a, b) => {
         if (sortBy === "recent") {
@@ -36,7 +39,7 @@ function usePaginationScrollSearchHook<T>({
           const dateB = new Date(b.groupDate).getTime();
           return dateB - dateA;
         } else if (sortBy === "recommendation") {
-          return b.recommendationCount - a.recommendationCount;
+          return (b.recommendationCount ?? 0) - (a.recommendationCount ?? 0);
         } else if (sortBy === "past") {
           const dateA = new Date(a.groupDate).getTime();
           const dateB = new Date(b.groupDate).getTime();
@@ -55,7 +58,7 @@ function usePaginationScrollSearchHook<T>({
         return uniqueData;
       });
 
-      setTotalPages(response.data.totalPages || 1);
+      setTotalPages(Array.isArray(pageData) ? 1 : pageData.totalPages || 1);
     } catch (error) {
       console.error(error);
     } finally {
@@ -65,14 +68,13 @@ function usePaginationScrollSearchHook<T>({
 
   useEffect(() => {
     setData([]);
-    fetchData(currentPage);
-  }, [currentPage, sortBy]);
-
-  useEffect(() => {
-    setData([]);
     setCurrentPage(1);
     fetchData(1);
   }, [sortBy]);
+
+  useEffect(() => {
+    if (currentPage > 1) fetchData(currentPage);
+  }, [currentPage]);
 
   useEffect(() => {
     setData([]);

@@ -13,7 +13,8 @@ export const searchBar = css`
   display: flex;
   justify-content: center;
   align-items: center;
-  min-width: 650px;
+  max-width: 760px;
+  padding: 24px 16px 0;
   margin: 0px auto;
   margin-top: 100px;
 `;
@@ -23,7 +24,11 @@ export const searchBarLine = css`
   display: flex;
   justify-content: center;
   align-items: center;
-  border-bottom: 1.2px solid #ff7b54;
+  border: 1px solid var(--moa-line);
+  border-radius: 999px;
+  padding: 10px 14px;
+  background: var(--moa-surface);
+  box-shadow: var(--moa-shadow);
 `;
 
 export const searchBtn = css`
@@ -31,7 +36,7 @@ export const searchBtn = css`
   margin: 0px 10px 0px 10px;
   background-color: rgba(0, 0, 0, 0);
   border: none;
-  color: #ff7b54;
+  color: var(--moa-primary);
   cursor: pointer;
   &:active {
     color: rgb(250, 86, 37);
@@ -44,22 +49,23 @@ export const searchInput = css`
   border: none;
   outline: none;
   font-size: 16px;
-  margin-bottom: 10px;
+  margin: 0;
+  background: transparent;
 `;
 
 export const searchTitleList = css`
-  width: 55%;
+  width: min(100% - 32px, 720px);
   list-style: none;
   margin-top: 40px;
 
   > li {
-    border-bottom: 2px solid #eee;
+    border-bottom: 1px solid var(--moa-line);
     margin-bottom: 15px;
     padding: 0px 0px 5px 10px;
     transition: border-bottom 0.2s;
   }
   > li:hover {
-    border-bottom: 2px solid #ff7b54;
+    border-bottom: 1px solid var(--moa-primary);
     font-weight: 600;
   }
 

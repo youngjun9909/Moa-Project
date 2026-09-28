@@ -10,19 +10,19 @@ import org.springframework.web.servlet.resource.PathResourceResolver;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
 
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
-    @Value("${user.dir}")
-    private String projectPath;
+    @Value("${root.path:./image/}")
+    private String rootPath;
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
-        String rootPath = projectPath + "/image/";
         registry.addResourceHandler("/image/**")
-                .addResourceLocations("file:///" + rootPath)
+                .addResourceLocations(Paths.get(rootPath).toAbsolutePath().normalize().toUri().toString())
                 .resourceChain(true)
                 .addResolver(new PathResourceResolver() {
                     @Override

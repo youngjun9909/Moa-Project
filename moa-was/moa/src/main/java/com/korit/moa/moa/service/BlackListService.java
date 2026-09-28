@@ -9,10 +9,10 @@ import java.util.List;
 
 public interface BlackListService {
 
-    ResponseDto<List<ResponseGetBlackListDto>> getBlackList(Long groupId);
+    ResponseDto<List<ResponseGetBlackListDto>> getBlackList(Long groupId, String managerId);
 
-    ResponseDto<ResponseBlackListDto> postBlackList(Long groupId,String userId);
+    ResponseDto<ResponseBlackListDto> postBlackList(Long groupId, String managerId, String userId);
 
-    ResponseDto<Void> deleteBlackList(Long groupId , String userId);
+    ResponseDto<Void> deleteBlackList(Long groupId, String managerId, String userId);
 
 }

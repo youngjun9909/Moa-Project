@@ -50,7 +50,7 @@ export default function GroupNaviBar() {
   };
 
   return (
-    <div css={s.fullBox}>
+    <div css={[s.fullBox, s.responsiveFullBox]}>
       <div css={s.headerBox}>
         <div css={s.imageBox} onClick={() => navigator("/main")}>
           <img src={logo} alt="로고" css={s.logoImage} />

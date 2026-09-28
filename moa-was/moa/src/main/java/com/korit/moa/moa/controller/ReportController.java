@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class ReportController {
     @PostMapping
     public ResponseEntity<ResponseDto<ReportResponseDto>> createReport(
             @AuthenticationPrincipal String userId,
-            @ModelAttribute CreateReportRequestDto dto
+            @Valid @ModelAttribute CreateReportRequestDto dto
     ) {
         ResponseDto<ReportResponseDto> response = reportService.createReport(userId, dto);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;

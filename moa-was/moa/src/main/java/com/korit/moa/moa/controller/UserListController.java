@@ -59,9 +59,10 @@ public class UserListController {
     @PutMapping(USER_LEVEL)
     public ResponseEntity<ResponseDto<UserLevelResponseDto>> putUserLevel(
             @PathVariable Long groupId,
+            @AuthenticationPrincipal String managerId,
             @RequestBody UserLevelRequestDto dto
     ) {
-        ResponseDto<UserLevelResponseDto> response = userListService.putUserLevel(groupId,dto);
+        ResponseDto<UserLevelResponseDto> response = userListService.putUserLevel(groupId, managerId, dto);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
     }
@@ -69,9 +70,10 @@ public class UserListController {
     @DeleteMapping(USER_DEL)
     public ResponseEntity<ResponseDto<Void>> deleteUser(
             @PathVariable Long groupId,
+            @AuthenticationPrincipal String managerId,
             @RequestParam String userId
     ) {
-        ResponseDto<Void> response = userListService.deleteUser(groupId,userId);
+        ResponseDto<Void> response = userListService.deleteUser(groupId, managerId, userId);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
     }

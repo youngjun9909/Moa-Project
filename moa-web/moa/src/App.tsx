@@ -67,6 +67,16 @@ function App() {
       logout();
     }
   }, [cookies.token, login, logout]);
+
+  useEffect(() => {
+    const handleAuthExpired = () => {
+      logout();
+      document.cookie = "token=; Max-Age=0; path=/";
+    };
+
+    window.addEventListener("moa:auth-expired", handleAuthExpired);
+    return () => window.removeEventListener("moa:auth-expired", handleAuthExpired);
+  }, [logout]);
   return (
     <>
       {location.pathname === p.WEB_MAIN ? (

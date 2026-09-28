@@ -13,6 +13,7 @@ import com.korit.moa.moa.repository.BlackListRepository;
 import com.korit.moa.moa.repository.MeetingGroupRepository;
 import com.korit.moa.moa.repository.UserRepository;
 import com.korit.moa.moa.service.BlackListService;
+import com.korit.moa.moa.service.GroupAuthorizationService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -31,10 +32,14 @@ public class BlackListServiceImplement implements BlackListService {
 
     private final BlackListRepository blackListRepository;
     private final UserRepository userRepository;
+    private final GroupAuthorizationService groupAuthorizationService;
 
     @Override
-    public ResponseDto<List<ResponseGetBlackListDto>> getBlackList(Long groupId) {
+    public ResponseDto<List<ResponseGetBlackListDto>> getBlackList(Long groupId, String managerId) {
         List<ResponseGetBlackListDto> data = null;
+        if (!groupAuthorizationService.isManager(groupId, managerId)) {
+            return ResponseDto.setFailed(ResponseMessage.NO_PERMISSION);
+        }
         try {
             List<Object[]> blackLists = blackListRepository.findByGroup(groupId);
 
@@ -60,8 +65,11 @@ public class BlackListServiceImplement implements BlackListService {
 
     @Override
     @Transactional
-    public ResponseDto<ResponseBlackListDto> postBlackList(Long groupId, String userId) {
+    public ResponseDto<ResponseBlackListDto> postBlackList(Long groupId, String managerId, String userId) {
         ResponseBlackListDto data = null;
+        if (!groupAuthorizationService.isManager(groupId, managerId)) {
+            return ResponseDto.setFailed(ResponseMessage.NO_PERMISSION);
+        }
         try {
             if (!userRepository.existsByUserId(userId)) {
                 return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_USER);
@@ -86,7 +94,10 @@ public class BlackListServiceImplement implements BlackListService {
 
     @Override
     @Transactional
-    public ResponseDto<Void> deleteBlackList(Long groupId, String userId) {
+    public ResponseDto<Void> deleteBlackList(Long groupId, String managerId, String userId) {
+        if (!groupAuthorizationService.isManager(groupId, managerId)) {
+            return ResponseDto.setFailed(ResponseMessage.NO_PERMISSION);
+        }
         try {
             Optional<BlackList> blackList = blackListRepository.findByGroupIdAndUserId(groupId, userId);
             if (blackList.isEmpty()) {

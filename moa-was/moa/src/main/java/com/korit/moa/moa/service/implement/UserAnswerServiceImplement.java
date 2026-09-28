@@ -21,6 +21,7 @@ import com.korit.moa.moa.repository.UserAnswerRepository;
 import com.korit.moa.moa.repository.UserListRepository;
 import com.korit.moa.moa.repository.UserRepository;
 import com.korit.moa.moa.service.UserAnswerService;
+import com.korit.moa.moa.service.GroupAuthorizationService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -41,6 +42,7 @@ public class UserAnswerServiceImplement implements UserAnswerService {
     private final UserListRepository userListRepository;
     private final UserAnswerRepository userAnswerRepository;
     private final MeetingGroupRepository meetingGroupRepository;
+    private final GroupAuthorizationService groupAuthorizationService;
 
     @Override
     public ResponseDto<List<UserAnswer>> getUserAnswer(Long groupId) {
@@ -59,7 +61,10 @@ public class UserAnswerServiceImplement implements UserAnswerService {
     }
 
     @Override
-    public ResponseDto<Void> approveUserAnswer(Long groupId, RequestDeleteUserAnswerDto dto) {
+    public ResponseDto<Void> approveUserAnswer(Long groupId, String managerId, RequestDeleteUserAnswerDto dto) {
+        if (!groupAuthorizationService.isManager(groupId, managerId)) {
+            return ResponseDto.setFailed(ResponseMessage.NO_PERMISSION);
+        }
         int isApproved = dto.getIsApproved();
         try {
             List<UserAnswer> userAnswers = userAnswerRepository.findAllByGroupId(groupId);
@@ -102,7 +107,10 @@ public class UserAnswerServiceImplement implements UserAnswerService {
     }
 
     @Override
-    public ResponseDto<Boolean> refuseRequestUserAnswer(Long groupId, RequestDeleteUserAnswerDto dto) {
+    public ResponseDto<Boolean> refuseRequestUserAnswer(Long groupId, String managerId, RequestDeleteUserAnswerDto dto) {
+        if (!groupAuthorizationService.isManager(groupId, managerId)) {
+            return ResponseDto.setFailed(ResponseMessage.NO_PERMISSION);
+        }
         int isApproved = dto.getIsApproved();
         UserAnswer updateData = null;
         try {

@@ -4,6 +4,8 @@ import com.korit.moa.moa.entity.meetingGroup.GroupCategory;
 import com.korit.moa.moa.entity.meetingGroup.GroupTypeCategory;
 import com.korit.moa.moa.entity.meetingGroup.MeetingGroup;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -73,17 +75,18 @@ SELECT ranked.*
     @Query("SELECT m FROM MeetingGroup m " +
             "WHERE m.groupTitle LIKE %:keyword% " +
             "ORDER BY m.groupId")
-    Optional<List<MeetingGroup>> findByGroupTitle(@Param("keyword") String keyword);
+    Page<MeetingGroup> findByGroupTitle(@Param("keyword") String keyword, Pageable pageable);
 
     @Query("SELECT m FROM MeetingGroup m " +
             "WHERE m.groupCategory = :groupCategory " +
             "AND m.groupAddress Like CONCAT('%', :region, '%') " +
             "ORDER BY m.groupId ")
-    Optional<List<MeetingGroup>> findByGroupCategoryAndRegion(
-            @Param("groupCategory")GroupCategory groupCategory,
-            @Param("region") String region);
+    Page<MeetingGroup> findByGroupCategoryAndRegion(
+            @Param("groupCategory") GroupCategory groupCategory,
+            @Param("region") String region,
+            Pageable pageable);
 
-    Optional<List<MeetingGroup>> findByGroupType(@Param("groupType") GroupTypeCategory groupType);
+    Page<MeetingGroup> findByGroupType(GroupTypeCategory groupType, Pageable pageable);
 
     Boolean existsByGroupIdAndCreatorId(Long groupId, String userId);
 

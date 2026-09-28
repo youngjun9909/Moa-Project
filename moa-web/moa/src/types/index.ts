@@ -31,6 +31,7 @@ export interface MeetingGroup {
   groupCategory: GroupCategory;
   groupType: GroupType;
   meetingType: MeetingType;
+  recommendationCount?: number;
 }
 
 export interface Notice {

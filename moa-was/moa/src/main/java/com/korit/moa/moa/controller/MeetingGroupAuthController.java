@@ -5,6 +5,7 @@ import com.korit.moa.moa.dto.ResponseDto;
 import com.korit.moa.moa.dto.group.response.HomeGroupResponseDto;
 import com.korit.moa.moa.dto.group.response.ResponseGroupDto;
 import com.korit.moa.moa.dto.group.response.SearchResponseDto;
+import com.korit.moa.moa.dto.group.response.PagedGroupResponseDto;
 import com.korit.moa.moa.entity.meetingGroup.GroupCategory;
 import com.korit.moa.moa.entity.meetingGroup.GroupTypeCategory;
 import com.korit.moa.moa.service.MeetingGroupService;
@@ -29,25 +30,37 @@ public class MeetingGroupAuthController {
     private static final String GET_MEETING_GROUP_ID = "/meeting-group/{groupId}";
 
     @GetMapping(GET_GROUP)
-    public ResponseEntity<ResponseDto<List<SearchResponseDto>>> SearchGroupKeyword(@RequestParam("keyword") String groupTitle) {
-        ResponseDto<List<SearchResponseDto>> response = meetingGroupService.findByGroupTitle(groupTitle);
+    public ResponseEntity<ResponseDto<PagedGroupResponseDto>> SearchGroupKeyword(
+            @RequestParam("keyword") String groupTitle,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int limit,
+            @RequestParam(defaultValue = "default") String sortBy) {
+        ResponseDto<PagedGroupResponseDto> response = meetingGroupService.findByGroupTitle(groupTitle, page, limit, sortBy);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }
 
     @GetMapping(GET_GROUP_CATEGORY)
-    public ResponseEntity<ResponseDto<List<SearchResponseDto>>> findByGroupCategoryAndRegion(
+    public ResponseEntity<ResponseDto<PagedGroupResponseDto>> findByGroupCategoryAndRegion(
             @RequestParam GroupCategory groupCategory,
-            @RequestParam String region
+            @RequestParam String region,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int limit,
+            @RequestParam(defaultValue = "default") String sortBy
     ) {
-        ResponseDto<List<SearchResponseDto>> response = meetingGroupService.findByGroupCategoryAndRegion(groupCategory, region);
+        ResponseDto<PagedGroupResponseDto> response = meetingGroupService
+                .findByGroupCategoryAndRegion(groupCategory, region, page, limit, sortBy);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }
 
     @GetMapping(GET_GROUP_TYPE)
-    public ResponseEntity<ResponseDto<List<SearchResponseDto>>> filterGroupType(@RequestParam GroupTypeCategory groupType) {
-        ResponseDto<List<SearchResponseDto>> response = meetingGroupService.findByGroupType(groupType);
+    public ResponseEntity<ResponseDto<PagedGroupResponseDto>> filterGroupType(
+            @RequestParam GroupTypeCategory groupType,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int limit,
+            @RequestParam(defaultValue = "default") String sortBy) {
+        ResponseDto<PagedGroupResponseDto> response = meetingGroupService.findByGroupType(groupType, page, limit, sortBy);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
         return ResponseEntity.status(status).body(response);
     }

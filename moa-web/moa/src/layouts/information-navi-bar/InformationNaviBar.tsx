@@ -42,7 +42,7 @@ export default function InformationNaviBar() {
   };
 
   return (
-    <div css={s.mainContainer}>
+    <div css={[s.mainContainer, s.responsiveInfo]}>
       <div css={s.infoNaviBar}>
         <div css={s.naviBox}>
           <div

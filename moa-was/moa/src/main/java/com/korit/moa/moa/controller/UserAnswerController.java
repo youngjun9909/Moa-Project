@@ -41,9 +41,10 @@ public class UserAnswerController {
     @PutMapping(PUT_REFUSE_REQUEST)
     public ResponseEntity<ResponseDto<Boolean>> refuseRequestUserAnswer(
             @PathVariable Long groupId,
+            @AuthenticationPrincipal String managerId,
             @RequestBody RequestDeleteUserAnswerDto dto
     ) {
-        ResponseDto<Boolean> response = userAnswerService.refuseRequestUserAnswer(groupId, dto);
+        ResponseDto<Boolean> response = userAnswerService.refuseRequestUserAnswer(groupId, managerId, dto);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
     }
@@ -51,9 +52,10 @@ public class UserAnswerController {
     @PostMapping(PUT_APPROVE_REQUEST)
     public ResponseEntity<ResponseDto<Void>> approveUserAnswer(
             @PathVariable Long groupId,
+            @AuthenticationPrincipal String managerId,
             @RequestBody RequestDeleteUserAnswerDto dto
     ) {
-        ResponseDto<Void> response = userAnswerService.approveUserAnswer(groupId, dto);
+        ResponseDto<Void> response = userAnswerService.approveUserAnswer(groupId, managerId, dto);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
     }

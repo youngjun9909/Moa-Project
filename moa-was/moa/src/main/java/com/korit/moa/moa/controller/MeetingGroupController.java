@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class MeetingGroupController {
     @PostMapping
     public ResponseEntity<ResponseDto<ResponseGroupDto>> createGroupMeeting(
             @AuthenticationPrincipal String userId,
-            @ModelAttribute RequestGroupDto dto
+            @Valid @ModelAttribute RequestGroupDto dto
     ) {
         ResponseDto<ResponseGroupDto> response = meetingGroupService.createGroupMeeting(userId, dto);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
@@ -40,16 +41,20 @@ public class MeetingGroupController {
     @PutMapping(UPD_MEETING_GROUP)
     public ResponseEntity<ResponseDto<ResponseGroupDto>> updateMeetingGroupId(
             @PathVariable Long groupId,
-            @ModelAttribute RequestGroupDto dto
+            @AuthenticationPrincipal String userId,
+            @Valid @ModelAttribute RequestGroupDto dto
     ) {
-        ResponseDto<ResponseGroupDto> response = meetingGroupService.updateMeetingGroupId(groupId, dto);
+        ResponseDto<ResponseGroupDto> response = meetingGroupService.updateMeetingGroupId(groupId, userId, dto);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
     }
 
     @DeleteMapping(DEL_MEETING_GROUP)
-    public ResponseEntity<ResponseDto<Void>> deleteMeetingGroupId(@PathVariable Long groupId) {
-        ResponseDto<Void> response = meetingGroupService.deleteMeetingGroupId(groupId);
+    public ResponseEntity<ResponseDto<Void>> deleteMeetingGroupId(
+            @PathVariable Long groupId,
+            @AuthenticationPrincipal String userId
+    ) {
+        ResponseDto<Void> response = meetingGroupService.deleteMeetingGroupId(groupId, userId);
         HttpStatus status = response.isResult() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(response);
     }

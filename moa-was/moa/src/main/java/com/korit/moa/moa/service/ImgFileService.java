@@ -9,38 +9,47 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
 public class ImgFileService {
 
-    @Value("${user.dir}")
-    private String projectPath;
+    @Value("${root.path:./image/}")
+    private String rootPath;
+
+    private static final long MAX_IMAGE_SIZE = 10 * 1024 * 1024;
+    private static final Map<String, String> ALLOWED_TYPES = Map.of(
+            "image/jpeg", ".jpg",
+            "image/png", ".png",
+            "image/gif", ".gif"
+    );
 
     public String convertImgFile(MultipartFile file, String subPath) {
-        String originalFilename = file.getOriginalFilename();
-        if (originalFilename == null || originalFilename.isEmpty()) {
-            throw new IllegalArgumentException("Invalid file: file name is missing");
+        if (file.isEmpty() || file.getSize() > MAX_IMAGE_SIZE) {
+            throw new IllegalArgumentException("Image must be between 1 byte and 10MB");
         }
 
-        String newImgName = UUID.randomUUID().toString() + "_" + originalFilename;
-
-        String rootPath = projectPath + "/image/";
-        String filePath = subPath + "/" + newImgName;
-        File f = new File(rootPath + subPath);
-
-        if (!f.exists() && !f.mkdirs()) {
-            throw new RuntimeException("Failed to create directory: " + f.getAbsolutePath());
+        String contentType = file.getContentType();
+        String extension = ALLOWED_TYPES.get(contentType);
+        if (extension == null) {
+            throw new IllegalArgumentException("Only JPEG, PNG, and GIF images are allowed");
         }
 
-        Path uploadPath = Paths.get(rootPath + filePath);
+        String newImgName = UUID.randomUUID() + extension;
+        Path directory = Paths.get(rootPath).toAbsolutePath().normalize().resolve(subPath).normalize();
+        Path uploadPath = directory.resolve(newImgName).normalize();
+        if (!uploadPath.startsWith(directory)) {
+            throw new IllegalArgumentException("Invalid upload path");
+        }
 
         try {
-            Files.write(uploadPath, file.getBytes());
+            Files.createDirectories(directory);
+            Files.write(uploadPath, file.getBytes(), StandardOpenOption.CREATE_NEW);
         } catch (IOException e) {
             throw new RuntimeException("Failed to save file: " + e.getMessage(), e);
         }
-        System.out.println("Saving file to: " + uploadPath.toString());
-        return filePath;
+        return Paths.get(subPath, newImgName).toString().replace(File.separatorChar, '/');
     }
 }
