@@ -20,7 +20,9 @@ export const Container = css`
 `;
 
 export const formSection = css`
-  width:100%; margin:0; padding:24px; border:1px solid var(--moa-line); border-radius:16px; background:var(--moa-surface-muted);
+  width:100%; margin:0; padding:24px; border:1px solid var(--moa-chip-line); border-radius:16px;
+  background:linear-gradient(90deg,var(--moa-primary) 0 68px,transparent 68px) top/100% 3px no-repeat,var(--moa-surface);
+  box-shadow:0 8px 24px rgba(33,49,66,.045);
   legend { padding:0 8px; margin-left:-8px; color:var(--moa-ink); font-size:18px; font-weight:900; letter-spacing:-.03em; }
   @media(max-width:620px){padding:20px 16px;}
 `;
@@ -32,6 +34,16 @@ export const fieldGroup = css`
 `;
 export const placeGrid = css`display:grid; grid-template-columns:minmax(240px,.7fr) minmax(320px,1.3fr); gap:24px; align-items:end; @media(max-width:760px){grid-template-columns:1fr; gap:2px;}`;
 export const twoColumnFields = css`display:grid; grid-template-columns:1fr 1fr; gap:18px; @media(max-width:680px){grid-template-columns:1fr; gap:2px;}`;
+export const addressInputRow = css`display:grid; grid-template-columns:minmax(0,1fr) auto; gap:9px; @media(max-width:520px){grid-template-columns:1fr;}`;
+export const addressSearchButton = css`
+  min-width:104px; min-height:48px; padding:0 16px; border:1px solid var(--moa-primary); border-radius:11px;
+  background:var(--moa-primary); color:#fff; font-weight:800; cursor:pointer;
+  &:hover{background:var(--moa-primary-dark); border-color:var(--moa-primary-dark);}
+`;
+export const detailAddressInput = css`
+  width:100%; min-height:46px; margin-top:9px; padding:0 15px; border:1px solid var(--moa-line-strong); border-radius:11px; background:#fff; font-size:15px;
+  &:focus{outline:3px solid var(--moa-primary-soft); border-color:var(--moa-primary);}
+`;
 
 export const AllBox = css`
   display: flex;

@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import axios from "axios";
 import CreateGroup from "./group-detail/create-group/CreateGroup";
@@ -20,6 +20,20 @@ describe("user page visual structure", () => {
     expect(screen.getByRole("group", { name: "어떤 모임인가요?" })).toBeInTheDocument();
     expect(screen.getByRole("group", { name: "언제 만나나요?" })).toBeInTheDocument();
     expect(screen.getByRole("group", { name: "어디서 만나나요?" })).toBeInTheDocument();
+  });
+
+  test("offline meeting can fill its address from Kakao postcode search", () => {
+    const Postcode = jest.fn(({ oncomplete }) => ({
+      open: () => oncomplete({ userSelectedType: "R", roadAddress: "서울 마포구 월드컵로 1", jibunAddress: "" }),
+    }));
+    (window as any).kakao = { Postcode };
+    render(<MemoryRouter><CreateGroup /></MemoryRouter>);
+
+    fireEvent.click(screen.getByRole("button", { name: "오프라인" }));
+    fireEvent.click(screen.getByRole("button", { name: "주소 찾기" }));
+
+    expect(screen.getByRole("textbox", { name: "모임 주소" })).toHaveValue("서울 마포구 월드컵로 1");
+    expect(screen.getByRole("textbox", { name: "상세 주소" })).toBeInTheDocument();
   });
 
   test("empty review feed keeps its primary action beside the empty-state guidance", async () => {

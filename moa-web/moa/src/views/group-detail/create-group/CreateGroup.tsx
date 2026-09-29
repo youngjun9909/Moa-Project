@@ -7,11 +7,23 @@ import axios from "axios";
 import { CREATE_GROUP_API } from "../../../apis";
 import groupImage from "../../../images/group.jpg";
 
+declare global {
+  interface Window {
+    kakao?: {
+      Postcode: new (options: { oncomplete: (data: { userSelectedType: string; roadAddress: string; jibunAddress: string }) => void }) => { open: () => void };
+    };
+  }
+}
+
+const POSTCODE_SCRIPT_ID = "kakao-postcode-script";
+const POSTCODE_SCRIPT_SRC = "https://t1.kakaocdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
+
 export default function CreateGroup() {
   const navigate = useNavigate();
   const [cookies] = useCookies(["token", "userId"]);
   const [groupImg, setGroupImg] = useState<any>(null);
   const [previewUrl, setPreviewUrl] = useState<any>(null);
+  const [detailAddress, setDetailAddress] = useState("");
   const [page, setPage] = useState(0);
   const [formData, setFormData] = useState({
     groupType: "",
@@ -60,6 +72,29 @@ export default function CreateGroup() {
     setPreviewUrl(null);
   }, [groupImg]);
 
+  useEffect(() => {
+    if (window.kakao?.Postcode || document.getElementById(POSTCODE_SCRIPT_ID)) return;
+    const script = document.createElement("script");
+    script.id = POSTCODE_SCRIPT_ID;
+    script.src = POSTCODE_SCRIPT_SRC;
+    script.async = true;
+    document.head.appendChild(script);
+  }, []);
+
+  const handleAddressSearch = () => {
+    if (!window.kakao?.Postcode) {
+      alert("주소 검색 서비스를 불러오는 중입니다. 잠시 후 다시 시도해주세요.");
+      return;
+    }
+    new window.kakao.Postcode({
+      oncomplete: (data) => {
+        const selectedAddress = data.userSelectedType === "R" ? data.roadAddress : data.jibunAddress;
+        handleInputChange("groupAddress", selectedAddress);
+        requestAnimationFrame(() => document.getElementById("group-detail-address")?.focus());
+      },
+    }).open();
+  };
+
   const handleNextPage = () => {
     if (!formData.groupType) {
       alert("모임 유형을 선택해주세요.");
@@ -86,7 +121,8 @@ export default function CreateGroup() {
   const handlePostGroup = async () => {
     const postGroupRequestDto = new FormData();
     Object.keys(formData).forEach((key) => {
-      postGroupRequestDto.append(key, formData[key as keyof typeof formData]);
+      const value = formData[key as keyof typeof formData];
+      postGroupRequestDto.append(key, key === "groupAddress" && formData.meetingType === "오프라인" ? `${value} ${detailAddress}`.trim() : value);
     });
 
     if (groupImg) {
@@ -167,7 +203,13 @@ export default function CreateGroup() {
               </div>
               <div css={s.fieldGroup}>
                 <label htmlFor="group-address">모임 주소</label>
-                <input id="group-address" type="text" css={s.TitleInput} placeholder={formData.meetingType === "온라인" ? "온라인 접속 링크를 입력해주세요" : "만날 장소나 주소를 입력해주세요"} value={formData.groupAddress} onChange={(e) => handleInputChange("groupAddress", e.target.value)} />
+                <div css={s.addressInputRow}>
+                  <input id="group-address" type="text" css={s.TitleInput} placeholder={formData.meetingType === "온라인" ? "온라인 접속 링크를 입력해주세요" : "주소 찾기로 기본 주소를 선택해주세요"} value={formData.groupAddress} onChange={(e) => handleInputChange("groupAddress", e.target.value)} />
+                  {formData.meetingType === "오프라인" && <button type="button" css={s.addressSearchButton} onClick={handleAddressSearch}>주소 찾기</button>}
+                </div>
+                {formData.meetingType === "오프라인" && (
+                  <input id="group-detail-address" aria-label="상세 주소" type="text" css={s.detailAddressInput} placeholder="건물명, 층, 호수 등 상세 주소" value={detailAddress} onChange={(e) => setDetailAddress(e.target.value)} />
+                )}
               </div>
             </div>
           </fieldset>
