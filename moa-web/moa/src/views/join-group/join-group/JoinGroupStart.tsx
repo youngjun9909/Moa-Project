@@ -15,10 +15,11 @@ function JoinGroupStart() {
 
   return (
     <div>
-      <h4 css={s.title}>모임 참여 신청</h4>
+      <p css={s.p}>1단계 · 참여 규칙 확인</p>
+      <h1 css={s.title}>모임 참여 신청</h1>
       {cookies.token && (
         <div css={s.container}>
-          <h4>참여시 주의사항</h4>
+          <h2>함께 지킬 참여 규칙</h2>
           <div css={s.listBox}>
             <ul css={s.listStyle}>
               <li>채팅 및 게시판에서 타인을 비방하거나 모욕하지 않습니다.</li>

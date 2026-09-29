@@ -35,6 +35,8 @@ function GroupAnswerResult() {
 
   return (
     <div css={s.container}>
+      <p css={s.p}>3단계 · 신청 접수</p>
+      <h1 css={s.title}>참여 신청 완료</h1>
       <div css={s.resultContainer}>
         <div css={s.groupImg}>
           <img
@@ -56,7 +58,7 @@ function GroupAnswerResult() {
         </div>
       </div>
       <div css={s.line3}></div>
-      <p css={s.p}>모임 참여 신청이 완료됐습니다.</p>
+      <p css={s.p}>모임장에게 신청을 보냈어요. 승인 결과는 참여 일정에서 확인할 수 있어요.</p>
       <button onClick={() => navigator(-3)} css={s.joinButton}>
         확인완료
       </button>

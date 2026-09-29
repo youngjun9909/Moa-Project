@@ -1,141 +1,21 @@
 import { css } from "@emotion/react";
 
-export const container = css`
-  width: 80%;
-  margin: 0 auto;
-  max-width: 500px;
-  min-width: 0;
-  margin: 0 auto;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-`;
-export const title = css`
-  margin-left: 50px;
-`;
-export const p = css`
-  font-size: 15px;
-`;
-export const joinButton = css`
-  border: none;
-  border-radius: 5px;
-  font-size: 12px;
-  height: 50px;
-  background-color: #ff7b54;
-  margin-top: 10px;
-  cursor: pointer;
-  :hover {
-    background-color: #e5673b;
-  }
-`;
-
-export const listBox = css`
-  display: flex;
-  align-items: center;
-  width: 100%;
-  height: 300px;
-  background-color: rgb(230, 230, 230);
-  box-sizing: border-box;
-  border-radius: 5px;
-  padding: 20px;
-  margin: 0;
-`;
-export const listStyle = css`
-  list-style: circle;
-  font-size: 10px;
-  li {
-    margin-top: 10px;
-  }
-`;
-export const line = css`
-  margin: 40px 0px 10px;
-`;
-
-export const AnswerListBox = css`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  width: 100%;
-  height: 100px;
-  box-sizing: border-box;
-  list-style: none;
-  border-radius: 5px;
-  padding: 0;
-  margin: 0;
-  margin-top: 10px;
-`;
-export const questionTitle = css`
-  margin: 0;
-  font-size: 15px;
-`;
-export const answerTitle = css`
-  margin: 0;
-  font-size: 15px;
-`;
-export const line2 = css`
-  width: 100%;
-  margin: 30px 0px;
-`;
-
-export const questionContent = css`
-  margin: 30px;
-  font-size: 12px;
-`;
-export const answerContent = css`
-  margin: 30px;
-  width: 85%;
-  border-radius: 5px;
-  font-size: 12px;
-  padding: 5px;
-  outline: #333;
-`;
-
-export const resultContainer = css`
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  margin-top: 150px;
-  width: 100%;
-  max-width: 700px;
-
-  gap: 10px;
-`;
-
-export const groupImg = css`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 200px;
-  height: 150px;
-  object-fit: cover;
-  overflow: hidden;
-`;
-export const mainImg = css`
-  width: 100%;
-`;
-
-export const groupDataDiv = css`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 200px;
-  height: 200px;
-  padding: 10px;
-  box-sizing: border-box;
-  gap: 10px;
-`;
-
-export const dateBox = css`
-  width: 130px;
-  display: flex;
-  list-style: none;
-  justify-content: space-between;
-  padding: 0;
-`;
-
-export const line3 = css`
-  width: 100%;
-  border: 1px solid #333;
-  margin-top: 10px;
-  margin-bottom: 20px;
-`;
+export const container = css`width:min(calc(100% - 32px),760px);margin:0 auto 56px;padding:clamp(22px,4vw,36px);display:flex;flex-direction:column;border:1px solid var(--moa-line);border-radius:var(--moa-radius-lg);background:var(--moa-surface);box-shadow:var(--moa-shadow-sm);`;
+export const title = css`width:min(calc(100% - 32px),760px);margin:4px auto 24px;color:var(--moa-ink);font-size:clamp(28px,4vw,38px);line-height:1.25;letter-spacing:-.045em;`;
+export const p = css`width:min(calc(100% - 32px),760px);margin:26px auto 7px;color:var(--moa-primary-dark);font-size:13px;font-weight:800;letter-spacing:.04em;`;
+export const joinButton = css`min-height:48px;border:0;border-radius:12px;background:var(--moa-primary);color:#fff;font-size:15px;font-weight:800;margin-top:18px;cursor:pointer;box-shadow:0 8px 18px rgba(242,105,73,.2);&:hover{background:var(--moa-primary-dark);}`;
+export const listBox = css`width:100%;padding:20px 22px;border:1px solid var(--moa-line);border-radius:14px;background:var(--moa-surface-muted);`;
+export const listStyle = css`margin:0;padding-left:20px;color:var(--moa-ink-subtle);font-size:14px;line-height:1.7;li+li{margin-top:7px;}`;
+export const line = css`height:1px;background:var(--moa-line);margin:26px 0 6px;`;
+export const AnswerListBox = css`display:grid;gap:10px;width:100%;list-style:none;padding:0;margin:0;`;
+export const questionTitle = css`color:var(--moa-ink);font-size:14px;font-weight:800;`;
+export const answerTitle = questionTitle;
+export const line2 = css`height:1px;background:var(--moa-line);margin:24px 0;`;
+export const questionContent = css`margin:0;padding:16px;border-radius:12px;background:var(--moa-chip-bg);color:var(--moa-chip-ink);font-size:15px;line-height:1.6;`;
+export const answerContent = css`width:100%;min-height:50px;padding:0 14px;border:1px solid var(--moa-line-strong);border-radius:12px;background:#fff;font-size:15px;&:focus{border-color:var(--moa-primary);box-shadow:0 0 0 4px var(--moa-primary-soft);outline:0;}`;
+export const resultContainer = css`display:grid;grid-template-columns:180px minmax(0,1fr);align-items:center;gap:24px;width:100%;padding:18px;border:1px solid var(--moa-line);border-radius:16px;background:var(--moa-surface-muted);@media(max-width:560px){grid-template-columns:1fr;}`;
+export const groupImg = css`width:180px;height:130px;border-radius:13px;overflow:hidden;background:#fff;@media(max-width:560px){width:100%;}`;
+export const mainImg = css`width:100%;height:100%;object-fit:cover;`;
+export const groupDataDiv = css`min-width:0;p{margin:0 0 10px;font-size:19px;font-weight:800;}`;
+export const dateBox = css`display:flex;gap:8px;list-style:none;margin:0;padding:0;color:var(--moa-muted);font-size:14px;`;
+export const line3 = css`height:1px;background:var(--moa-line);margin:24px 0 0;`;

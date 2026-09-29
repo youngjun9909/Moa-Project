@@ -84,7 +84,9 @@ const JoinGroupAnswer = () => {
 
   useEffect(() => {
     groupFetchData();
-  }, [groupData]);
+    // groupId와 로그인 상태가 바뀔 때만 모임 질문을 다시 불러옵니다.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [groupId, cookies.token]);
 
   const handleUserAnswerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -96,7 +98,8 @@ const JoinGroupAnswer = () => {
 
   return (
     <div>
-      <h4 css={s.title}>모임 참여 신청</h4>
+      <p css={s.p}>2단계 · 참여 질문 답변</p>
+      <h1 css={s.title}>모임 참여 신청</h1>
       <div css={s.container}>
         <ul css={s.AnswerListBox} key={groupId}>
           <li css={s.questionTitle}>질문</li>
@@ -104,8 +107,9 @@ const JoinGroupAnswer = () => {
         </ul>
         <div css={s.line2}></div>
         <ul css={s.AnswerListBox}>
-          <li css={s.answerTitle}>답변</li>
+          <li css={s.answerTitle}><label htmlFor="join-answer">참여 신청 답변</label></li>
           <input
+            id="join-answer"
             css={s.answerContent}
             type="text"
             name="userAnswer"

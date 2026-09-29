@@ -147,10 +147,9 @@ export default function GroupHeader() {
           </div>
           <div>
             {isCreator && (
-              <IoSettingsOutline
-                css={s.optionBtn}
-                onClick={() => handleManagerPageRender(parseToNumGroupId)}
-              />
+              <button type="button" css={s.optionBtn} aria-label="모임 설정" onClick={() => handleManagerPageRender(parseToNumGroupId)}>
+                <IoSettingsOutline aria-hidden="true" />
+              </button>
             )}
           </div>
           <div>
@@ -187,7 +186,7 @@ export default function GroupHeader() {
             </button>
             <button css={s.btnSt} onClick={() => setActivePage("userList")}>
               <PiUserList />
-              회원 목록
+              멤버 보기
             </button>
           </div>
           <div css={s.copyBox}>
