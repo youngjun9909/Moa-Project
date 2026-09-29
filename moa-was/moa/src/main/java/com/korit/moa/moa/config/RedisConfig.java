@@ -1,6 +1,7 @@
 package com.korit.moa.moa.config;
 
 import com.korit.moa.moa.redis.RedisSubscriber;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -28,6 +29,12 @@ public class RedisConfig {
     }
 
     @Bean
+    @ConditionalOnProperty(
+            prefix = "app.redis",
+            name = "enabled",
+            havingValue = "true",
+            matchIfMissing = true
+    )
     public RedisMessageListenerContainer redisMessageListenerContainer(
             RedisConnectionFactory connectionFactory,
             RedisSubscriber redisSubscriber,

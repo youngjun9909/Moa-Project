@@ -17,7 +17,7 @@ export const Tab = css`
   justify-content: space-evenly;
 
   &:hover {
-    background-color: #B0B8C4;
+    background-color: var(--moa-primary-soft);
   }
 
   &:focus {

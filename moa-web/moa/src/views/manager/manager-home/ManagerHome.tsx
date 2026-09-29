@@ -6,8 +6,10 @@ import { useCookies } from "react-cookie";
 import ReactModal from "react-modal";
 import userImg from "../../../images/userImg.png";
 import {
+  GROUP_UPDATE_API,
   MANGE_HOME_DELTE_API,
   MANGE_HOME_GET_API,
+  MANGE_HOME_IMG_API,
   MANGE_HOME_PUT_API,
 } from "../../../apis";
 import { GetUserListResponseDto } from "../../../types/dto/response.dto";
@@ -118,6 +120,7 @@ const ManagerHome: React.FC<ManagerHomeProps> = ({ parseToNumGroupId }) => {
       alert("관리자는 스스로 방출 안됩니다.");
       return;
     }
+    if (!window.confirm("이 사용자를 모임에서 내보낼까요?")) return;
 
     try {
       await axios.delete(
@@ -135,8 +138,9 @@ const ManagerHome: React.FC<ManagerHomeProps> = ({ parseToNumGroupId }) => {
   };
 
   const handleDeleteGroup = async(groupId: number) => {
+    if (!window.confirm("모임을 해체하면 되돌릴 수 없습니다. 계속할까요?")) return;
     try {
-      await axios.delete(`http://localhost:8080/api/v1/meeting-group/${groupId}`, {
+      await axios.delete(`${GROUP_UPDATE_API}${groupId}`, {
         headers: { 
           Authorization: `Bearer ${cookies.token}` 
         },
@@ -167,7 +171,7 @@ const ManagerHome: React.FC<ManagerHomeProps> = ({ parseToNumGroupId }) => {
                 ) : (
                   <img
                     src={manager!.profileImage
-                      ? `http://localhost:8080/image/${manager!.profileImage}`
+                      ? `${MANGE_HOME_IMG_API}${manager!.profileImage}`
                       : userImg}
                     alt="profileImage"
                     css={s.userImg}
@@ -200,7 +204,7 @@ const ManagerHome: React.FC<ManagerHomeProps> = ({ parseToNumGroupId }) => {
                 ) : (
                   <img
                     src={user.profileImage
-                      ? `http://localhost:8080/image/${user.profileImage}`
+                      ? `${MANGE_HOME_IMG_API}${user.profileImage}`
                       : userImg}
                     alt="profileImage"
                     css={s.userImg}
@@ -238,7 +242,7 @@ const ManagerHome: React.FC<ManagerHomeProps> = ({ parseToNumGroupId }) => {
                 ) : (
                   <img
                     src={user.profileImage
-                      ? `http://localhost:8080/image/${user.profileImage}`
+                      ? `${MANGE_HOME_IMG_API}${user.profileImage}`
                       : userImg}
                     alt="profileImage"
                     css={s.userImg}

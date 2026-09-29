@@ -38,11 +38,12 @@ export const field = css`
 export const chip = css`
   min-height: 40px;
   padding: 0 14px;
-  border: 1px solid var(--moa-line-strong);
+  border: 1px solid var(--moa-chip-line);
   border-radius: 11px;
-  background: var(--moa-surface);
-  color: var(--moa-ink-subtle);
+  background: var(--moa-chip-bg);
+  color: var(--moa-chip-ink);
   font-weight: 700;
+  &:hover { background:var(--moa-chip-hover); border-color:var(--moa-primary); }
 `;
 
 export const sectionTitle = css`
@@ -70,4 +71,3 @@ export const visuallyHidden = css`
   white-space: nowrap;
   border: 0;
 `;
-

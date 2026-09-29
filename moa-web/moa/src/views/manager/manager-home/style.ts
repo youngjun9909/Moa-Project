@@ -37,7 +37,7 @@ export const openModalButton = css`
   justify-content: space-evenly;
 
   &:hover {
-    background-color: #B0B8C4;
+    background-color: var(--moa-primary-soft);
   }
 
   &:focus {
@@ -87,7 +87,7 @@ export const closeModalButton = css`
   border-radius: 7px;
   text-align: center;
   &:hover {
-    background-color: #B0B8C4;
+    background-color: var(--moa-primary-soft);
   }
   &:focus {
     color: #fff;

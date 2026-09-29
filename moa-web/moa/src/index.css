@@ -19,6 +19,13 @@
   --moa-primary: #f26949;
   --moa-primary-dark: #d95638;
   --moa-primary-soft: rgba(242, 105, 73, 0.13);
+  --moa-chip-bg: #fff0df;
+  --moa-chip-hover: #ffe0c4;
+  --moa-chip-line: #f2c8a9;
+  --moa-chip-ink: #78472f;
+  --moa-link: #c94e34;
+  --moa-aqua-soft: #e7f7f3;
+  --moa-aqua: #267f73;
   --moa-danger: #bd3535;
   --moa-danger-soft: #fff3f2;
   --moa-danger-line: #f2c5c1;
@@ -32,7 +39,7 @@
   --moa-shadow: var(--moa-shadow-sm);
   --moa-rail-width: 76px;
   --moa-sidebar-width: 224px;
-  --moa-header-height: 72px;
+  --moa-header-height: 64px;
 }
 
 html { background: var(--moa-bg); }

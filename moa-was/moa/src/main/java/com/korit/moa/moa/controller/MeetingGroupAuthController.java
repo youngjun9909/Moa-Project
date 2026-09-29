@@ -42,8 +42,8 @@ public class MeetingGroupAuthController {
 
     @GetMapping(GET_GROUP_CATEGORY)
     public ResponseEntity<ResponseDto<PagedGroupResponseDto>> findByGroupCategoryAndRegion(
-            @RequestParam GroupCategory groupCategory,
-            @RequestParam String region,
+            @RequestParam(required = false) GroupCategory groupCategory,
+            @RequestParam(required = false) String region,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int limit,
             @RequestParam(defaultValue = "default") String sortBy

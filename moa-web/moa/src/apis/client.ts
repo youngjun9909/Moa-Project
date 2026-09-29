@@ -1,7 +1,8 @@
 import axios from "axios";
+import { REQUEST_URL } from "../constants";
 
 const API_BASE_URL =
-  process.env.REACT_APP_API_BASE_URL || "http://localhost:8080";
+  process.env.REACT_APP_API_BASE_URL || REQUEST_URL;
 
 let configured = false;
 
@@ -10,8 +11,8 @@ export function configureApiClient() {
   configured = true;
 
   axios.interceptors.request.use((config) => {
-    if (config.url?.startsWith("http://localhost:8080")) {
-      config.url = `${API_BASE_URL}${config.url.slice("http://localhost:8080".length)}`;
+    if (config.url?.startsWith(REQUEST_URL) && API_BASE_URL !== REQUEST_URL) {
+      config.url = `${API_BASE_URL}${config.url.slice(REQUEST_URL.length)}`;
     }
 
     if (!config.headers?.Authorization) {

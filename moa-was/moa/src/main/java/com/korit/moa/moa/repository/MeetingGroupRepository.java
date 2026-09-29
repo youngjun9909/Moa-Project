@@ -86,6 +86,14 @@ SELECT ranked.*
             @Param("region") String region,
             Pageable pageable);
 
+    @Query("SELECT m FROM MeetingGroup m " +
+            "WHERE (:groupCategory IS NULL OR m.groupCategory = :groupCategory) " +
+            "AND (:region IS NULL OR :region = '' OR m.groupAddress LIKE CONCAT('%', :region, '%'))")
+    Page<MeetingGroup> findByOptionalFilters(
+            @Param("groupCategory") GroupCategory groupCategory,
+            @Param("region") String region,
+            Pageable pageable);
+
     Page<MeetingGroup> findByGroupType(GroupTypeCategory groupType, Pageable pageable);
 
     Boolean existsByGroupIdAndCreatorId(Long groupId, String userId);

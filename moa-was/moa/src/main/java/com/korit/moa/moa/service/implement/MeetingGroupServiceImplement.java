@@ -307,16 +307,10 @@ public class MeetingGroupServiceImplement implements MeetingGroupService {
     public ResponseDto<PagedGroupResponseDto> findByGroupCategoryAndRegion(
             GroupCategory groupCategory, String region, int page, int size, String sortBy) {
 
-        if (groupCategory == null) {
-            return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_DATA);
-        }
-        if (region == null || region.toString().trim().isEmpty()) {
-            return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_DATA);
-        }
-
         try {
-            Page<MeetingGroup> groups = meetingGroupRepository.findByGroupCategoryAndRegion(
-                    groupCategory, region, createPageable(page, size, sortBy));
+            String normalizedRegion = region == null || region.trim().isEmpty() ? null : region.trim();
+            Page<MeetingGroup> groups = meetingGroupRepository.findByOptionalFilters(
+                    groupCategory, normalizedRegion, createPageable(page, size, sortBy));
             return ResponseDto.setSuccess(ResponseMessage.SUCCESS, toPagedResponse(groups, page, size));
         } catch (Exception e) {
             e.printStackTrace();

@@ -166,7 +166,7 @@ const Report: React.FC<ReportProps> = ({ parseToNumGroupId }) => {
               </div>
               <div css={s.bottomBox}>
                 <img
-                  src={data.reportImage ?"http://localhost:8080/image/" + data.reportImage : defaultImg}
+                  src={data.reportImage ? REPORT_IMG_API + data.reportImage : defaultImg}
                   alt={
                     data.reportImage ? "신고 이미지 미리보기" : "기본 이미지"
                   }

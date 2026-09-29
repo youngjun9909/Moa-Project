@@ -7,7 +7,11 @@ import { useCookies } from "react-cookie";
 import { BlackListPageResponseDto } from "../../../types/dto/response.dto";
 import ReactModal from "react-modal";
 import { closeModalButton, modalContent } from "../manager-home/style";
-import { BLACK_LIST_API } from "../../../apis";
+import {
+  BLACK_LIST_API,
+  BLACK_LIST_DELETE_API,
+  BLACK_LIST_PAGE_IMG_API,
+} from "../../../apis";
 
 interface BlackListProps {
   parseToNumGroupId: number;
@@ -91,7 +95,7 @@ const BlackList: React.FC<BlackListProps> = ({ parseToNumGroupId }) => {
   };
 
   const handleDeleteBlackList = async (groupId: number, userId: string) => {
-    const url = `http://localhost:8080/api/v1/black-list?groupId=${groupId}&userId=${userId}`;
+    const url = `${BLACK_LIST_DELETE_API}?groupId=${groupId}&userId=${userId}`;
 
     if (cookies.token) {
       try {
@@ -133,7 +137,7 @@ const BlackList: React.FC<BlackListProps> = ({ parseToNumGroupId }) => {
                   <img src={userImg} alt="userImage" css={s.userImg} />
                 ) : (
                   <img
-                    src={"http://localhost:8080/image/" + data.profileImage}
+                    src={BLACK_LIST_PAGE_IMG_API + data.profileImage}
                     alt="profileImage"
                     css={s.userImg}
                   />
