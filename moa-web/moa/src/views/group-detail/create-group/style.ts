@@ -116,6 +116,7 @@ export const TitleInput = css`
   border:1px solid var(--moa-line-strong);
   border-radius: 11px;
   padding-left: 15px;
+  &[data-address-search="true"] { cursor:pointer; }
 `;
 
 export const ContentBox = css`

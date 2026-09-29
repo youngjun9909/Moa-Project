@@ -204,7 +204,17 @@ export default function CreateGroup() {
               <div css={s.fieldGroup}>
                 <label htmlFor="group-address">모임 주소</label>
                 <div css={s.addressInputRow}>
-                  <input id="group-address" type="text" css={s.TitleInput} placeholder={formData.meetingType === "온라인" ? "온라인 접속 링크를 입력해주세요" : "주소 찾기로 기본 주소를 선택해주세요"} value={formData.groupAddress} onChange={(e) => handleInputChange("groupAddress", e.target.value)} />
+                  <input
+                    id="group-address"
+                    type="text"
+                    css={s.TitleInput}
+                    data-address-search={formData.meetingType === "오프라인"}
+                    aria-haspopup={formData.meetingType === "오프라인" ? "dialog" : undefined}
+                    placeholder={formData.meetingType === "온라인" ? "온라인 접속 링크를 입력해주세요" : "주소 찾기로 기본 주소를 선택해주세요"}
+                    value={formData.groupAddress}
+                    onClick={formData.meetingType === "오프라인" ? handleAddressSearch : undefined}
+                    onChange={(e) => handleInputChange("groupAddress", e.target.value)}
+                  />
                   {formData.meetingType === "오프라인" && <button type="button" css={s.addressSearchButton} onClick={handleAddressSearch}>주소 찾기</button>}
                 </div>
                 {formData.meetingType === "오프라인" && (

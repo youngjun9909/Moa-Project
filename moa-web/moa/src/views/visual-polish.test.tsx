@@ -39,7 +39,7 @@ describe("user page visual structure", () => {
     render(<MemoryRouter><CreateGroup /></MemoryRouter>);
 
     fireEvent.click(screen.getByRole("button", { name: "오프라인" }));
-    fireEvent.click(screen.getByRole("button", { name: "주소 찾기" }));
+    fireEvent.click(screen.getByRole("textbox", { name: "모임 주소" }));
 
     expect(screen.getByRole("textbox", { name: "모임 주소" })).toHaveValue("서울 마포구 월드컵로 1");
     expect(screen.getByRole("textbox", { name: "상세 주소" })).toBeInTheDocument();
