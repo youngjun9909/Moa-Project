@@ -2,7 +2,8 @@ import { css } from '@emotion/react';
 
 export const fullBox = css`
   width: 100%;
-  height: 100%;
+  min-height: 100dvh;
+  padding:28px 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -11,8 +12,13 @@ export const fullBox = css`
 
 export const innerBox = css`
   box-sizing: border-box;
-  width: 50%;
-  height: 80%;
+  width:min(100%,460px);
+  min-height:0;
+  padding:32px;
+  border:1px solid var(--moa-line);
+  border-radius:24px;
+  background:#fff;
+  box-shadow:var(--moa-shadow-md);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -20,15 +26,13 @@ export const innerBox = css`
 
 export const mainBox = css`
   width: 100%;
-  height: 50%;
+  height:auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 40px;
+  gap: 20px;
 
-  > h1 {
-  margin-bottom: 20px;
-  }
+  > h1 { margin:18px 0 6px; color:var(--moa-ink); font-size:24px; letter-spacing:-.04em; }
 
   > div {
     display: flex;
@@ -39,35 +43,33 @@ export const mainBox = css`
 `;
 
 export const topInput = css`
-  width: 60%;
-  height: 40px;
+  width: 100%;
+  height: 50px;
   font-size: 17px;
-  padding-left: 10px;
-  border-radius: 5px 5px 0 0;
-  border: 1px solid #ccc;
+  padding:0 13px;
+  border-radius: 11px;
+  border: 1px solid var(--moa-chip-line);
 
   &:focus {
     outline: none;
-    border: 1px solid #ccc;
+    border: 1px solid var(--moa-primary);
     z-index: 1;
     transition: border 0.5s ease;
   }
 `;
 
 export const bottomInput = css`
-  width: 60%;
-  height: 40px;
+  width: 100%;
+  height: 50px;
   font-size: 17px;
-  padding-left: 10px;
-  border-radius: 0 0 5px 5px;
-  border: 1px solid #ccc;
-  border-top:  1px solid #fff;
+  padding:0 13px;
+  border-radius: 11px;
+  border: 1px solid var(--moa-chip-line);
   margin-bottom: 10px;
 
   &:focus {
     outline: none;
-    border-top: 1px solid #fff;
-    border: 1px solid #ccc;
+    border: 1px solid var(--moa-primary);
     z-index: 1;
     transition: border 0.5s ease;
   }
@@ -80,18 +82,18 @@ export const bottomBox = css`
   align-items: center;
 
   > button {
-    min-width: 60%;
-    height: 45px;
+    width: 100%;
+    min-height: 48px;
     padding: 0 5px;
     font-size: 17px;
-    border-radius: 5px;
+    border-radius: 11px;
     border: none;
-    background-color: #FF7B54;
+    background-color: var(--moa-primary);
     color: #fff;
     cursor: pointer;
 
     &:hover, :active{
-    background-color: #e5673b;
+    background-color: var(--moa-primary-dark);
     border: none;
     outline: none;
   }
@@ -105,8 +107,9 @@ export const mailBox = css`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  border-radius: var(--moa-radius-lg);
+  border:1px solid var(--moa-line);
+  box-shadow: var(--moa-shadow-sm);
 
   > h2 {
     margin: 0;
@@ -114,17 +117,18 @@ export const mailBox = css`
 `;
 
 export const errorMessage = css`
-  color: red;
+  margin:8px 0 0; color:var(--moa-danger); font-size:13px;
 `;
+
+export const description = css`margin:0 0 24px; color:var(--moa-muted); font-size:14px; line-height:1.6; text-align:center;`;
+export const fieldLabel = css`width:100%; margin:0 0 7px; color:var(--moa-ink-subtle); font-size:13px; font-weight:750;`;
 
 export const mainBox2 = css`
   width: 100%;
-  height: 45%;
+  min-height:0;
   display: flex;
   flex-direction: column;
   align-items: center;
 
-  > h1 {
-    margin-bottom: 20px;
-  }
+  > h1 { margin:18px 0 6px; color:var(--moa-ink); font-size:24px; letter-spacing:-.04em; }
 `;

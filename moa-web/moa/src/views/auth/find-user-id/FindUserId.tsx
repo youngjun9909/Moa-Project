@@ -53,11 +53,14 @@ function FindUserId() {
 
   return (
     <div css={s.findUserIdContainer}>
-      <h4 css={s.findUserIdTitle}>아이디 찾기</h4>
       <div css={s.inputBox}>
-        <img src={Img} alt="img" css={s.findUserIdImg} />
+        <img src={Img} alt="MOA" css={s.findUserIdImg} />
+        <h1 css={s.findUserIdTitle}>아이디 찾기</h1>
+        <p css={s.authDescription}>가입할 때 등록한 정보로 아이디를 확인해드려요.</p>
         <form onSubmit={(e) => e.preventDefault()} css={s.findUserIdForm}>
+          <label htmlFor="find-id-name" css={s.fieldLabel}>이름</label>
           <input
+            id="find-id-name"
             css={s.findUserIdInput1}
             type="text"
             onChange={handleChange}
@@ -66,7 +69,9 @@ function FindUserId() {
             placeholder="이름을 입력해주세요."
             onKeyDown={handleSendMail}
           />
+          <label htmlFor="find-id-phone" css={s.fieldLabel}>휴대폰 번호</label>
           <input
+            id="find-id-phone"
             css={s.findUserIdInput2}
             type="text"
             onChange={handleChange}
@@ -88,7 +93,7 @@ function FindUserId() {
       >
         <h2>알림</h2>
         <div className="findUserIdModal">
-        <p>{modalMessage}</p>
+        <p role="status">{modalMessage}</p>
         <button onClick={closeModal} className="closeModalBtn">닫기</button>
         </div>
       </ReactModal>

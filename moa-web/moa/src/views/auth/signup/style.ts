@@ -424,7 +424,7 @@ export const anotherSignInBox = css`
   display: flex;
   flex-direction: row;
   align-items: center;
-  border: 1px solid #aaa;
+  border: 1px solid var(--moa-chip-line);
   width: 63%;
   height: 40px;
   border-radius: 5px;
@@ -449,7 +449,7 @@ export const anotherSignInBox = css`
 `;
 
 export const anotherLogoBox = css`
-  border-right: 1px solid #aaa;
+  border-right: 1px solid var(--moa-chip-line);
   height: 100%;
   width: 20%;
   display: flex;

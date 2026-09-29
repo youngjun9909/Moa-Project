@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import React, { useState } from "react";
 import * as s from "./style";
-import * as logo from "../../../styles/LogoStyle";
 import logoImg from "../../../images/moaLogo.png";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -109,73 +108,48 @@ export default function SignIn() {
 
   return (
     <div css={s.fullBox}>
-      <div css={s.innerBox}>
-        <div css={logo.logoBox} onClick={() => navigate("/main")}>
-          <img src={logoImg} alt="로고" css={logo.logo} />
+      <div css={s.authCard}>
+        <div css={s.brandSection}>
+          <button type="button" css={s.brandButton} onClick={() => navigate("/main")} aria-label="MOA 홈으로 이동">
+            <img src={logoImg} alt="MOA" css={s.brandLogo} />
+          </button>
+          <h1>다시 만나서 반가워요</h1>
+          <p>모임과 사람들을 계속 만나보세요.</p>
         </div>
-      </div>
 
-      <form css={s.innerBox}>
-        <input
-          css={s.topInput(idError)}
-          type="text"
-          placeholder="아이디"
-          value={userId}
-          onChange={inputIdChange}
-        />
-        <input
-          css={s.bottomInput(passwordError)}
-          type="password"
-          placeholder="비밀번호"
-          value={password}
-          onChange={inputPasswordChange}
-        />
+        <form css={s.formSection}>
+          <label css={s.fieldLabel} htmlFor="signin-id">아이디</label>
+          <input id="signin-id" css={s.topInput(idError)} type="text" placeholder="아이디를 입력하세요" value={userId} onChange={inputIdChange} />
+          <label css={s.fieldLabel} htmlFor="signin-password">비밀번호</label>
+          <input id="signin-password" css={s.bottomInput(passwordError)} type="password" placeholder="비밀번호를 입력하세요" value={password} onChange={inputPasswordChange} />
 
-        {errorMessage && <p css={s.errorMessage}>{errorMessage}</p>}
+          {errorMessage && <p css={s.errorMessage}>{errorMessage}</p>}
 
-        <button css={s.signInBtn} onClick={handleSignIn}>
-          로그인
-        </button>
-      </form>
+          <button css={s.signInBtn} onClick={handleSignIn}>로그인</button>
+        </form>
 
-      <div css={s.innerBox}>
         <div css={s.linkBox}>
-          <a href="/findUserId" css={s.linkText}>
-            아이디찾기
-          </a>
-          <a href="/findPassword" css={s.linkText}>
-            비밀번호찾기
-          </a>
-          <a href="/signUp" css={s.linkText}>
-            회원가입
-          </a>
+          <a href="/findUserId" css={s.linkText}>아이디 찾기</a>
+          <span aria-hidden="true" />
+          <a href="/findPassword" css={s.linkText}>비밀번호 찾기</a>
+          <span aria-hidden="true" />
+          <a href="/signUp" css={s.linkText}>회원가입</a>
         </div>
-      </div>
 
-      <div css={s.innerBox}>
-        <div
-          css={s.anotherSignInBox}
-          className="naver"
-          onClick={() => onSnsButtonClickHandler("naver")}
-        >
+        <div css={s.divider}><span>또는 간편 로그인</span></div>
+        <div css={s.socialSection}>
+        <button type="button" css={s.anotherSignInBox} className="naver" onClick={() => onSnsButtonClickHandler("naver")}>
           <div css={s.anotherLogoBox}>
             <img src={naverLogo} alt="네이버로고" className="naver" />
           </div>
-          <div>
-            <p>Naver 계정으로 로그인</p>
-          </div>
-        </div>
-        <div
-          css={s.anotherSignInBox}
-          className="kakao"
-          onClick={() => onSnsButtonClickHandler("kakao")}
-        >
+          <span>Naver 계정으로 로그인</span>
+        </button>
+        <button type="button" css={s.anotherSignInBox} className="kakao" onClick={() => onSnsButtonClickHandler("kakao")}>
           <div css={s.anotherLogoBox}>
             <img src={kakaoLogo} alt="카카오로고" className="kakao" />
           </div>
-          <div>
-            <p>Kakao 계정으로 로그인</p>
-          </div>
+          <span>Kakao 계정으로 로그인</span>
+        </button>
         </div>
       </div>
     </div>

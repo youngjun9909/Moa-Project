@@ -90,8 +90,11 @@ export default function VerifyToken() {
         {!isPasswordSuccess ? (
           <>
             <div css={s.mainBox2}>
-              <h1>비밀번호 찾기</h1>
+              <h1>새 비밀번호 설정</h1>
+              <p css={s.description}>안전한 새 비밀번호를 입력해주세요.</p>
+              <label css={s.fieldLabel} htmlFor="new-password">새 비밀번호</label>
               <input
+                id="new-password"
                 type="password"
                 name="newPassword"
                 value={resetData.newPassword}
@@ -99,7 +102,9 @@ export default function VerifyToken() {
                 onChange={handleInputChange}
                 css={s.topInput}
               />
+              <label css={s.fieldLabel} htmlFor="confirm-password">비밀번호 확인</label>
               <input
+                id="confirm-password"
                 type="password"
                 name="confirmPassword"
                 value={resetData.confirmPassword}
@@ -107,7 +112,7 @@ export default function VerifyToken() {
                 onChange={handleInputChange}
                 css={s.bottomInput}
               />
-              {!isPasswordMatch ? <p css={s.errorMessage}>비밀번호가 일치하지 않습니다.</p> : <></>}
+              <div aria-live="polite">{!isPasswordMatch ? <p css={s.errorMessage}>비밀번호가 일치하지 않습니다.</p> : <></>}</div>
             </div>
             <div css={s.bottomBox}>
               <button onClick={handleResetPassword}>비밀번호 변경</button>
@@ -115,8 +120,8 @@ export default function VerifyToken() {
           </>
         ) : (
           <>
-          <div css={s.mailBox}>
-            <h2>비밀번호 변경 완료</h2>
+          <div css={s.mailBox} aria-live="polite">
+            <h1>비밀번호 변경 완료</h1>
             <h2>본 페이지로 이동해주세요.</h2>
           </div>
           </>

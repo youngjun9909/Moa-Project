@@ -48,10 +48,10 @@ function FindUserIdResult() {
 
   return (
     <div css={s.findUserIdContainer}>
-      <h4 css={s.findUserIdTitle}>아이디 찾기</h4>
       <div css={s.findUserIdResultBox}>
+        <h1 css={s.findUserIdTitle}>아이디 찾기 결과</h1>
         {loading ? (
-          <p>로딩중....</p>
+          <p role="status">확인하고 있어요...</p>
         ) : isData ? (
           <>
             <ul css={s.findUserIdResultUl}>
@@ -69,7 +69,7 @@ function FindUserIdResult() {
             </button>
           </>
         ) : (
-          <p>죄송합니다. 아이디를 찾을 수 없습니다.</p>
+          <p role="alert">입력한 정보와 일치하는 아이디를 찾을 수 없습니다.</p>
         )}
       </div>
     </div>

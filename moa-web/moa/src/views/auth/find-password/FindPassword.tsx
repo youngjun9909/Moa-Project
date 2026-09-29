@@ -85,8 +85,11 @@ export default function FindPassword() {
             <>
               <div css={s.mainBox}>
                 <h1>비밀번호 찾기</h1>
+                <p css={s.description}>가입한 아이디와 이름을 입력하면 재설정 링크를 보내드려요.</p>
                 <div>
+                  <label css={s.fieldLabel} htmlFor="password-user-id">아이디</label>
                   <input
+                    id="password-user-id"
                     type="text"
                     placeholder="아이디"
                     name="userId"
@@ -94,7 +97,9 @@ export default function FindPassword() {
                     css={s.topInput}
                     onChange={handleInputChange}
                   />
+                  <label css={s.fieldLabel} htmlFor="password-user-name">이름</label>
                   <input
+                    id="password-user-name"
                     type="text"
                     placeholder="성명"
                     name="userName"
@@ -102,7 +107,7 @@ export default function FindPassword() {
                     css={s.bottomInput}
                     onChange={handleInputChange}
                   />
-                  {sendMailError && <p css={s.errorMessage}>{sendMailErrorMs}</p>}
+                  <div aria-live="polite">{sendMailError && <p css={s.errorMessage}>{sendMailErrorMs}</p>}</div>
                 </div>
                 </div>
     
@@ -114,7 +119,8 @@ export default function FindPassword() {
             </>
           ) : (
             <>
-              <div css={s.mailBox}>
+              <div css={s.mailBox} aria-live="polite">
+                <h1>이메일을 확인해주세요</h1>
                 <h2>이메일 전송 완료</h2>
                 <h2>링크를 확인해주세요.</h2>
               </div>
