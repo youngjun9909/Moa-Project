@@ -52,22 +52,22 @@ export default function GroupNaviBar() {
   return (
     <div css={[s.fullBox, s.responsiveFullBox]}>
       <div css={s.headerBox}>
-        <div css={s.imageBox} onClick={() => navigator("/main")}>
+        <button type="button" css={s.imageBox} onClick={() => navigator("/main")} aria-label="MOA 홈">
           <img src={logo} alt="로고" css={s.logoImage} />
           <h1>MOA</h1>
-        </div>
+        </button>
       </div>
 
       <div css={s.middleBox}>
         {groupList.map((group) => (
-          <div
+          <button type="button"
             css={s.imageBox}
             onClick={() => renderGroupPage(group.groupId)}
             key={group.groupId}
             style={{ marginBottom: "15px" }}
             onMouseEnter={() => setHoveredGroupId(group.groupId)}
             onMouseLeave={() => setHoveredGroupId(null)}
-          >
+            aria-label={`${group.groupTitle} 모임 열기`}>
             {hoveredGroupId === group.groupId ? (
               <p>{group.groupTitle}</p>
             ) : (
@@ -81,15 +81,15 @@ export default function GroupNaviBar() {
                 css={s.logoImage}
               />
             )}
-          </div>
+          </button>
         ))}
       </div>
 
       {cookies.token && (
         <div css={s.bottomBox}>
-          <div onClick={() => handleNext()} css={s.createBox}>
+          <button type="button" onClick={() => handleNext()} css={s.createBox} aria-label="새 모임 만들기">
             <FiPlusCircle css={s.createIcon} />
-          </div>
+          </button>
         </div>
       )}
     </div>

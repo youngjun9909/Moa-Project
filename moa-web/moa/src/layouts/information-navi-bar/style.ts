@@ -3,7 +3,7 @@ import { css } from "@emotion/react";
 
 export const infoNaviBar = css`
   box-sizing: border-box;
-  padding: 12px 24px;
+  padding: 8px 20px;
   height: var(--moa-header-height);
   width: calc(100% - var(--moa-sidebar-width));
   margin-left: var(--moa-sidebar-width);
@@ -56,10 +56,12 @@ export const serviceItem = css`
 `;
 
 export const globalSearch = css`
-  width:min(48vw,520px); height:44px; display:flex; align-items:center; gap:10px; padding:0 15px;
-  border:1px solid transparent; border-radius:12px; background:#f2f5f7; color:var(--moa-muted); cursor:pointer;
-  &:hover { border-color:var(--moa-line-strong); background:#fff; }
-  @media (max-width: 720px) { width:44px; padding:0; justify-content:center; > span { display:none; } }
+  width:min(48vw,520px); height:40px; display:flex; align-items:center; gap:10px; padding:0 14px;
+  border:1px solid var(--moa-chip-line); border-radius:12px; background:var(--moa-surface-muted); color:var(--moa-chip-ink); cursor:pointer;
+  &:focus-within { border-color:var(--moa-primary); background:#fff; box-shadow:0 0 0 4px var(--moa-primary-soft); }
+  > button { display:grid; place-items:center; padding:0; border:0; background:transparent; color:var(--moa-primary); font-size:19px; cursor:pointer; }
+  > input { min-width:0; flex:1; border:0; outline:0; background:transparent; color:var(--moa-ink); }
+  @media (max-width: 720px) { width:min(62vw,360px); }
 `;
 
 export const mobileMenuButton = css`
@@ -68,7 +70,7 @@ export const mobileMenuButton = css`
 `;
 
 export const createGroupButton = css`
-  min-height:44px; padding:0 16px; border:0; border-radius:11px; background:var(--moa-primary); color:#fff; font-weight:800; cursor:pointer;
+  min-height:40px; padding:0 15px; border:0; border-radius:10px; background:var(--moa-primary); color:#fff; font-weight:800; cursor:pointer;
   &:hover { background:var(--moa-primary-dark); }
   @media (max-width: 900px) { width:44px; padding:0; overflow:hidden; white-space:nowrap; color:transparent; &::first-letter { color:#fff; font-size:20px; } }
 `;
@@ -146,31 +148,37 @@ export const logoutBtn = css`
   padding: 5px 10px;
   margin: 10px;
   border-radius: 5px;
-  background-color: #cfcfcf;
-  border: 1px solid #0a3140;
+  background-color: var(--moa-aqua-soft);
+  border: 1px solid var(--moa-aqua);
   cursor: pointer;
   &:hover{
-    background-color: #afafaf;
+    background-color: var(--moa-aqua);
     color: #fff;
     border: 1px solid #fff
   }
 `;
 
 export const signBtn = css`
-  color: #0a3140 ;
-  align-items: center;
-  font-weight: 600;
+  color: var(--moa-primary-dark);
+  min-height:40px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight: 800;
   font-size: 14px;
-  padding: 5px 10px;
-  margin: 10px;
-  border-radius: 5px;
-  background-color: #E7E7E7;
-  border: 1px solid #0a3140;
+  padding: 0 16px;
+  margin: 0 8px;
+  border-radius: 11px;
+  background-color: var(--moa-primary-soft);
+  border: 1px solid var(--moa-primary);
   cursor: pointer;
-  transition: transform 0.3s ease;
+  white-space:nowrap;
+  transition: transform 0.2s ease, background 0.2s ease;
 
   &:hover{
-    transform: scale(1.1);
+    transform: translateY(-1px);
+    background:var(--moa-primary);
+    color:#fff;
   }
 `;
 
@@ -247,6 +255,4 @@ export const naviModal = css`
   padding: 2;
 `;
 
-export const responsiveInfo = css`
-  width:100%;
-`;
+export const responsiveInfo = css``;

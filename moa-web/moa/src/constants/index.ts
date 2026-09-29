@@ -1,4 +1,4 @@
-export const REQUEST_URL = "http://localhost:8080";
+export const REQUEST_URL = "http://localhost:4040";
 
 //& 테이블 경로 상수 선언
 export const WEB_MAIN = '/';
@@ -12,6 +12,20 @@ export const FIND__VERIFY_PASSWORD_PAGE = "/findPassword/verify";
 export const FIND_USERID_PAGE = "/findUserId/*";
 export const AUTH_PAGE = "/auth";
 export const SNS_SUCCESS_PAGE = "/sns-success";
+
+const STANDALONE_AUTH_PREFIXES = [
+  SIGN_IN_PAGE,
+  SIGN_UP_PAGE,
+  FIND_PASSWORD_PAGE,
+  "/findUserId",
+  AUTH_PAGE,
+  SNS_SUCCESS_PAGE,
+];
+
+export const isStandaloneAuthPath = (pathname: string) =>
+  STANDALONE_AUTH_PREFIXES.some(
+    (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`)
+  );
 
 // 리뷰 매핑
 export const REVIEW_MAIN = "/main";

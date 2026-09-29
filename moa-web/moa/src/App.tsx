@@ -39,12 +39,6 @@ function App() {
       mode: "light",
     },
   });
-  interface TokenUser {
-    userId: string;
-    nickName: string;
-    profileImage: string | null;
-  }
-
   const [cookies] = useCookies(["token"]);
   const { login, logout } = userAuthStore();
 
@@ -77,6 +71,23 @@ function App() {
     window.addEventListener("moa:auth-expired", handleAuthExpired);
     return () => window.removeEventListener("moa:auth-expired", handleAuthExpired);
   }, [logout]);
+
+  if (p.isStandaloneAuthPath(location.pathname)) {
+    return (
+      <RootLayout>
+        <Routes>
+          <Route path={p.SIGN_UP_PAGE} element={<SignUp />} />
+          <Route path={p.AUTH_PAGE} element={<AuthRedirectHandler />} />
+          <Route path={p.SIGN_IN_PAGE} element={<SignIn />} />
+          <Route path={p.SNS_SUCCESS_PAGE} element={<SnsSuccess />} />
+          <Route path={p.FIND_PASSWORD_PAGE} element={<FindPassword />} />
+          <Route path={p.FIND_USERID_PAGE} element={<FindUserId />} />
+          <Route path={p.FIND__VERIFY_PASSWORD_PAGE} element={<VerificationPassword />} />
+        </Routes>
+      </RootLayout>
+    );
+  }
+
   return (
     <>
       {location.pathname === p.WEB_MAIN ? (
@@ -142,7 +153,6 @@ function App() {
                     </Routes>
                   }
                 />
-                <Route path={p.NOTICE_PAGE} element={<NoticePage />} />
                 <Route path={p.NOTICE_PAGE} element={<NoticePage />} />
                 <Route
                   path={p.GROUP_JOIN_PAGE}

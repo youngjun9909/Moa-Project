@@ -54,6 +54,7 @@ export const imageBox = css`
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  color:inherit;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   
 
@@ -123,6 +124,7 @@ export const createBox = css`
   display: flex;
   align-items: center;
   justify-content: center;
+  border:0; background:transparent; cursor:pointer;
 `;
 
 export const createIcon = css`
@@ -136,6 +138,4 @@ export const createIcon = css`
   }
 `;
 
-export const responsiveFullBox = css`
-  width:100%;
-`;
+export const responsiveFullBox = css``;

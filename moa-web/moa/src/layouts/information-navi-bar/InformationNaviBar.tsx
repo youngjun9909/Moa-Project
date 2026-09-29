@@ -10,15 +10,13 @@ import userAuthStore from "../../stores/auth.store";
 import { useCookies } from "react-cookie";
 import HamburgerMenu from "../../components/HamburgerMenu";
 import { INFORMATION_IMG } from "../../apis";
-import useCategoryBarStore from "../../stores/categoryBar.store";
 
 export default function InformationNaviBar() {
   const { nickName, profileImage, isAuthenticated, logout } = userAuthStore();
   const [cookies] = useCookies(["token"]);
-  const category = useCategoryBarStore((state) => state.isOpen);
-  const setCategory = useCategoryBarStore((state) => state.setIsOpen);
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const [mobileNavOpen, setMobileNavOpen] = useState<boolean>(false);
+  const [headerKeyword, setHeaderKeyword] = useState("");
 
   const navigator = useNavigate();
 
@@ -30,11 +28,19 @@ export default function InformationNaviBar() {
   }, [cookies.token, logout]);
 
   const handleClickButton = () => {
-    setCategory(!category);
+    navigator("/main/search");
+    setMobileNavOpen(false);
   };
 
   const handleMenuClick = () => {
     setMenuOpen((prev) => !prev);
+  };
+
+  const handleHeaderSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const keyword = headerKeyword.trim();
+    if (!keyword) return;
+    navigator(`/main/search/searchresult/${encodeURIComponent(keyword)}`);
   };
 
   return (
@@ -46,7 +52,6 @@ export default function InformationNaviBar() {
         </div>
         <nav css={s.serviceMenu} aria-label="서비스 탐색">
           <button css={s.serviceItem} onClick={() => { navigator("/main"); setMobileNavOpen(false); }}><IoHomeOutline /> 홈</button>
-          <button css={s.serviceItem} onClick={() => { navigator("/main/search"); setMobileNavOpen(false); }}><IoSearchSharp /> 모임 찾기</button>
           <button css={s.serviceItem} onClick={handleClickButton}><IoExtensionPuzzle /> 카테고리</button>
           <p css={s.menuCaption}>내 활동</p>
           <button css={s.serviceItem} onClick={() => navigator("/mypage/participationStatus")}><IoCalendarOutline /> 참여 일정</button>
@@ -57,7 +62,10 @@ export default function InformationNaviBar() {
       <div css={s.infoNaviBar}>
         <div css={s.naviBox}>
           <button css={s.mobileMenuButton} onClick={() => setMobileNavOpen((open) => !open)} aria-label="서비스 메뉴 열기" aria-expanded={mobileNavOpen}><HiMenu /></button>
-          <button css={s.globalSearch} onClick={() => navigator("/main/search")} aria-label="통합 검색 열기"><IoSearchSharp /><span>관심사, 지역, 모임 이름으로 검색</span></button>
+          <form css={s.globalSearch} onSubmit={handleHeaderSearch} role="search">
+            <button type="submit" aria-label="모임 검색"><IoSearchSharp /></button>
+            <input type="search" value={headerKeyword} onChange={(e) => setHeaderKeyword(e.target.value)} placeholder="관심사, 지역, 모임 이름으로 검색" aria-label="통합 모임 검색" />
+          </form>
         </div>
         <div css={s.userInfoBox}>
           <button css={s.createGroupButton} onClick={() => navigator("/main/create-group")}>＋ 모임 만들기</button>
@@ -78,9 +86,9 @@ export default function InformationNaviBar() {
               <HiMenu css={s.iconSt} />
             </button>
           ) : (
-            <div onClick={() => navigator("/signIn")} css={s.signBtn}>
+            <button type="button" onClick={() => navigator("/signIn")} css={s.signBtn}>
               로그인 & 회원가입
-            </div>
+            </button>
           )}
         </div>
       </div>
