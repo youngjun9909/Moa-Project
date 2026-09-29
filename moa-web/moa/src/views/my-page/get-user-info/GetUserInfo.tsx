@@ -171,7 +171,7 @@ const GetUserInfo = () => {
 
   return (
     <div>
-      <h4 className="mypageTitle">마이페이지</h4>
+      <header className="mypageHeader"><span>MY MOA</span><h1>프로필 수정</h1><p>모임에서 보여질 정보와 연락처를 관리하세요.</p></header>
       <div className="userInfoBox">
         <div className="innerBox">
           {loading ? (
@@ -179,7 +179,7 @@ const GetUserInfo = () => {
           ) : userInfo ? (
             <ul className="userInfoUl">
               <li className="imgBox">
-                <span>프로필 이미지</span>
+                  <h2>프로필 이미지</h2>
                 <div className="imgDiv">
                   <div className="imgBackroundColor">
                     {!userProfileImg ? (

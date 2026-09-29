@@ -1,7 +1,9 @@
-* {
-  margin: 0px;
-  padding: 0px;
-}
+* { box-sizing: border-box; }
+
+.mypageHeader { width:min(100% - 40px, 920px); margin:34px auto 22px; }
+.mypageHeader span { color:var(--moa-primary); font-size:12px; font-weight:800; letter-spacing:.1em; }
+.mypageHeader h1 { margin:7px 0 5px; color:var(--moa-text); font-size:clamp(27px,3vw,36px); }
+.mypageHeader p { margin:0; color:var(--moa-text-muted); }
 
 .mypageTitle {
   margin: 20px 40px;
@@ -13,7 +15,7 @@
   flex-direction: column;
   align-items: center;
   gap: 20px;
-  margin: 48px clamp(16px, 5vw, 80px);
+  width:min(100% - 40px, 920px); margin:0 auto 56px;
 }
 
 .passowordBox {
@@ -22,20 +24,18 @@
   justify-content: center;
   align-items: center;
   gap: 30px;
-  background-color: #f3f3f3;
-  border-radius: 5px;
-  width: min(100%, 500px);
-  height: 300px;
+  background-color: #fff; border:1px solid var(--moa-line); box-shadow:var(--moa-shadow-sm);
+  border-radius: var(--moa-radius-lg); width:min(100%,560px); min-height:280px; padding:34px;
 }
 
 .passwordCheckInput {
   background-color: white;
-  width: 300px;
-  height: 40px;
+  width: 100%;
+  height: 48px;
   font: 20px;
   border-radius: 5px;
-  border: none;
-  padding: 20px;
+  border: 1px solid var(--moa-line-strong);
+  padding: 0 14px;
   box-sizing: border-box;
   outline: none;
 }
@@ -46,43 +46,40 @@
 }
 
 .infoUpdateBtn {
-  width: 150px;
-  height: 40px;
-  border-radius: 5px;
+  width: 100%; max-width:300px; height: 46px; border-radius:12px;
   border: none;
   color: #fff;
-  background-color: #c9c9c9;
+  background-color: var(--moa-aqua);
+  font-weight: 700;
 }
 
 .infoUpdateBtn:hover {
   cursor: pointer;
-  background-color: #929292;
+  background-color: #1f6d64;
 }
 
 .deleteUserIdBtn {
-  width: min(100%, 500px);
-  height: 50px;
-  border-radius: 5px;
-  border: none;
-  background-color: #FF7B54;
-  color: #fff;
+  min-width: 130px; height:42px; border-radius:10px; border:1px solid #d9544d; background:#fff; color:#b93630;
 }
 
 .deleteUserIdBtn:hover {
   cursor: pointer;
-  background-color: #e5673b;
+  background-color: #fff2f0;
 }
 
+.accountDanger { width:min(100%,560px); display:flex; gap:20px; justify-content:space-between; align-items:center; padding:20px; border:1px solid #f1c5c1; border-radius:var(--moa-radius-md); background:#fff9f8; }
+.accountDanger p { margin:5px 0 0; color:var(--moa-text-muted); font-size:13px; }
+
 .innerBox {
-  width: 400px;
+  width: 100%;
   margin: 0 auto;
 }
 
 .userInfoBox {
   background-color: #ffffff;
   padding: 30px;
-  width: 400px;
-  height: 530px;
+  width: min(calc(100% - 40px), 720px);
+  min-height: 530px;
   margin: 0 auto;
   border: 1px solid #ddd;
   border-radius: 10px;
@@ -334,11 +331,11 @@
 }
 
 .updateCancel {
-  background-color: #aaa;
+  background-color: var(--moa-aqua);
 }
 
 .updateCancel:hover {
-  background-color: #888;
+  background-color: #1f6d64;
 }
 
 .userInfoButtons {

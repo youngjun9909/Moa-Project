@@ -3,16 +3,13 @@
   margin: 0;
   padding: 0;
   color: #333;
-  margin-top: 100px;
+  padding: 34px 20px 60px;
 }
 
 .deleteSection {
-  max-width: 600px;
-  margin: 40px auto;
-  padding: 20px;
-  border-radius: 8px;
+  max-width: 720px; margin: 0 auto; padding: 34px; border-radius: var(--moa-radius-lg);
   background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border:1px solid #efc4c0; box-shadow:var(--moa-shadow-sm);
 }
 
 .deleteTitle {
@@ -20,7 +17,7 @@
   font-weight: bold;
   margin-bottom: 20px;
   color: #333;
-  text-align: center;
+  text-align: left;
 }
 
 .deleteList {
@@ -104,16 +101,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 200px;
+  min-height:calc(100vh - 180px); padding:34px 20px;
 }
 
 .confirmationSection {
   width: 100%;
-  max-width: 400px;
-  padding: 20px;
-  border-radius: 8px;
+  max-width: 520px; padding: 34px; border-radius: var(--moa-radius-lg);
   background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border:1px solid #efc4c0; box-shadow:var(--moa-shadow-sm);
   text-align: center;
 }
 
@@ -124,8 +119,7 @@
   margin-bottom: 20px;
   color: #333;
   text-align: center;
-  border-bottom: 2px solid #FF7B54;
-  padding-bottom: 10px;
+  padding-bottom: 4px;
 }
 
 .passwordInput {
@@ -135,7 +129,7 @@
   border: 1px solid #ddd;
   border-radius: 4px;
   margin-bottom: 20px;
-  background-color: #eee;
+  background-color: #fff;
   text-align: center;
   color: #333;
 }
@@ -189,3 +183,8 @@
 .redirectButton:hover {
   background-color: #e6691e;
 }
+
+.dangerEyebrow { color:#b93630; font-size:12px; font-weight:800; letter-spacing:.1em; }
+.withdrawalGuide { color:var(--moa-text-muted); line-height:1.6; margin:0 0 22px; }
+.srOnly { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
+@media(max-width:560px){ .deleteSection,.confirmationSection{padding:24px 20px;} }

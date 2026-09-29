@@ -63,14 +63,15 @@ function MyPageStart() {
 
   return (
     <div>
-      <h4 className="mypageTitle">마이페이지</h4>
+        <header className="mypageHeader"><span>MY MOA</span><h1>내 정보</h1><p>계정 정보를 안전하게 확인하고 수정할 수 있어요.</p></header>
       <div className="mypageBox">
-        <h4 className="mypagesubTitle">
-          비밀번호 인증 후 내 정보 수정이 가능합니다.
-        </h4>
+            <h2 className="mypagesubTitle">
+              비밀번호 인증 후 내 정보 수정이 가능합니다.
+            </h2>
         <div className="passowordBox">
-          <h4 className="mypagesubTitle">비밀번호를 입력해주세요.</h4>
-          <input
+              <label className="mypagesubTitle" htmlFor="mypagePassword">비밀번호를 입력해주세요.</label>
+              <input
+                id="mypagePassword"
             type="password"
             className="passwordCheckInput"
             name="password"
@@ -84,9 +85,7 @@ function MyPageStart() {
             내 정보 수정
           </button>
         </div>
-        <button className="deleteUserIdBtn" onClick={handleButtonDeleteInfo}>
-          회원탈퇴
-        </button>
+            <div className="accountDanger"><div><strong>회원 탈퇴</strong><p>탈퇴 전 안내사항과 삭제 범위를 꼭 확인해주세요.</p></div><button className="deleteUserIdBtn" onClick={handleButtonDeleteInfo}>탈퇴 안내 보기</button></div>
       </div>
     </div>
   );

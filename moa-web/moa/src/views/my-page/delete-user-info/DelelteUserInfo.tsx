@@ -61,9 +61,13 @@ function DeleteUserInfo() {
   return (
     <div className="withdrawalPage">
       {cookies.isChecked ? (
-        <div className="confirmationSection">
-          <h4 className="sectionTitle">탈퇴 본인 확인</h4>
+        <div className="confirmationSection dangerZone">
+          <span className="dangerEyebrow">FINAL STEP</span>
+          <h1 className="sectionTitle">탈퇴 본인 확인</h1>
+          <p className="withdrawalGuide">비밀번호를 입력하면 마지막 확인 후 계정이 삭제됩니다.</p>
+          <label className="srOnly" htmlFor="withdrawalPassword">비밀번호</label>
           <input
+            id="withdrawalPassword"
             className="passwordInput"
             type="password"
             placeholder="비밀번호를 입력해주세요."

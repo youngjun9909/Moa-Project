@@ -17,6 +17,7 @@ import { FaSignsPost } from "react-icons/fa6";
 import { useCookies } from "react-cookie";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { EmptyState } from "../../../components/ui/EmptyState";
 
 export default function ParticipationStatusPage() {
   const [cookies] = useCookies(["token"]);
@@ -68,10 +69,13 @@ export default function ParticipationStatusPage() {
   return (
     <div css={s.fullBox}>
       <div css={s.headerBox}>
+        <span>MY ACTIVITY</span>
         <h1>모임 신청 내역</h1>
+        <p>내가 신청한 모임의 승인 상태와 일정을 확인하세요.</p>
       </div>
 
       <div css={s.mainBox}>
+        {participationStatusData.length === 0 && <EmptyState title="아직 신청한 모임이 없어요" description="관심 있는 모임을 찾아 새로운 활동을 시작해보세요." />}
         {participationStatusData.map((data) => (
           <div css={s.reviewBox} key={data.answerId}>
             <div css={s.reviewMain}>
@@ -80,10 +84,10 @@ export default function ParticipationStatusPage() {
                   {data.groupImage ? (
                     <img
                       src={`${GROUP_MAIN_IMG_API}${data.groupImage}`}
-                      alt="REVIEW IMAGE"
+                      alt={`${data.groupTitle} 대표 이미지`}
                     />
                   ) : (
-                    <img src={img} alt="DEFAULT IMAGE" className="default" />
+                    <img src={img} alt="MOA 기본 이미지" className="default" />
                   )}
                 </div>
               </div>

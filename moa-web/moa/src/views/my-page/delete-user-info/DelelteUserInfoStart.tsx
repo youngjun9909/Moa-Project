@@ -33,8 +33,9 @@ function DeleteUserInfoStart() {
   return (
     <div className="deletContainer">
       {cookies.token ? (
-        <div className="deleteSection">
-          <h4 className="deleteTitle">회원탈퇴 확인</h4>
+        <div className="deleteSection dangerZone">
+          <span className="dangerEyebrow">ACCOUNT SAFETY</span>
+          <h1 className="deleteTitle">회원 탈퇴 전 확인해주세요</h1>
           <ul className="deleteList">
             <li>회원 탈퇴 후 계정 및 데이터는 복구가 불가능합니다.</li>
             <li>탈퇴 시 저장된 개인정보와 이용 기록은 모두 삭제됩니다.</li>
@@ -48,8 +49,7 @@ function DeleteUserInfoStart() {
               합니다.
             </li>
             <li>
-              가입 상태에서 부여된 특별 권한(관리자, 모임 주최자 등)이
-              상실됩니다.
+              가입 상태에서 부여된 모임 주최 권한도 함께 상실됩니다.
             </li>
           </ul>
           <p className="deleteConfirmText">탈퇴 시 주의사항 확인 여부</p>
@@ -69,7 +69,7 @@ function DeleteUserInfoStart() {
             </label>
           </form>
           <button className="deleteNextBtn" onClick={handleNext}>
-            다음 페이지로 이동
+            확인하고 본인 인증하기
           </button>
         </div>
       ) : (
