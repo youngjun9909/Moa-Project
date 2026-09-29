@@ -81,6 +81,7 @@ export const userInfoBox = css`
   display: flex;
   align-items: center;
   min-width: 0;
+  @media (max-width:600px) { padding:0; }
 `;
 
 export const userImgBox = css`
@@ -179,6 +180,10 @@ export const signBtn = css`
     transform: translateY(-1px);
     background:var(--moa-primary);
     color:#fff;
+  }
+  @media (max-width:600px) {
+    flex:0 0 auto; min-width:64px; padding:0 12px; margin:0; font-size:0;
+    &::after { content:"로그인"; font-size:13px; }
   }
 `;
 
