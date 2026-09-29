@@ -2,8 +2,9 @@ import { css } from "@emotion/react";
 
 export const page = css`width:min(100%, 1440px); margin:0 auto; padding:clamp(24px,4vw,44px) clamp(18px,4vw,56px) 64px;`;
 export const eyebrow = css`margin:0 0 7px; color:var(--moa-primary-dark); font-size:12px; font-weight:850; letter-spacing:.1em;`;
+export const results = css`width:100%; margin-top:24px;`;
 export const grid = css`
-  display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:22px 18px; margin-top:24px;
+  display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:22px 18px;
   @media(max-width:1120px){grid-template-columns:repeat(3,minmax(0,1fr));}
   @media(max-width:820px){grid-template-columns:repeat(2,minmax(0,1fr));}
   @media(max-width:520px){grid-template-columns:1fr;}

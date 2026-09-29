@@ -51,6 +51,7 @@ export const mainBox = css`
   flex-direction: column;
   align-items: center;
 `;
+export const emptyWrap = css`width:100%; padding-top:8px; > section{min-height:300px;}`;
 
 export const reviewGrid = css`
   width: 100%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px;
@@ -73,10 +74,11 @@ export const reviewHeader = css`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 0 4px 9px;
+  padding: 0;
   gap: 10px;
 
-  > p, > time { margin: 0; color: var(--moa-text-muted); font-size: 13px; }
+  > span { color: var(--moa-primary-dark); font-size: 12px; font-weight: 800; }
+  > time { color: var(--moa-text-muted); font-size: 12px; }
 `;
 
 export const reviewMain = css`
@@ -86,9 +88,9 @@ export const reviewMain = css`
   border-radius: var(--moa-radius-md);
   width: 100%;
   display: grid;
-  grid-template-columns: 150px minmax(0, 1fr);
-  gap: 16px;
-  padding: 14px;
+  grid-template-columns: 180px minmax(0, 1fr);
+  gap: 20px;
+  padding: 16px;
   box-shadow: var(--moa-shadow-sm);
   @media (max-width: 520px) { grid-template-columns: 1fr; }
 `;
@@ -120,36 +122,8 @@ export const contentBox = css`
   display: flex;
   flex-direction: column;
   gap: 10px;
-
-  > div:nth-child(1) {
-    box-sizing: border-box;
-    width: 100%;
-    background-color: var(--moa-surface-muted);
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    padding: 5px 10px;
-
-    > p {
-      margin: 0; font-weight: 800; color: var(--moa-text);
-    }
-  }
-  
-  > div:nth-child(2) {
-    box-sizing: border-box;
-    width: 100%;
-    min-height: 92px;
-    border-radius: 5px;
-    display: flex;
-    padding: 5px 10px;
-
-    > p {
-      margin: 0;
-      word-wrap: break-word; 
-      word-break: break-word; 
-      white-space: pre-wrap; color: var(--moa-text); line-height: 1.7;
-    }
-  }
+  > h2 { margin:2px 0 0; color:var(--moa-text); font-size:18px; letter-spacing:-.03em; }
+  > p { margin:0; display:-webkit-box; overflow:hidden; -webkit-box-orient:vertical; -webkit-line-clamp:4; word-break:break-word; white-space:pre-wrap; color:var(--moa-text-muted); font-size:14px; line-height:1.7; }
 `;
 export const loadMore = css`
   margin-top: 28px; min-width: 132px; min-height: 44px; padding: 0 22px; border-radius: 12px;

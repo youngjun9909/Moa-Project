@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 
-export const createPage = css`width:min(100%,1040px); margin:0 auto; padding:38px clamp(20px,4vw,52px) 64px;`;
+export const createPage = css`width:min(100%,1080px); margin:0 auto; padding:34px clamp(20px,4vw,48px) 64px;`;
 export const createHeader = css`
   display:flex; justify-content:space-between; align-items:flex-end; gap:24px; margin-bottom:24px;
   > div > span { color:var(--moa-primary-dark); font-size:12px; font-weight:900; letter-spacing:.12em; }
@@ -18,6 +18,20 @@ export const Container = css`
   width:100%; padding:0; margin:0;
   > h4 { margin:0 0 9px; color:var(--moa-ink); font-size:14px; }
 `;
+
+export const formSection = css`
+  width:100%; margin:0; padding:24px; border:1px solid var(--moa-line); border-radius:16px; background:var(--moa-surface-muted);
+  legend { padding:0 8px; margin-left:-8px; color:var(--moa-ink); font-size:18px; font-weight:900; letter-spacing:-.03em; }
+  @media(max-width:620px){padding:20px 16px;}
+`;
+export const sectionDescription = css`margin:-2px 0 20px; color:var(--moa-muted); font-size:13px; line-height:1.6;`;
+export const fieldGroup = css`
+  min-width:0; margin-top:20px;
+  &:first-of-type{margin-top:0;}
+  > h4, > label { display:block; margin:0 0 9px; color:var(--moa-ink); font-size:14px; font-weight:800; }
+`;
+export const placeGrid = css`display:grid; grid-template-columns:minmax(240px,.7fr) minmax(320px,1.3fr); gap:24px; align-items:end; @media(max-width:760px){grid-template-columns:1fr; gap:2px;}`;
+export const twoColumnFields = css`display:grid; grid-template-columns:1fr 1fr; gap:18px; @media(max-width:680px){grid-template-columns:1fr; gap:2px;}`;
 
 export const AllBox = css`
   display: flex;
@@ -109,16 +123,14 @@ export const ContentBox = css`
 export const CreatorBox = css`
   margin:0;
   width:100%;
-  padding:clamp(22px,4vw,38px);
-  border:1px solid var(--moa-line);
-  border-radius:var(--moa-radius-lg);
-  background:var(--moa-surface);
-  box-shadow:var(--moa-shadow-sm);
+  padding:0;
+  border:0;
+  background:transparent;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
-  gap:24px;
+  align-items:stretch;
+  gap:18px;
   `;
 
 export const CreatorBox_1 = css`
@@ -181,3 +193,5 @@ export const secondaryButton = css`
 export const previewImage = css`width:100%; max-height:300px; aspect-ratio:16/7; object-fit:cover; border-radius:14px; border:1px solid var(--moa-line);`;
 export const fileButton = css`display:inline-flex; min-height:42px; align-items:center; padding:0 15px; border:1px solid var(--moa-chip-line); border-radius:11px; background:var(--moa-chip-bg); color:var(--moa-chip-ink); font-weight:800; cursor:pointer;`;
 export const hiddenFileInput = css`position:absolute; width:1px; height:1px; overflow:hidden; opacity:0;`;
+export const imageUpload = css`display:grid; grid-template-columns:minmax(0,1fr) 220px; gap:20px; align-items:center; @media(max-width:680px){grid-template-columns:1fr;}`;
+export const uploadAction = css`display:flex; flex-direction:column; align-items:flex-start; gap:10px; span{color:var(--moa-muted); font-size:12px; line-height:1.5;}`;

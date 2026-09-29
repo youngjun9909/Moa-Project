@@ -7,6 +7,7 @@ import { format } from "date-fns";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { CREATE_REVIEW_GET_API, CREATE_REVIEW_IMG_API } from "../../../apis";
+import { Button } from "../../../components/ui";
 import { EmptyState } from "../../../components/ui/EmptyState";
 
 export default function ReviewMain() {
@@ -65,16 +66,17 @@ export default function ReviewMain() {
 
       <div css={s.mainBox}>
         {!loading && reviewData.length === 0 && (
-          <EmptyState title="아직 등록된 후기가 없어요" description="첫 번째 모임 후기를 남겨보세요." />
+          <div css={s.emptyWrap}>
+            <EmptyState
+              title="아직 등록된 후기가 없어요"
+              description="함께한 모임의 기억과 유용한 팁을 첫 번째로 들려주세요."
+              action={<Button onClick={() => navigate("/review/create")}>첫 후기 작성하기</Button>}
+            />
+          </div>
         )}
         <div css={s.reviewGrid}>
         {reviewData.map((review) => (
-          <div css={s.reviewBox} key={review.reviewId}>
-            <div css={s.reviewHeader}>
-              <p>{review.userId}</p>
-                <time dateTime={String(review.reviewDate)}>{format(review.reviewDate, "yyyy.MM.dd")}</time>
-            </div>
-
+          <article css={s.reviewBox} key={review.reviewId}>
             <div css={s.reviewMain}>
               <div css={s.imgBox}>
                 <div>
@@ -90,16 +92,15 @@ export default function ReviewMain() {
               </div>
 
               <div css={s.contentBox}>
-                <div>
-                  <p>{review.groupName}</p>
+                <div css={s.reviewHeader}>
+                  <span>{review.userId}</span>
+                  <time dateTime={String(review.reviewDate)}>{format(review.reviewDate, "yyyy.MM.dd")}</time>
                 </div>
-
-                <div>
-                  <p>{review.reviewContent}</p>
-                </div>
+                <h2>{review.groupName}</h2>
+                <p>{review.reviewContent}</p>
               </div>
             </div>
-          </div>
+          </article>
         ))}
         </div>
         {reviewData.length > 0 && hasMore && (

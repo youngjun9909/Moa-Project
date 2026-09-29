@@ -125,90 +125,52 @@ export default function CreateGroup() {
       </header>
       {page === 0 && (
         <div css={s.CreatorBox}>
-          <div css={s.Container}>
-            <h4>모임 유형</h4>
-            <div css={s.AllBox}>
-              <button type="button"
-                css={formData.groupType === "단기모임" ? s.activeTab : s.Tab}
-                onClick={() => handleInputChange("groupType", "단기모임")}
-              >
-                단기 모임
-              </button>
-              <button type="button"
-                css={formData.groupType === "정기모임" ? s.activeTab : s.Tab}
-                onClick={() => handleInputChange("groupType", "정기모임")}
-              >
-                정기 모임
-              </button>
+          <fieldset css={s.formSection}>
+            <legend>어떤 모임인가요?</legend>
+            <p css={s.sectionDescription}>운영 방식과 관심 주제를 선택해주세요.</p>
+            <div css={s.fieldGroup}>
+              <h4>모임 유형</h4>
+              <div css={s.AllBox}>
+                <button type="button" css={formData.groupType === "단기모임" ? s.activeTab : s.Tab} onClick={() => handleInputChange("groupType", "단기모임")}>단기 모임</button>
+                <button type="button" css={formData.groupType === "정기모임" ? s.activeTab : s.Tab} onClick={() => handleInputChange("groupType", "정기모임")}>정기 모임</button>
+              </div>
             </div>
-          </div>
-
-          <div css={s.Container}>
-            <h4>모임 카테고리</h4>
-            <div css={s.AllBox}>
-              {[
-                "취미",
-                "문화_예술",
-                "스포츠_운동",
-                "푸드_맛집",
-                "자기계발",
-                "힐링",
-                "연애",
-                "여행",
-              ].map((category) => (
-                <button type="button"
-                  key={category}
-                  css={
-                    formData.groupCategory === category ? s.activeTab : s.Tab
-                  }
-                  onClick={() => handleInputChange("groupCategory", category)}
-                >
-                  {category}
-                </button>
-              ))}
+            <div css={s.fieldGroup}>
+              <h4>모임 카테고리</h4>
+              <div css={s.AllBox}>
+                {["취미", "문화_예술", "스포츠_운동", "푸드_맛집", "자기계발", "힐링", "연애", "여행"].map((category) => (
+                  <button type="button" key={category} css={formData.groupCategory === category ? s.activeTab : s.Tab} onClick={() => handleInputChange("groupCategory", category)}>{category}</button>
+                ))}
+              </div>
             </div>
-          </div>
+          </fieldset>
 
-          <div css={s.Container}>
-            <label htmlFor="group-date">모임 날짜</label>
-            <input
-              id="group-date"
-              type="date"
-              css={s.DateBox}
-              value={formData.groupDate}
-              onChange={(e) => handleInputChange("groupDate", e.target.value)}
-            />
-          </div>
-
-          <div css={s.Container}>
-            <h4>모임 장소</h4>
-            <div css={s.AllBox}>
-              <button type="button"
-                css={formData.meetingType === "온라인" ? s.activeTab : s.Tab}
-                onClick={() => handleInputChange("meetingType", "온라인")}
-              >
-                온라인
-              </button>
-              <button type="button"
-                css={formData.meetingType === "오프라인" ? s.activeTab : s.Tab}
-                onClick={() => handleInputChange("meetingType", "오프라인")}
-              >
-                오프라인
-              </button>
+          <fieldset css={s.formSection}>
+            <legend>언제 만나나요?</legend>
+            <p css={s.sectionDescription}>참여자가 일정을 한눈에 확인할 수 있어요.</p>
+            <div css={s.fieldGroup}>
+              <label htmlFor="group-date">모임 날짜</label>
+              <input id="group-date" type="date" css={s.DateBox} value={formData.groupDate} onChange={(e) => handleInputChange("groupDate", e.target.value)} />
             </div>
-          </div>
+          </fieldset>
 
-          <div css={s.Container}>
-            <h4>모임 주소</h4>
-            <input
-              type="text"
-              css={s.TitleInput}
-              value={formData.groupAddress}
-              onChange={(e) =>
-                handleInputChange("groupAddress", e.target.value)
-              }
-            />
-          </div>
+          <fieldset css={s.formSection}>
+            <legend>어디서 만나나요?</legend>
+            <p css={s.sectionDescription}>진행 방식을 고르고 접속 링크나 만날 장소를 알려주세요.</p>
+            <div css={s.placeGrid}>
+              <div css={s.fieldGroup}>
+                <h4>진행 방식</h4>
+                <div css={s.AllBox}>
+                  <button type="button" css={formData.meetingType === "온라인" ? s.activeTab : s.Tab} onClick={() => handleInputChange("meetingType", "온라인")}>온라인</button>
+                  <button type="button" css={formData.meetingType === "오프라인" ? s.activeTab : s.Tab} onClick={() => handleInputChange("meetingType", "오프라인")}>오프라인</button>
+                </div>
+              </div>
+              <div css={s.fieldGroup}>
+                <label htmlFor="group-address">모임 주소</label>
+                <input id="group-address" type="text" css={s.TitleInput} placeholder={formData.meetingType === "온라인" ? "온라인 접속 링크를 입력해주세요" : "만날 장소나 주소를 입력해주세요"} value={formData.groupAddress} onChange={(e) => handleInputChange("groupAddress", e.target.value)} />
+              </div>
+            </div>
+          </fieldset>
 
           <div css={s.BottomButtonContainer}>
             <button type="button" css={s.MoveButton} onClick={handleNextPage}>
@@ -220,7 +182,10 @@ export default function CreateGroup() {
 
       {page === 1 && (
         <div css={s.CreatorBox}>
-          <div css={s.Container}>
+          <fieldset css={s.formSection}>
+            <legend>모임을 소개해주세요</legend>
+            <p css={s.sectionDescription}>누구나 모임의 분위기와 활동을 쉽게 이해할 수 있도록 작성해주세요.</p>
+          <div css={s.fieldGroup}>
             <label htmlFor="group-title">모임 제목</label>
             <input
               id="group-title"
@@ -231,7 +196,7 @@ export default function CreateGroup() {
               onChange={(e) => handleInputChange("groupTitle", e.target.value)}
             />
           </div>
-          <div css={s.Container}>
+          <div css={s.fieldGroup}>
             <label htmlFor="group-content">모임 소개</label>
             <textarea
               id="group-content"
@@ -243,9 +208,11 @@ export default function CreateGroup() {
               }
             />
           </div>
-          <div css={s.Container}>
-            <h4>준비물</h4>
+          <div css={s.twoColumnFields}>
+          <div css={s.fieldGroup}>
+            <label htmlFor="group-supplies">준비물</label>
             <input
+              id="group-supplies"
               type="text"
               css={s.TitleInput}
               placeholder="모임 필요한 준비물"
@@ -255,9 +222,10 @@ export default function CreateGroup() {
               }
             />
           </div>
-          <div css={s.Container}>
-            <h4>질문</h4>
+          <div css={s.fieldGroup}>
+            <label htmlFor="group-question">가입 질문</label>
             <input
+              id="group-question"
               type="text"
               css={s.TitleInput}
               placeholder="설정하고 싶은 모입 가입 질문"
@@ -267,18 +235,25 @@ export default function CreateGroup() {
               }
             />
           </div>
+          </div>
+          </fieldset>
 
-          <div css={s.Container}>
+          <fieldset css={s.formSection}>
+            <legend>대표 이미지를 골라주세요</legend>
+            <p css={s.sectionDescription}>모임의 분위기가 잘 드러나는 가로 이미지를 추천해요.</p>
+          <div css={s.imageUpload}>
             <img
               src={previewUrl || groupImage}
               alt="미리보기"
               css={s.previewImage}
             />
-          </div>
-          <div>
+          <div css={s.uploadAction}>
             <label css={s.fileButton} htmlFor="groupImg">대표 이미지 선택</label>
+            <span>{groupImg ? groupImg.name : "JPG, PNG 등의 이미지 파일"}</span>
             <input css={s.hiddenFileInput} type="file" id="groupImg" accept="image/*" onChange={handleFileChange} />
           </div>
+          </div>
+          </fieldset>
 
           <div css={s.BottomButtonContainer}>
             <button type="button" css={s.secondaryButton} onClick={handlePrevPage}>
