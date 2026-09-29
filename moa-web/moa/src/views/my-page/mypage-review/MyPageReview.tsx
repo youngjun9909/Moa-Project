@@ -63,7 +63,7 @@ export default function MyPageReview() {
         <h1>내 후기 관리</h1>
       </div>
       <div css={s.mainBox}>
-        {!!reviewData ? (
+        {reviewData.length > 0 ? (
           reviewData.map((review) => (
             <div css={s.reviewBox} key={review.reviewId}>
               <div css={s.reviewHeader}>
@@ -99,7 +99,7 @@ export default function MyPageReview() {
             </div>
           ))
         ) : (
-          <div>리뷰 데이터가 없음</div>
+          <div>아직 작성한 후기가 없어요.</div>
         )}
       </div>
       {openModal && (

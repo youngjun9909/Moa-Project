@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as s from "./style";
 import img from "../../../images/moaLogo.png";
 import { Review } from "../../../types";
@@ -7,12 +7,13 @@ import { format } from "date-fns";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { CREATE_REVIEW_GET_API, CREATE_REVIEW_IMG_API } from "../../../apis";
+import { EmptyState } from "../../../components/ui/EmptyState";
 
 export default function ReviewMain() {
   const [reviewData, setReviewData] = useState<Review[]>([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(0);
-  const sentinelRef = useRef(null);
+  const [hasMore, setHasMore] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,9 +34,7 @@ export default function ReviewMain() {
           return uniqueData;
         });
 
-        if (response.data.data.length === 0) {
-          setLoading(false);
-        }
+        setHasMore(response.data.data.length === 5);
       } catch (error) {
         console.error(error);
       } finally {
@@ -46,25 +45,6 @@ export default function ReviewMain() {
     fetchReviews();
   }, [page]);
 
-  useEffect(() => {
-    const handleObserver = (entries: IntersectionObserverEntry[]) => {
-      if (entries[0].isIntersecting && !loading) {
-        setPage((prev) => prev + 1);
-      }
-    };
-
-    if (sentinelRef.current) {
-      const observer = new IntersectionObserver(handleObserver, {
-        threshold: 0.5,
-      });
-      observer.observe(sentinelRef.current);
-
-      return () => {
-        observer.disconnect();
-      };
-    }
-  }, [loading]);
-
   const handlePostReviewPage = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     navigate("/review/create");
@@ -74,17 +54,25 @@ export default function ReviewMain() {
     <div css={s.fullBox}>
       <div css={s.header}>
         <div>
-          <h1>후기 게시판</h1>
+          <div>
+            <span>MOA STORY</span>
+            <h1>모임 후기</h1>
+            <p>함께한 순간과 솔직한 경험을 나눠보세요.</p>
+          </div>
           <button onClick={handlePostReviewPage}>후기 작성</button>
         </div>
       </div>
 
       <div css={s.mainBox}>
+        {!loading && reviewData.length === 0 && (
+          <EmptyState title="아직 등록된 후기가 없어요" description="첫 번째 모임 후기를 남겨보세요." />
+        )}
+        <div css={s.reviewGrid}>
         {reviewData.map((review) => (
           <div css={s.reviewBox} key={review.reviewId}>
             <div css={s.reviewHeader}>
               <p>{review.userId}</p>
-              <p>{format(review.reviewDate, "yyyy-MM-dd")}</p>
+                <time dateTime={String(review.reviewDate)}>{format(review.reviewDate, "yyyy.MM.dd")}</time>
             </div>
 
             <div css={s.reviewMain}>
@@ -93,10 +81,10 @@ export default function ReviewMain() {
                   {review.reviewImage ? (
                     <img
                       src={`${CREATE_REVIEW_IMG_API}${review.reviewImage}`}
-                      alt="REVIEW IMAGE"
+                      alt={`${review.groupName} 후기`}
                     />
                   ) : (
-                    <img src={img} alt="DEFAULT IMAGE" className="default" />
+                    <img src={img} alt="MOA 기본 이미지" className="default" />
                   )}
                 </div>
               </div>
@@ -113,10 +101,12 @@ export default function ReviewMain() {
             </div>
           </div>
         ))}
-        <div
-          ref={sentinelRef}
-          style={{ height: "10px", background: "transparent" }}
-        ></div>
+        </div>
+        {reviewData.length > 0 && hasMore && (
+          <button css={s.loadMore} type="button" disabled={loading} onClick={() => setPage((current) => current + 1)}>
+            {loading ? "불러오는 중..." : "더 보기"}
+          </button>
+        )}
       </div>
     </div>
   );

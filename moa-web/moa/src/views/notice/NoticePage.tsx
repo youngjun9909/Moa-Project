@@ -5,6 +5,7 @@ import { Notice } from "../../types";
 import axios from "axios";
 import { format } from "date-fns";
 import { NOTICE_API } from "../../apis";
+import { EmptyState } from "../../components/ui/EmptyState";
 
 export default function NoticePage() {
   const [noticeData, setNoticeData] = useState<Notice[]>([]);
@@ -22,10 +23,13 @@ export default function NoticePage() {
   return (
     <div css={s.fullBox}>
       <div css={s.headerBox}>
+        <span>MOA NEWS</span>
         <h1>공지사항</h1>
+        <p>서비스의 새로운 소식과 중요한 안내를 확인하세요.</p>
       </div>
 
       <div css={s.mainBox}>
+        {noticeData.length === 0 && <EmptyState title="등록된 공지사항이 없어요" description="새로운 소식이 등록되면 이곳에서 알려드릴게요." />}
         {noticeData.map((notice) => (
           <div css={s.noticeBox} key={notice.noticeId}>
             <div>
@@ -34,7 +38,7 @@ export default function NoticePage() {
             <div>
               <p>{notice.noticeContent}</p>
             </div>
-            <div>등록 날짜: {format(notice.noticeDate, "yyyy-MM-dd")}</div>
+            <time dateTime={String(notice.noticeDate)}>{format(notice.noticeDate, "yyyy.MM.dd")}</time>
           </div>
         ))}
       </div>
