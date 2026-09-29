@@ -197,8 +197,9 @@ function CreateReview() {
           </select>
         </div>
 
-        <div css={s.content}>
-          <textarea
+            <div css={s.content}>
+              <label htmlFor="reviewContent">후기 내용</label>
+              <textarea
             name="reviewContent"
             id="reviewContent"
             placeholder="후기 내용"
@@ -210,7 +211,7 @@ function CreateReview() {
         <div css={s.imgFile}>
           <div>
             {!reviewImg ? (
-              <img src={img} />
+                  <img src={img} alt="후기 이미지 미리보기" />
             ) : (
               <img src={reviewImg} alt="미리보기 사진" />
             )}

@@ -1,9 +1,22 @@
 import { css } from "@emotion/react";
 
+export const createPage = css`width:min(100%,1040px); margin:0 auto; padding:38px clamp(20px,4vw,52px) 64px;`;
+export const createHeader = css`
+  display:flex; justify-content:space-between; align-items:flex-end; gap:24px; margin-bottom:24px;
+  > div > span { color:var(--moa-primary-dark); font-size:12px; font-weight:900; letter-spacing:.12em; }
+  h1 { margin:7px 0 6px; font-size:clamp(27px,4vw,38px); letter-spacing:-.05em; color:var(--moa-ink); }
+  p { margin:0; color:var(--moa-muted); }
+  @media(max-width:720px){align-items:flex-start; flex-direction:column;}
+`;
+export const stepIndicator = css`
+  display:flex; gap:8px; margin:0; padding:0; list-style:none;
+  li { min-height:38px; display:flex; align-items:center; gap:7px; padding:0 12px; border:1px solid var(--moa-line); border-radius:999px; color:var(--moa-muted); font-size:12px; font-weight:800; }
+  li[data-active="true"] { background:var(--moa-primary); border-color:var(--moa-primary); color:#fff; }
+`;
+
 export const Container = css`
-  margin: 0 auto;
-  width: min(100%, 980px);
-  padding:32px clamp(20px,4vw,48px) 56px;
+  width:100%; padding:0; margin:0;
+  > h4 { margin:0 0 9px; color:var(--moa-ink); font-size:14px; }
 `;
 
 export const AllBox = css`
@@ -12,7 +25,7 @@ export const AllBox = css`
   align-items: center; 
   gap: 10px; 
   flex-wrap: wrap; 
-  margin-bottom: 15px; 
+  margin-bottom: 0;
 `;
 
 export const Tab = css`
@@ -20,11 +33,11 @@ export const Tab = css`
   color: #000;
   cursor: pointer;
   font-size: 13px;
-  background-color: rgb(222, 222, 222);
-  width: 20%;
-  padding: 10px 12px;
-  border: none;
-  border-radius: 7px;
+  background-color: var(--moa-chip-bg);
+  min-width:96px;
+  padding: 10px 14px;
+  border:1px solid var(--moa-chip-line);
+  border-radius: 11px;
   display: flex;
   justify-content: space-evenly;
   box-sizing: border-box;
@@ -41,15 +54,15 @@ export const Tab = css`
 `;
 
 export const activeTab = css`
-  background-color: #f7e2d5;
-  color: #000;
+  background-color: var(--moa-primary);
+  color: #fff;
   padding: 10px 12px; /* Tab과 동일하게 설정 */
-  width: 20%; /* Tab과 동일하게 설정 */
+  min-width:96px;
   font-size: 13px;
   border: none;
   outline: none;
   box-sizing: border-box;
-  border-radius: 7px;
+  border-radius: 11px;
   transition: none;
 `;
 
@@ -63,10 +76,10 @@ export const DateContainer = css`
   justify-content: center;
 `;
 export const DateBox = css`
-  width: 30%;
-  height: 40px;
+  width:min(100%,320px);
+  height:48px;
   text-align: center;
-  border-radius: 7px;
+  border:1px solid var(--moa-line-strong); border-radius:11px; padding:0 13px;
 `;
 
 export const TitleInput = css`
@@ -94,13 +107,18 @@ export const ContentBox = css`
 `;
 //  nth-of-type()
 export const CreatorBox = css`
-  margin: 10px auto;
-  width: min(100%, 760px);
-  padding: clamp(20px,4vw,36px);
+  margin:0;
+  width:100%;
+  padding:clamp(22px,4vw,38px);
+  border:1px solid var(--moa-line);
+  border-radius:var(--moa-radius-lg);
+  background:var(--moa-surface);
+  box-shadow:var(--moa-shadow-sm);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap:24px;
   `;
 
 export const CreatorBox_1 = css`
@@ -114,11 +132,11 @@ export const CreatorBox_1 = css`
 
 export const BottomButtonContainer = css`
   display: flex;
-  margin-left: 25px;
-  justify-content: start;
-  padding-top: 100px;
+  justify-content:flex-end;
+  gap:10px;
+  padding-top:12px;
   width: 100%;
-  margin-top: 10px;
+  margin:0;
 `;
 
 export const ImgInput = css`
@@ -126,7 +144,7 @@ export const ImgInput = css`
   height: 20px;
   font-size: 16px;
   font-weight: 500;
-  border-radius: 7px;
+  border-radius: 11px;
 `;
 
 export const MoveButton = css`
@@ -139,9 +157,9 @@ export const MoveButton = css`
   color:#fff;
   min-width: 140px;
   padding: 10px 12px;
-  margin: 10px;
+  margin:0;
   border: none;
-  border-radius: 7px;
+  border-radius:11px;
   display: flex;
   justify-content: space-evenly;
 
@@ -154,3 +172,12 @@ export const MoveButton = css`
     outline: 3px solid #dae2ed;
   }
 `;
+
+export const secondaryButton = css`
+  min-width:110px; min-height:44px; padding:0 16px; border:1px solid var(--moa-line-strong); border-radius:11px;
+  background:#fff; color:var(--moa-ink-subtle); font-weight:800; cursor:pointer;
+  &:hover { border-color:var(--moa-primary); color:var(--moa-primary-dark); background:var(--moa-primary-soft); }
+`;
+export const previewImage = css`width:100%; max-height:300px; aspect-ratio:16/7; object-fit:cover; border-radius:14px; border:1px solid var(--moa-line);`;
+export const fileButton = css`display:inline-flex; min-height:42px; align-items:center; padding:0 15px; border:1px solid var(--moa-chip-line); border-radius:11px; background:var(--moa-chip-bg); color:var(--moa-chip-ink); font-weight:800; cursor:pointer;`;
+export const hiddenFileInput = css`position:absolute; width:1px; height:1px; overflow:hidden; opacity:0;`;

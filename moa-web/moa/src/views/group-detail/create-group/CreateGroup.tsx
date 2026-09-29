@@ -111,19 +111,30 @@ export default function CreateGroup() {
   };
 
   return (
-    <div>
+    <div css={s.createPage}>
+      <header css={s.createHeader}>
+        <div>
+          <span>CREATE A MEETING</span>
+          <h1>새로운 모임 만들기</h1>
+          <p>모임의 기본 정보부터 소개까지 두 단계로 완성해보세요.</p>
+        </div>
+        <ol css={s.stepIndicator} aria-label="모임 생성 단계">
+          <li data-active={page === 0}>1 <span>기본 정보</span></li>
+          <li data-active={page === 1}>2 <span>소개 작성</span></li>
+        </ol>
+      </header>
       {page === 0 && (
         <div css={s.CreatorBox}>
           <div css={s.Container}>
             <h4>모임 유형</h4>
             <div css={s.AllBox}>
-              <button
+              <button type="button"
                 css={formData.groupType === "단기모임" ? s.activeTab : s.Tab}
                 onClick={() => handleInputChange("groupType", "단기모임")}
               >
                 단기 모임
               </button>
-              <button
+              <button type="button"
                 css={formData.groupType === "정기모임" ? s.activeTab : s.Tab}
                 onClick={() => handleInputChange("groupType", "정기모임")}
               >
@@ -145,7 +156,7 @@ export default function CreateGroup() {
                 "연애",
                 "여행",
               ].map((category) => (
-                <button
+                <button type="button"
                   key={category}
                   css={
                     formData.groupCategory === category ? s.activeTab : s.Tab
@@ -159,8 +170,9 @@ export default function CreateGroup() {
           </div>
 
           <div css={s.Container}>
-            <h4>모임 날짜</h4>
+            <label htmlFor="group-date">모임 날짜</label>
             <input
+              id="group-date"
               type="date"
               css={s.DateBox}
               value={formData.groupDate}
@@ -171,13 +183,13 @@ export default function CreateGroup() {
           <div css={s.Container}>
             <h4>모임 장소</h4>
             <div css={s.AllBox}>
-              <button
+              <button type="button"
                 css={formData.meetingType === "온라인" ? s.activeTab : s.Tab}
                 onClick={() => handleInputChange("meetingType", "온라인")}
               >
                 온라인
               </button>
-              <button
+              <button type="button"
                 css={formData.meetingType === "오프라인" ? s.activeTab : s.Tab}
                 onClick={() => handleInputChange("meetingType", "오프라인")}
               >
@@ -199,7 +211,7 @@ export default function CreateGroup() {
           </div>
 
           <div css={s.BottomButtonContainer}>
-            <button css={s.MoveButton} onClick={handleNextPage}>
+            <button type="button" css={s.MoveButton} onClick={handleNextPage}>
               다음
             </button>
           </div>
@@ -209,8 +221,9 @@ export default function CreateGroup() {
       {page === 1 && (
         <div css={s.CreatorBox}>
           <div css={s.Container}>
-            <h4>모임 게시물</h4>
+            <label htmlFor="group-title">모임 제목</label>
             <input
+              id="group-title"
               type="text"
               css={s.TitleInput}
               placeholder="모임 제목"
@@ -219,8 +232,9 @@ export default function CreateGroup() {
             />
           </div>
           <div css={s.Container}>
-            <h4>내용</h4>
+            <label htmlFor="group-content">모임 소개</label>
             <textarea
+              id="group-content"
               css={s.ContentBox}
               placeholder="모임에 대한 소개말"
               value={formData.groupContent}
@@ -258,18 +272,19 @@ export default function CreateGroup() {
             <img
               src={previewUrl || groupImage}
               alt="미리보기"
-              style={{ width: "400px", height: "200px" }}
+              css={s.previewImage}
             />
           </div>
           <div>
-            <input type="file" id="groupImg" onChange={handleFileChange} />
+            <label css={s.fileButton} htmlFor="groupImg">대표 이미지 선택</label>
+            <input css={s.hiddenFileInput} type="file" id="groupImg" accept="image/*" onChange={handleFileChange} />
           </div>
 
           <div css={s.BottomButtonContainer}>
-            <button css={s.MoveButton} onClick={handlePrevPage}>
+            <button type="button" css={s.secondaryButton} onClick={handlePrevPage}>
               이전
             </button>
-            <button css={s.MoveButton} onClick={handlePostGroup}>
+            <button type="button" css={s.MoveButton} onClick={handlePostGroup}>
               완료
             </button>
           </div>

@@ -137,8 +137,7 @@ export default function ReportPage() {
           <IoArrowBackOutline css={s.backPage} onClick={backPage} /> 신고 게시판
         </h1>
         <p>
-          ※ 신고 사항은 해당 모임의 관리자만 확인이 가능하고 수정이 불가하니
-          신중하게 작성해 주세요.
+          ※ 신고 내용은 해당 모임의 운영자만 확인할 수 있으며 등록 후 수정할 수 없어요.
         </p>
       </div>
       <div css={s.mainBox}>
@@ -164,6 +163,7 @@ export default function ReportPage() {
         </div>
 
         <div css={s.content}>
+          <label htmlFor="reportContent">신고 내용</label>
           <textarea
             name="reportDetail"
             id="reportContent"
@@ -176,7 +176,7 @@ export default function ReportPage() {
         <div css={s.imgFile}>
           <div>
             {!reportImg ? (
-              <img src={img} />
+              <img src={img} alt="신고 이미지 미리보기" />
             ) : (
               <img src={reportImg} alt="미리보기 사진" />
             )}

@@ -3,15 +3,16 @@ import { css } from "@emotion/react";
 export const fullBox = css`
   position: relative;
   width: 100%;
-  height: 100%;
+  min-height: 100%;
+  padding:32px clamp(20px,4vw,48px) 56px;
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
 
 export const header = css`
-  width: 80%;
-  height: 15%;
+  width:min(100%,900px);
+  min-height:80px;
   display: flex;
   flex-direction: column;
 
@@ -32,13 +33,15 @@ export const header = css`
 
 export const mainBox = css`
   box-sizing: border-box;
-  width: 80%;
-  height: 70%;
-  background-color: #eee;
-  border-radius: 5px;
+  width:min(100%,900px);
+  min-height:560px;
+  background-color: var(--moa-surface);
+  border:1px solid var(--moa-line);
+  border-radius: var(--moa-radius-lg);
+  box-shadow:var(--moa-shadow-sm);
   display: flex;
   flex-direction: column;
-  padding: 20px 60px;
+  padding: clamp(20px,4vw,40px);
   gap: 20px;
 `;
 
@@ -52,7 +55,7 @@ export const mainHeader = css`
   > div:nth-child(1) {
     background-color: #fff;
     padding: 10px 40px;
-    border-radius: 5px;
+    border-radius: 11px;
     display: flex;
     flex-direction: row;
     gap: 10px;
@@ -62,7 +65,7 @@ export const mainHeader = css`
     > select {
       width: 100%;
       padding: 10px 40px;
-      border-radius: 5px;
+      border-radius: 11px;
       border: none;
       outline: none;
     }
@@ -73,7 +76,7 @@ export const content = css`
   width: 100%;
   height: 40%;
   background-color: #fff;
-  border-radius: 5px;
+  border-radius: 11px;
 
   > textArea {
     box-sizing: border-box;
@@ -81,7 +84,7 @@ export const content = css`
     height: 100%;
     resize: none;
     border: none;
-    border-radius: 5px;
+    border-radius: 11px;
     padding: 10px 15px;
     font-size: 18px;
   }
@@ -100,13 +103,13 @@ export const imgFile = css`
     height: 100%;
     padding: 10px;
     background-color: #fff;
-    border-radius: 5px;
+    border-radius: 11px;
 
     > img {
       box-sizing: border-box;
       width: 100%;
       height: 100%;
-      border-radius: 5px;
+      border-radius: 11px;
       border: none;
       object-fit: contain;
     }
@@ -129,7 +132,7 @@ export const imgFile = css`
       border: 1px solid black;
       width: 100%;
       padding: 10px;
-      border-radius: 5px;
+      border-radius: 11px;
       background-color: #fff;
       border: 1px solid #fff;
       text-align: center;
@@ -147,16 +150,17 @@ export const btnBox = css`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 40px;
-  height: 10%;
-  width: 40%;
+  gap: 12px;
+  min-height:48px;
+  width:100%;
 
   > button {
-    width: 50%;
-    padding: 10px 40px;
+    min-width:140px;
+    min-height:44px;
+    padding: 0 18px;
     background-color: #fff;
     border: 1px solid #000;
-    border-radius: 5px;
+    border-radius: 11px;
     cursor: pointer;
   }
 
@@ -182,10 +186,10 @@ export const backPage = css`
 export const modalBox = css`
   position: fixed;
   bottom: 50%;
-  width: 500px;
+  width:min(calc(100% - 32px),500px);
   height: 200px;
   background-color: #fff;
-  border-radius: 5px;
+  border-radius: var(--moa-radius-lg);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -198,7 +202,7 @@ export const modalBox = css`
     height: 30px;
     background-color: #fff;
     border: 1px solid #FF7B54;
-    border-radius: 5px;
+    border-radius: 11px;
     color: #FF7B54;
     padding: 10px;
     display: flex;

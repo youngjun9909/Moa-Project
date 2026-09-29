@@ -188,11 +188,13 @@ const GroupUpdate: React.FC<GroupUpdateProps> = ({ parseToNumGroupId }) => {
 
   return (
     <div css={s.totalContainer}>
+      <header><p>MEETING SETTINGS</p><h1>모임 정보 수정</h1><span>멤버에게 보이는 모임 정보를 최신 상태로 관리하세요.</span></header>
       <div css={s.Container}>
         <strong>
-          <h2 css={s.label}>제목</h2>
+          <label css={s.label} htmlFor="update-title">제목</label>
         </strong>
         <textarea
+          id="update-title"
           placeholder="모임 제목 설정"
           css={s.TitleInput}
           value={formData.groupTitle}
