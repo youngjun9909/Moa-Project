@@ -7,8 +7,7 @@ import {
   tabClasses,
   buttonClasses,
 } from "@mui/base";
-import { createTheme, ThemeProvider, Theme } from "@mui/material";
-import { grey } from "@mui/material/colors";
+import { Theme } from "@mui/material";
 import { Tabs } from "@mui/base/Tabs";
 import ManagerHome from "./manager-home/ManagerHome";
 
@@ -19,35 +18,34 @@ import Vote from "./vote/Vote";
 import Report from "./report/Report";
 import Approved from "./approved/approved";
 import GroupUpdate from "./group-update/GroupUpdate";
+import { PageHeader } from "../../components/ui";
 
 
 const Tab = styled(BaseTab)`
-  font-family: "IBM Plex Sans", sans-serif;
-  color: #000;
+  color: var(--moa-ink-subtle);
   cursor: pointer;
-  font-size: 16px;
-  font-weight: 600;
-  background-color: #fff;
-  width: 100%;
-  padding: 10px 12px;
-  margin: 10px;
-  border: none;
-  border-radius: 7px;
+  font-size: 14px;
+  font-weight: 750;
+  background-color: transparent;
+  min-height: 44px;
+  padding: 0 15px;
+  border: 1px solid transparent;
+  border-radius: 11px;
   display: flex;
   justify-content: space-evenly;
 
   &:hover {
-    background-color: #f7ac57;
+    background-color: var(--moa-primary-soft);
+    color: var(--moa-primary-dark);
   }
 
   &:focus {
-    color: #000;
-    outline: 3px solid ${grey[200]};
+    outline: 3px solid var(--moa-primary-soft);
   }
 
   &.${tabClasses.selected} {
-    background-color: #f7ac57;
-    color: ${grey[600]};
+    background-color: var(--moa-ink);
+    color: #fff;
   }
 
   &.${buttonClasses.disabled} {
@@ -60,30 +58,32 @@ const TabPanel = styled(BaseTabPanel)<{ theme?: Theme }>(
   ({ theme }) => `
   box-sizing: border-box;
   width: 100%;
-  font-family: 'IBM Plex Sans', sans-serif;
   font-size: 16px;
-  padding: 20px 12px;
-  ackground: ${theme.palette.mode === "dark" ? grey[900] : "#000"};
-  border: 1px solid ${theme.palette.mode === "dark" ? grey[700] : grey[50]};
-  border-radius: 12px;
-  opacity: 0.6;
+  padding: 24px 0 0;
+  background: transparent;
+  border: 0;
   `
 );
 
 const TabsList = styled(BaseTabsList)<{ theme?: Theme }>(
   ({ theme }) => `
-  min-width: 400px;
-  background-color: ${grey[50]};
-  border-radius: 12px;
-  margin-bottom: 16px;
+  width: 100%;
+  overflow-x: auto;
+  background-color: var(--moa-surface-muted);
+  border: 1px solid var(--moa-line);
+  border-radius: 14px;
+  padding: 6px;
   display: flex;
   align-items: center;
-  place-content: space-between center;
-  box-shadow: 0 4px 30px ${
-    theme.palette.mode === "dark" ? grey[900] : grey[200]
-  };
+  gap: 4px;
   `
 );
+
+const Workspace = styled.main`
+  width: min(100%, 1320px);
+  margin: 0 auto;
+  padding: 34px clamp(20px, 4vw, 56px) 56px;
+`;
 
 
 export default function Index() {
@@ -92,16 +92,17 @@ export default function Index() {
   const parseToNumGroupId = Number(groupId);
 
   return (
-    <div>
+    <Workspace>
+      <PageHeader eyebrow="GROUP OWNER" title="모임 관리" description="멤버와 활동, 가입 요청, 모임 정보를 한곳에서 관리하세요." />
       <Tabs defaultValue={0}>
         <TabsList>
-          <Tab value={0}>유저</Tab>
-          <Tab value={1}>차트</Tab>
+          <Tab value={0}>멤버</Tab>
+          <Tab value={1}>활동 통계</Tab>
           <Tab value={2}>투표</Tab>
-          <Tab value={3}>블랙</Tab>
-          <Tab value={4}>신고</Tab>
-          <Tab value={5}>승인</Tab>
-          <Tab value={6}>수정</Tab>
+          <Tab value={3}>제한 목록</Tab>
+          <Tab value={4}>신고 관리</Tab>
+          <Tab value={5}>가입 승인</Tab>
+          <Tab value={6}>모임 정보</Tab>
         </TabsList>
         <TabPanel value={0}>
           {/* 각 컴포넌트에 index.tsx 해당 파일에 있는 groupId값을 props로 전달하기 */}
@@ -126,6 +127,6 @@ export default function Index() {
           <GroupUpdate parseToNumGroupId={parseToNumGroupId} />
         </TabPanel>
       </Tabs>
-    </div>
+    </Workspace>
   );
 }

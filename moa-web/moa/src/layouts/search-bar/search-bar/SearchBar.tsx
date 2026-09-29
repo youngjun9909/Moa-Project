@@ -68,7 +68,7 @@ export default function SearchBar() {
     <div css={s.container}>
       <div css={s.searchBar}>
         <div css={s.searchBarLine}>
-          <button css={s.searchBtn} value={keyword} onClick={handleSearch}>
+          <button css={s.searchBtn} value={keyword} onClick={handleSearch} aria-label="모임 검색">
             <IoSearchOutline />
           </button>
           <input
@@ -78,6 +78,7 @@ export default function SearchBar() {
             onChange={handleKeywordList}
             onKeyDown={handleSearch}
             placeholder="모임 이름을 입력해주세요."
+            aria-label="관심사, 지역, 모임 이름 검색"
           />
         </div>
       </div>

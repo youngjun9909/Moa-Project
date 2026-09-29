@@ -6,12 +6,13 @@ export const fullBox = css`
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding:34px clamp(20px,4vw,56px) 56px;
 `;
 
 export const headerBox = css`
   box-sizing: border-box;
-  width: 80%;
-  height: 10%;
+  width: min(100%, 1120px);
+  min-height: 84px;
 
   > h1 {
     color: #0a3140;
@@ -20,12 +21,12 @@ export const headerBox = css`
 
 export const mainBox = css`
   box-sizing: border-box;
-  width: 80%;
+  width: min(100%, 1120px);
   height: 90%;
   padding: 20px 0;
   display: grid;
-  grid-template-columns: repeat(2, 1fr); 
-  gap: 50px; 
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr));
+  gap: 18px;
   margin: 0 auto; 
   justify-items: center; 
 `;
@@ -35,8 +36,9 @@ export const noticeBox = css`
   width: 100%;
   max-height: 270px;
   height: 100%;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.4);
+  border:1px solid var(--moa-line);
+  border-radius: var(--moa-radius-md);
+  box-shadow: var(--moa-shadow-sm);
   display: flex;
   flex-direction: column;
   padding: 10px;
@@ -48,7 +50,7 @@ export const noticeBox = css`
     width: 100%;
     height: 15%;
     border-radius: 5px;
-    background-color: #eee;
+    background-color: var(--moa-surface-muted);
     padding: 5px 10px;
     display: flex;
     flex-direction: column;
@@ -65,7 +67,7 @@ export const noticeBox = css`
     width: 100%;
     height: 70%;
     border-radius: 5px;
-    background-color: #eee;
+    background-color: var(--moa-surface-muted);
     padding: 5px 10px;
     display: flex;
     overflow-x: hidden;
@@ -88,7 +90,7 @@ export const noticeBox = css`
     width: 100%;
     height: 10%;
     border-radius: 5px;
-    background-color: #eee;
+    background-color: var(--moa-surface-muted);
     padding: 5px 10px;
     display: flex;
     align-items: center;

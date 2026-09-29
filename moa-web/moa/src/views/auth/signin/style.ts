@@ -11,6 +11,11 @@ export const fullBox = css`
 
 export const innerBox = css`
   width: min(100%, 420px);
+  padding:clamp(24px,4vw,38px);
+  border:1px solid var(--moa-line);
+  border-radius:var(--moa-radius-lg);
+  background:var(--moa-surface);
+  box-shadow:var(--moa-shadow-md);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -33,7 +38,7 @@ export const innerBox = css`
 
 export const topInput = (hasError: boolean) => css`
   width: 100%;
-  height: 40px;
+  height: 50px;
   font-size: 17px;
   padding-left: 10px;
   border-radius: 10px 10px 0 0;
@@ -49,7 +54,7 @@ export const topInput = (hasError: boolean) => css`
 
 export const bottomInput = (hasError: boolean) => css`
   width: 100%;
-  height: 40px;
+  height: 50px;
   font-size: 17px;
   padding-left: 10px;
   border-radius: 0 0 10px 10px;
@@ -71,14 +76,15 @@ export const signInBtn = css`
   width: 100%;
   margin-top: 50px;
   font-size: 17px;
-  border-radius: 5px;
+  min-height:48px;
+  border-radius: 11px;
   border: none;
   padding: 10px 10px;
   background-color: var(--moa-primary);
   color: #fff;
   cursor: pointer;
   &:hover, :active{
-    background-color: #FCD572;
+    background-color: var(--moa-primary-dark);
     border: none;
     outline: none;
   }
@@ -122,9 +128,9 @@ export const anotherSignInBox = css`
   align-items: center;
   border: 1px solid #aaa;
   width: 100%;
-  height: 40px;
+  min-height: 48px;
   margin-top: 20px;
-  border-radius: 5px;
+  border-radius: 11px;
   cursor: pointer;
 
   > div:nth-child(2) p {

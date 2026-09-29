@@ -4,7 +4,8 @@ export const box = css`
   box-sizing: border-box;
   display: flex; 
   flex-direction :column ;
-  padding: 20px;
+  padding: 0;
+  gap: 10px;
 `;
 
 export const modalContainer = css`
@@ -122,12 +123,13 @@ export const userImg = css`
 export const headerBox = css`
   box-sizing: border-box;
   width: 100%;
-  height: 40px;
+  min-height: 48px;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
-  padding: 0 10px;
+  padding: 0 4px;
+  color: var(--moa-muted);
 `;
 
 export const mainBox = css`
@@ -141,15 +143,19 @@ export const ulBox = css`
   grid-template-rows: repeat(auto-fill, minmax(70px, 1fr));
   gap: 10px;
   overflow-y: auto;
-  padding: 10px;
-  border-radius: 5px;
+  padding: 0;
+  margin: 0 0 18px;
+  border-radius: var(--moa-radius-md);
+  list-style: none;
 `;
 
 export const listItem = css`
   width: 100%;
-  height: 100%;
+  min-height: 84px;
   background-color: #fff;
-  border-radius: 5px;
+  border: 1px solid var(--moa-line);
+  border-radius: 14px;
+  box-shadow: var(--moa-shadow-sm);
   display: flex;
   flex-direction: row;
 
@@ -186,11 +192,11 @@ export const listItem = css`
 
     > button {
       width: 100px;
-      height: 30px;
+      min-height: 38px;
       background-color: #fff;
       color: #E50914;
       border: 1px solid #E50914;
-      border-radius: 5px;
+      border-radius: 10px;
       cursor: pointer;
 
       &:hover {
@@ -211,13 +217,13 @@ export const btnBox = css`
 
   > button {
     width: 100px;
-    height: 30px;
-    font-size: 16px;
+    min-height: 38px;
+    font-size: 14px;
     text-align: center;
     background-color: #fff;
     color: #E50914;
     border: 1px solid #E50914;
-    border-radius: 5px;
+    border-radius: 10px;
     cursor: pointer;
 
       &:hover {
@@ -230,7 +236,9 @@ export const btnBox = css`
 
 export const userLabel = css`
   font-size: 18px;
-  padding: 10px 0 ;
+  margin: 12px 0;
+  padding: 0;
+  color: var(--moa-ink);
 `;
 
 export const modalHeader = css`

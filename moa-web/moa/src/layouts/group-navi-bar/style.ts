@@ -2,21 +2,22 @@ import { css } from "@emotion/react";
 
 export const fullBox = css`
   box-sizing: border-box;
-  border-radius: var(--moa-radius) 0 0 var(--moa-radius);
+  border-radius: 0;
   height: 100%;
-  width: 88px;
+  width: var(--moa-rail-width);
   overflow: hidden;
-  background-color: var(--moa-primary);
+  background-color: var(--moa-surface-muted);
+  border-right: 1px solid var(--moa-line);
   display: flex;
   flex-direction: column;
-  min-width: 80px;
+  min-width: var(--moa-rail-width);
   min-height: 0;
 `;
 
 export const headerBox = css`
   box-sizing: border-box;
   width: 100%;
-  height: 88px;
+  height: var(--moa-header-height);
   display: flex;
   padding: 10px 0;
   align-items: center;
@@ -28,20 +29,21 @@ export const logoImage = css`
   height: 100%;
   transition: transform 0.3s ease;
   object-fit: cover;
-  border-radius: 14px;
+  border-radius: 13px;
 
 `;
 
 export const imageBox = css`
   box-sizing: border-box;
   padding: 5px;
-  width: 60px;
-  min-width: 60px;
-  height: 60px;
-  min-height: 60px;
-  border-radius: 10%;
+  width: 48px;
+  min-width: 48px;
+  height: 48px;
+  min-height: 48px;
+  border-radius: 15px;
   overflow: hidden;
-  background-color: #fff;
+  background-color: var(--moa-surface);
+  border: 1px solid var(--moa-line);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -85,7 +87,7 @@ export const middleBox = css`
   flex-direction: column;
   align-items: center;
   padding: 14px 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.35);
+  border-top: 1px solid var(--moa-line);
   min-height: 0;
   overflow-x: hidden;
   overflow-y: scroll; 
@@ -103,7 +105,7 @@ export const bottomBox = css`
   display: flex;
   align-items: center;
   justify-content: center;
-  border-top: 1px solid rgba(255, 255, 255, 0.35);
+  border-top: 1px solid var(--moa-line);
 `;
 
 export const createBox = css`
@@ -116,8 +118,8 @@ export const createBox = css`
 `;
 
 export const createIcon = css`
-  font-size: 50px;
-  color: rgba(255, 255, 255, 0.9);
+  font-size: 38px;
+  color: var(--moa-primary);
   cursor: pointer;
   transition: transform 0.3s ease;
 
@@ -133,6 +135,14 @@ export const responsiveFullBox = css`
     min-height: 68px;
     flex-direction: row;
     border-radius: 0;
+    order: 2;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 50;
+    border-right: 0;
+    border-top: 1px solid var(--moa-line);
 
     ${headerBox}, ${bottomBox} {
       width: auto;

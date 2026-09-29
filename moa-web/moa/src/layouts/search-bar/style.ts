@@ -1,39 +1,41 @@
 import { css } from "@emotion/react";
 
 export const container = css`
+  width: min(100%, 1100px);
+  margin: 0 auto;
+  padding: 48px clamp(20px, 5vw, 64px);
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  align-items: stretch;
 `;
 
 export const searchBar = css`
   width: 100%;
-  height: 10%;
+  min-height: 80px;
   display: flex;
   justify-content: center;
   align-items: center;
-  max-width: 760px;
-  padding: 24px 16px 0;
-  margin: 0px auto;
-  margin-top: 100px;
+  max-width: 820px;
+  padding: 0;
+  margin: 0 auto;
 `;
 
 export const searchBarLine = css`
-  width: 60%;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   border: 1px solid var(--moa-line);
-  border-radius: 999px;
-  padding: 10px 14px;
+  border-radius: 16px;
+  padding: 8px 14px;
   background: var(--moa-surface);
-  box-shadow: var(--moa-shadow);
+  box-shadow: var(--moa-shadow-md);
+  &:focus-within { border-color:var(--moa-primary); box-shadow:0 0 0 4px var(--moa-primary-soft); }
 `;
 
 export const searchBtn = css`
   font-size: 25px;
-  margin: 0px 10px 0px 10px;
+  margin: 0 8px 0 0;
   background-color: rgba(0, 0, 0, 0);
   border: none;
   color: var(--moa-primary);
@@ -45,7 +47,7 @@ export const searchBtn = css`
 
 export const searchInput = css`
   width: 100%;
-  height: 30%;
+  min-height: 48px;
   border: none;
   outline: none;
   font-size: 16px;
@@ -54,14 +56,15 @@ export const searchInput = css`
 `;
 
 export const searchTitleList = css`
-  width: min(100% - 32px, 720px);
+  width: min(100%, 820px);
   list-style: none;
-  margin-top: 40px;
+  margin: 22px auto 0;
+  padding: 0;
 
   > li {
     border-bottom: 1px solid var(--moa-line);
-    margin-bottom: 15px;
-    padding: 0px 0px 5px 10px;
+    margin: 0;
+    padding: 0;
     transition: border-bottom 0.2s;
   }
   > li:hover {
@@ -72,7 +75,7 @@ export const searchTitleList = css`
   > li > button {
     background-color: rgba(0, 0, 0, 0);
     border: none;
-    color: rgb(102, 102, 102);
+    width:100%; min-height:48px; text-align:left; color:var(--moa-ink-subtle); padding:0 12px; border-radius:9px;
   }
   li > button:hover {
     color: rgb(0, 0, 0);
@@ -80,32 +83,37 @@ export const searchTitleList = css`
 `;
 
 export const mainContainer = css`
+  position: relative;
   width: 100%;
-  margin: 0px;
+  margin: 0;
   display: flex;
-  justify-content: end;
-  padding-right: 230px;
+  justify-content: center;
   box-sizing: border-box;
 `;
 
 export const categoryBox = css`
   position: absolute;
-  z-index: 2;
+  z-index: 20;
+  top: 16px;
+  left: clamp(20px, 4vw, 56px);
+  right: clamp(20px, 4vw, 56px);
   background-color: #fff;
-  width: 305px;
-  height: 300px;
+  width: auto;
+  min-height: 300px;
   box-sizing: border-box;
   margin-top: 0px;
-  border-radius: 0px 0px 10px 10px;
+  border:1px solid var(--moa-line);
+  border-radius: var(--moa-radius-lg);
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
-  box-shadow: 0px 8px 6px 2px rgba(0, 0, 0, 0.1);
+  padding:24px;
+  box-shadow: var(--moa-shadow-md);
 `;
 export const ulStyle = css`
   list-style: none;
-  width: 300px;
+  width: 100%;
   display: flex;
   flex-wrap: wrap;
   margin: 0px;
@@ -116,28 +124,32 @@ export const buttonStyle = css`
   align-items: center;
   justify-content: center;
   border: none;
-  border-radius: 5px;
-  font-size: 11px;
-  height: 21px;
-  margin: 5px;
-  padding: 5px;
+  border: 1px solid var(--moa-line);
+  border-radius: 10px;
+  font-size: 13px;
+  min-height: 40px;
+  margin: 4px;
+  padding: 0 13px;
+  font-weight:700;
 `;
 export const categoryTitle = css`
-  width: 300px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-top: 20px;
-  margin-left: 20px;
+  margin: 0 0 12px;
+  > p { margin:0 0 8px; font-weight:800; color:var(--moa-ink); }
 `;
 export const categorySearchBtn = css`
-  width: 50px;
+  min-width: 92px;
   margin: 10px;
   border: none;
-  border-radius: 5px;
-  background-color: #ff7b54;
+  border-radius: 10px;
+  background-color: var(--moa-primary);
   color: #fff;
-  padding: 3px;
+  min-height:44px;
+  padding: 0 16px;
+  font-weight:800;
   box-sizing: border-box;
   &:hover {
     background-color: #e5673b;
@@ -145,7 +157,7 @@ export const categorySearchBtn = css`
 `;
 
 export const buttonDiv = css`
-  width: 300px;
+  width: 100%;
   display: flex;
   justify-content: flex-end;
 `;

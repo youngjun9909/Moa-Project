@@ -6,14 +6,15 @@ export const fullBox = css`
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding:34px clamp(20px,4vw,56px) 56px;
 `;
 
 export const headerBox = css`
-  width: 80%;
-  height: 10%;
+  width: min(100%, 1120px);
+  min-height: 82px;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid #0a3140;
+  border-bottom: 1px solid var(--moa-line);
 
   > h1 {
     margin: 5px 0;
@@ -23,7 +24,7 @@ export const headerBox = css`
 
 export const mainBox = css`
   box-sizing: border-box;
-  width: 80%;
+  width: min(100%, 1120px);
   height: 90%;
   margin-top: 20px;
   padding: 20px 0;
@@ -44,8 +45,9 @@ export const reviewBox = css`
 
 export const reviewMain = css`
   box-sizing: border-box;
-  background-color: #eee;
-  border-radius: 5px;
+  background-color: var(--moa-surface-muted);
+  border:1px solid var(--moa-line);
+  border-radius: var(--moa-radius-md);
   width: 100%;
   height: 85%;
   display: flex;

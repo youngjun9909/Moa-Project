@@ -7,12 +7,12 @@ export const fullBox = css`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  padding:32px clamp(20px,4vw,56px) 56px;
 `;
 
 export const header = css`
-  width: 80%;
-  height: 100px;
+  width: min(100%, 1120px);
+  min-height: 88px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -26,11 +26,12 @@ export const backPage = css`
 
 export const imageBox  = css`
   box-sizing: border-box;
-  width: 80%;
-  height: 300px;
-  background-color: #eee;
-  border-radius: 10px;
-  padding: 10px;
+  width: min(100%, 1120px);
+  height: clamp(280px,42vw,480px);
+  background-color: var(--moa-surface-muted);
+  border-radius: var(--moa-radius-lg);
+  padding: 0;
+  overflow:hidden;
 
   > img{
     box-sizing: border-box;
@@ -41,8 +42,8 @@ export const imageBox  = css`
 `;
 
 export const tapBox = css`
-  width: 80%;
-  height: 100px;
+  width: min(100%, 1120px);
+  min-height: 78px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -52,23 +53,24 @@ export const tapBox = css`
 
 export const tabBtn = (isActive: boolean) => css`
   box-sizing: border-box;
-  width: 100px;
-  height: 60px;
+  min-width: 100px;
+  height: 48px;
   font-size: 16px;
   background-color: #fff;
   border: none;
-  border-bottom: ${isActive ? "1px solid black" : "none"};
+  border-bottom: ${isActive ? "3px solid var(--moa-primary)" : "3px solid transparent"};
   cursor: pointer;
 `;
 
 export const contentBox = css`
   box-sizing: border-box;
-  width: 80%;
+  width: min(100%, 1120px);
   min-height: 500px;
   height: auto;
-  background-color: #eee;
-  border-radius: 10px;
-  padding: 10px;
+  background-color: var(--moa-surface-muted);
+  border:1px solid var(--moa-line);
+  border-radius: var(--moa-radius-lg);
+  padding: 16px;
 
   > div {
     width: 100%;
@@ -90,7 +92,7 @@ export const categoryBox = css`
   gap: 20px;
   padding: 0 20px;
   box-sizing: border-box;
-  background-color: #eee;
+  background-color: var(--moa-surface-muted);
 
   > span {
     width: auto;
@@ -137,12 +139,13 @@ export const content = css`
 
 export const supplies = css`
   box-sizing: border-box;
-  width: 80%;
+  width: min(100%, 1120px);
   height: 200px;
   margin: 50px 0;
-  background-color: #eee;
-  border-radius: 10px;
-  padding: 10px;
+  background-color: var(--moa-surface-muted);
+  border:1px solid var(--moa-line);
+  border-radius: var(--moa-radius-lg);
+  padding: 16px;
 
   > div {
     box-sizing: border-box;
@@ -160,10 +163,10 @@ export const supplies = css`
 
 export const mapBox = css`
   box-sizing: border-box;
-  width: 80%;
+  width: min(100%, 1120px);
   height: 300px;
-  background-color: #eee;
-  border-radius: 10px;
+  background-color: var(--moa-surface-muted);
+  border-radius: var(--moa-radius-lg);
   box-sizing: border-box;
   padding: 10px;
 
@@ -174,7 +177,7 @@ export const mapBox = css`
 `;
 
 export const joinBox = css`
-  width: 80%;
+  width: min(100%, 1120px);
   height: 200px;
   display: flex;
   align-items: center;
@@ -183,14 +186,14 @@ export const joinBox = css`
     width: 100%;
     height: 50px;
     font-size: 20px;
-    background-color: #FF7B54;
+    background-color: var(--moa-primary);
     color: #fff;
     border: none;
     cursor: pointer;
     border-radius: 10px;
 
     &:hover {
-      background-color: #FCD572;
+      background-color: var(--moa-primary-dark);
     }
   }
 `;

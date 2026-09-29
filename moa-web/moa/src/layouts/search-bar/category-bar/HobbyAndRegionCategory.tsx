@@ -66,6 +66,7 @@ const HobbyAndRegionCategory = () => {
                     style={categoryButtonStyle(category)}
                     onClick={handleHobbyFilterClick}
                     value={category}
+                    aria-pressed={groupCategory === category}
                   >
                     {category}
                   </button>
@@ -94,15 +95,16 @@ const HobbyAndRegionCategory = () => {
                 "경북",
                 "경남",
                 "제주",
-              ].map((region) => (
-                <li key={region}>
+              ].map((location) => (
+                <li key={location}>
                   <button
                     css={s.buttonStyle}
-                    style={regionButtonStyle(region)}
+                    style={regionButtonStyle(location)}
                     onClick={handleRegionFilterClick}
-                    value={region}
+                    value={location}
+                    aria-pressed={region === location}
                   >
-                    {region}
+                    {location}
                   </button>
                 </li>
               ))}

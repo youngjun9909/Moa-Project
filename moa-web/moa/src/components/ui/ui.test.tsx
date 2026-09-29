@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { Button, EmptyState, FormField, PageHeader } from ".";
+import { Button, EmptyState, FormField, PageHeader } from "./index";
 
 describe("MOA UI primitives", () => {
   test("buttons default to a safe type and expose their visual intent", () => {

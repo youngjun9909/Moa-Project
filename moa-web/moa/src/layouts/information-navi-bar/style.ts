@@ -3,9 +3,10 @@ import { css } from "@emotion/react";
 
 export const infoNaviBar = css`
   box-sizing: border-box;
-  padding: 12px 20px;
-  height: 76px;
-  width: 100%;
+  padding: 12px 24px;
+  height: var(--moa-header-height);
+  width: calc(100% - var(--moa-sidebar-width));
+  margin-left: var(--moa-sidebar-width);
   overflow: hidden;
   background-color: var(--moa-surface);
   border-bottom: 1px solid var(--moa-line);
@@ -13,6 +14,49 @@ export const infoNaviBar = css`
   justify-content: space-between;
   align-items: center;
   min-width: 0;
+`;
+
+export const serviceSidebar = css`
+  position: absolute;
+  inset: 0 auto 0 0;
+  z-index: 5;
+  width: var(--moa-sidebar-width);
+  height: 100%;
+  background: #fbfcfd;
+  border-right: 1px solid var(--moa-line);
+  display: flex;
+  flex-direction: column;
+`;
+
+export const serviceBrand = css`
+  height: var(--moa-header-height);
+  border-bottom: 1px solid var(--moa-line);
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  > strong { color: var(--moa-ink); font-size: 19px; letter-spacing: -.03em; }
+  > span { color: var(--moa-muted); font-size: 11px; margin-top: 2px; }
+`;
+
+export const serviceMenu = css`display:flex; flex-direction:column; gap:4px; padding:16px 12px;`;
+export const menuCaption = css`margin:16px 10px 5px; color:var(--moa-muted); font-size:11px; font-weight:800; letter-spacing:.08em;`;
+export const serviceItem = css`
+  width:100%; min-height:44px; padding:0 12px; display:flex; align-items:center; gap:11px;
+  border:0; border-radius:11px; background:transparent; color:var(--moa-ink-subtle); font-weight:700; text-align:left; cursor:pointer;
+  > svg { font-size:19px; flex:0 0 auto; }
+  &:hover { background:var(--moa-primary-soft); color:var(--moa-primary-dark); }
+`;
+
+export const globalSearch = css`
+  width:min(48vw,520px); height:44px; display:flex; align-items:center; gap:10px; padding:0 15px;
+  border:1px solid transparent; border-radius:12px; background:#f2f5f7; color:var(--moa-muted); cursor:pointer;
+  &:hover { border-color:var(--moa-line-strong); background:#fff; }
+`;
+
+export const createGroupButton = css`
+  min-height:44px; padding:0 16px; border:0; border-radius:11px; background:var(--moa-primary); color:#fff; font-weight:800; cursor:pointer;
+  &:hover { background:var(--moa-primary-dark); }
 `;
 
 export const userInfoBox = css`
@@ -154,7 +198,7 @@ export const categoryBox = css`
 export const mainContainer = css`
   display: flex;
   flex-direction: column;
-  border: 1px ;
+  height: var(--moa-header-height);
   position: relative;
 `;
 
@@ -184,7 +228,10 @@ export const naviModal = css`
 
 export const responsiveInfo = css`
   @media (max-width: 720px) {
+    ${serviceSidebar} { display:none; }
     ${infoNaviBar} {
+      width:100%;
+      margin-left:0;
       height: auto;
       min-height: 64px;
       padding: 10px 12px;
@@ -195,6 +242,9 @@ export const responsiveInfo = css`
       gap: 4px;
       overflow-x: auto;
     }
+
+    ${globalSearch} { width:44px; padding:0; justify-content:center; > span { display:none; } }
+    ${createGroupButton} { width:44px; padding:0; font-size:0; &::first-letter { font-size:20px; } }
 
     ${fontSt} {
       display: none;

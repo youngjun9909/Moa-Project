@@ -16,6 +16,7 @@ import {
   HOME_GROUP_RECOMMENDATION_GET_API,
   HOME_GROUP_RECOMMENDATION_POST_API,
 } from "../../apis";
+import { EmptyState, PageHeader } from "../../components/ui";
 
 function HomeGroup() {
   const [datas, setDatas] = useState<MeetingGroup[]>([]);
@@ -110,12 +111,6 @@ function HomeGroup() {
     }
   };
 
-  const slices = [
-    { start: 0, end: 3 },
-    { start: 3, end: 6 },
-    { start: 6, end: 10 },
-  ];
-
   const cutText = (text: string, maxLength: number) => {
     if (text.length > maxLength) {
       return text.slice(0, maxLength) + "...";
@@ -124,50 +119,45 @@ function HomeGroup() {
   };
 
   return (
-    <div>
-      <div css={s.container}>
-        <div css={s.mainBox}>
-          <p>추천 모임</p>
-          <div css={s.line}></div>
+      <main css={s.container}>
+        <PageHeader eyebrow="DISCOVER TOGETHER" title="오늘은 누구와 무엇을 시작해볼까요?" description="취향과 지역이 맞는 모임을 편하게 둘러보세요." />
+        <nav css={s.filterBar} aria-label="모임 유형">
+          <button css={s.activeFilter} onClick={() => navigator("/main")}>전체</button>
+          <button css={s.filter} onClick={() => navigator("/main/grouptype/shorttype")}>단기 모임</button>
+          <button css={s.filter} onClick={() => navigator("/main/grouptype/regulartype")}>정기 모임</button>
+        </nav>
+        <section css={s.mainBox} aria-labelledby="recommended-groups">
+          <div css={s.sectionHeading}><h2 id="recommended-groups">추천 모임</h2><span>새로운 모임 {datas.length}개</span></div>
           {loading ? (
-            <p>데이터를 불러오는 중입니다...</p>
+            <div css={s.loadingBox}>모임을 불러오는 중입니다...</div>
+          ) : datas.length === 0 ? (
+            <EmptyState title="아직 추천할 모임이 없어요" description="검색과 카테고리에서 새로운 모임을 찾아보세요." />
           ) : (
-            slices.map(({ start, end }, index) => (
-              <ul css={s.groupList} key={`slice-${index}`}>
-                <div css={s.marginPaddingDel}>
-                  {datas.length > start
-                    ? datas[start]?.groupCategory || "카테고리가 없습니다."
-                    : "카테고리가 없습니다."}
-                </div>
-                <ul css={s.marginPaddingDel}>
-                  {datas.slice(start, end).map((data) => (
+              <ul css={s.groupList}>
+                  {datas.map((data) => (
                     <li key={data.groupId} css={s.groupLi}>
-                      <div>
-                        <div css={s.imgDiv}>
+                        <button css={s.imgDiv} onClick={() => handleOpenGroup(data)} aria-label={`${data.groupTitle} 상세 보기`}>
                           {!data.groupImage ? (
                             <img
                               src={groupImg}
-                              alt="userImage"
+                              alt=""
                               css={s.img}
-                              onClick={() => handleOpenGroup(data)}
                             />
                           ) : (
                             <img
                               src={`${HOME_GROUP_IMG_API}${data.groupImage}`}
                               css={s.img}
-                              alt={data.groupImage}
-                              onClick={() => handleOpenGroup(data)}
+                              alt=""
                             />
                           )}
-                        </div>
-                      </div>
-                      <div css={s.line}></div>
+                          <span css={s.categoryTag}>{data.groupCategory || "모임"}</span>
+                        </button>
                       <div css={s.listDetail}>
-                        <p>{cutText(data.groupTitle, 11)}</p>
-                        <p>
+                        <h3 title={data.groupTitle}>{data.groupTitle}</h3>
                           <button
                             css={s.click}
                             onClick={() => handleFetchData(data.groupId)}
+                            aria-label={likedGroups.includes(data.groupId) ? `${data.groupTitle} 관심 모임 해제` : `${data.groupTitle} 관심 모임 추가`}
                           >
                             {likedGroups.includes(data.groupId) ? (
                               <BsHeartFill style={{ color: "#FF7B54" }} />
@@ -175,21 +165,17 @@ function HomeGroup() {
                               <BsHeart />
                             )}
                           </button>
-                        </p>
                       </div>
-                      <div css={s.listDetail}>
-                        <p>{data.groupDate}</p>
-                        <p>{cutText(data.groupAddress, 4)}</p>
+                      <div css={s.metaRow}>
+                        <span>{data.groupDate}</span>
+                        <span>{cutText(data.groupAddress, 8)}</span>
                       </div>
                     </li>
                   ))}
-                </ul>
               </ul>
-            ))
           )}
-        </div>
-      </div>
-    </div>
+        </section>
+      </main>
   );
 }
 

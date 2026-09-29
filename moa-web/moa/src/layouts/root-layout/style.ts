@@ -3,9 +3,10 @@ import { css } from "@emotion/react";
 export const fullDiv = css`
   box-sizing: border-box;
   margin: 0;
-  padding: clamp(12px, 4vw, 48px);
+  padding: 0;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: row;
   background-color: var(--moa-bg);
@@ -20,7 +21,7 @@ export const fullDiv = css`
 
   @media (max-width: 720px) {
     padding: 0;
-    height: auto;
-    min-height: 100vh;
+    height: 100dvh;
+    flex-direction: column;
   }
 `;

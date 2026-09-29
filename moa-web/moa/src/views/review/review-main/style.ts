@@ -6,14 +6,15 @@ export const fullBox = css`
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding:34px clamp(20px,4vw,56px) 56px;
 `;
 
 export const header = css`
-  width: 80%;
-  height: 15%;
+  width: min(100%, 1120px);
+  min-height: 88px;
   display: flex;
   flex-direction: column;
-  border-bottom: 1px solid #0a3140;
+  border-bottom: 1px solid var(--moa-line);
 
   > div {
     height: 100%;
@@ -49,7 +50,7 @@ export const header = css`
 `;
 
 export const mainBox = css`
-  width: 80%;
+  width: min(100%, 1120px);
   height: 90%;
   padding: 20px 0;
 `;
@@ -57,7 +58,8 @@ export const mainBox = css`
 export const reviewBox = css`
   box-sizing: border-box;
   width: 100%;
-  height: 300px;
+  min-height: 280px;
+  height: auto;
   display: flex;
   flex-direction: column;
   padding: 10px 0;
@@ -91,14 +93,15 @@ export const reviewHeader = css`
 
 export const reviewMain = css`
   box-sizing: border-box;
-  background-color: #eee;
-  border-radius: 5px;
+  background-color: var(--moa-surface-muted);
+  border:1px solid var(--moa-line);
+  border-radius: var(--moa-radius-md);
   width: 100%;
   height: 85%;
   display: flex;
   flex-direction: row;
   gap: 10px;
-  padding: 10px;
+  padding: 14px;
 `;
 
 export const imgBox  = css`

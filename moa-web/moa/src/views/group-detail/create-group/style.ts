@@ -1,8 +1,9 @@
 import { css } from "@emotion/react";
 
 export const Container = css`
-  margin-top: 25px;
-  width: 100%;
+  margin: 0 auto;
+  width: min(100%, 980px);
+  padding:32px clamp(20px,4vw,48px) 56px;
 `;
 
 export const AllBox = css`
@@ -70,10 +71,11 @@ export const DateBox = css`
 
 export const TitleInput = css`
   width: 100%;
-  height: 40px;
+  min-height: 48px;
   font-size: 16px;
   font-weight: 500;
-  border-radius: 7px;
+  border:1px solid var(--moa-line-strong);
+  border-radius: 11px;
   padding-left: 15px;
 `;
 
@@ -82,7 +84,8 @@ export const ContentBox = css`
   height: 180px;
   font-size: 16px;
   font-weight: 500;
-  border-radius: 7px;
+  border:1px solid var(--moa-line-strong);
+  border-radius: 11px;
   text-align: left;
   resize: none;
   display: block;
@@ -92,8 +95,8 @@ export const ContentBox = css`
 //  nth-of-type()
 export const CreatorBox = css`
   margin: 10px auto;
-  width: 600px;
-  padding: 30px;
+  width: min(100%, 760px);
+  padding: clamp(20px,4vw,36px);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -132,8 +135,9 @@ export const MoveButton = css`
   cursor: pointer;
   font-size: 16px;
   font-weight: 600;
-  background-color: rgb(255, 132, 25);
-  width: 20%;
+  background-color: var(--moa-primary);
+  color:#fff;
+  min-width: 140px;
   padding: 10px 12px;
   margin: 10px;
   border: none;
@@ -142,7 +146,7 @@ export const MoveButton = css`
   justify-content: space-evenly;
 
   &:hover {
-    background-color: #fab77d;
+    background-color: var(--moa-primary-dark);
   }
 
   &:focus {
