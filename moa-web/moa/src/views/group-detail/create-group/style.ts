@@ -23,10 +23,10 @@ export const formSection = css`
   width:100%; margin:0; padding:24px; border:1px solid var(--moa-chip-line); border-radius:16px;
   background:linear-gradient(90deg,var(--moa-primary) 0 68px,transparent 68px) top/100% 3px no-repeat,var(--moa-surface);
   box-shadow:0 8px 24px rgba(33,49,66,.045);
-  legend { padding:0 8px; margin-left:-8px; color:var(--moa-ink); font-size:18px; font-weight:900; letter-spacing:-.03em; }
+  > h2 { margin:0 0 8px; color:var(--moa-ink); font-size:18px; font-weight:900; letter-spacing:-.03em; }
   @media(max-width:620px){padding:20px 16px;}
 `;
-export const sectionDescription = css`margin:-2px 0 20px; color:var(--moa-muted); font-size:13px; line-height:1.6;`;
+export const sectionDescription = css`margin:0 0 20px; color:var(--moa-muted); font-size:13px; line-height:1.6;`;
 export const fieldGroup = css`
   min-width:0; margin-top:20px;
   &:first-of-type{margin-top:0;}

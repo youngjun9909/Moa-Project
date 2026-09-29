@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import axios from "axios";
 import CreateGroup from "./group-detail/create-group/CreateGroup";
@@ -20,6 +20,15 @@ describe("user page visual structure", () => {
     expect(screen.getByRole("group", { name: "어떤 모임인가요?" })).toBeInTheDocument();
     expect(screen.getByRole("group", { name: "언제 만나나요?" })).toBeInTheDocument();
     expect(screen.getByRole("group", { name: "어디서 만나나요?" })).toBeInTheDocument();
+  });
+
+  test("meeting creation card titles stay inside each card as headings", () => {
+    render(<MemoryRouter><CreateGroup /></MemoryRouter>);
+
+    ["어떤 모임인가요?", "언제 만나나요?", "어디서 만나나요?"].forEach((title) => {
+      const card = screen.getByRole("group", { name: title });
+      expect(within(card).getByRole("heading", { name: title })).toBeInTheDocument();
+    });
   });
 
   test("offline meeting can fill its address from Kakao postcode search", () => {

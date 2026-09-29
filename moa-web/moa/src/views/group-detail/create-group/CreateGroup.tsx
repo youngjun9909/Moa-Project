@@ -161,8 +161,8 @@ export default function CreateGroup() {
       </header>
       {page === 0 && (
         <div css={s.CreatorBox}>
-          <fieldset css={s.formSection}>
-            <legend>어떤 모임인가요?</legend>
+          <section css={s.formSection} role="group" aria-labelledby="meeting-kind-title">
+            <h2 id="meeting-kind-title">어떤 모임인가요?</h2>
             <p css={s.sectionDescription}>운영 방식과 관심 주제를 선택해주세요.</p>
             <div css={s.fieldGroup}>
               <h4>모임 유형</h4>
@@ -179,19 +179,19 @@ export default function CreateGroup() {
                 ))}
               </div>
             </div>
-          </fieldset>
+          </section>
 
-          <fieldset css={s.formSection}>
-            <legend>언제 만나나요?</legend>
+          <section css={s.formSection} role="group" aria-labelledby="meeting-date-title">
+            <h2 id="meeting-date-title">언제 만나나요?</h2>
             <p css={s.sectionDescription}>참여자가 일정을 한눈에 확인할 수 있어요.</p>
             <div css={s.fieldGroup}>
               <label htmlFor="group-date">모임 날짜</label>
               <input id="group-date" type="date" css={s.DateBox} value={formData.groupDate} onChange={(e) => handleInputChange("groupDate", e.target.value)} />
             </div>
-          </fieldset>
+          </section>
 
-          <fieldset css={s.formSection}>
-            <legend>어디서 만나나요?</legend>
+          <section css={s.formSection} role="group" aria-labelledby="meeting-place-title">
+            <h2 id="meeting-place-title">어디서 만나나요?</h2>
             <p css={s.sectionDescription}>진행 방식을 고르고 접속 링크나 만날 장소를 알려주세요.</p>
             <div css={s.placeGrid}>
               <div css={s.fieldGroup}>
@@ -212,7 +212,7 @@ export default function CreateGroup() {
                 )}
               </div>
             </div>
-          </fieldset>
+          </section>
 
           <div css={s.BottomButtonContainer}>
             <button type="button" css={s.MoveButton} onClick={handleNextPage}>
@@ -224,8 +224,8 @@ export default function CreateGroup() {
 
       {page === 1 && (
         <div css={s.CreatorBox}>
-          <fieldset css={s.formSection}>
-            <legend>모임을 소개해주세요</legend>
+          <section css={s.formSection} role="group" aria-labelledby="meeting-intro-title">
+            <h2 id="meeting-intro-title">모임을 소개해주세요</h2>
             <p css={s.sectionDescription}>누구나 모임의 분위기와 활동을 쉽게 이해할 수 있도록 작성해주세요.</p>
           <div css={s.fieldGroup}>
             <label htmlFor="group-title">모임 제목</label>
@@ -278,10 +278,10 @@ export default function CreateGroup() {
             />
           </div>
           </div>
-          </fieldset>
+          </section>
 
-          <fieldset css={s.formSection}>
-            <legend>대표 이미지를 골라주세요</legend>
+          <section css={s.formSection} role="group" aria-labelledby="meeting-image-title">
+            <h2 id="meeting-image-title">대표 이미지를 골라주세요</h2>
             <p css={s.sectionDescription}>모임의 분위기가 잘 드러나는 가로 이미지를 추천해요.</p>
           <div css={s.imageUpload}>
             <img
@@ -295,7 +295,7 @@ export default function CreateGroup() {
             <input css={s.hiddenFileInput} type="file" id="groupImg" accept="image/*" onChange={handleFileChange} />
           </div>
           </div>
-          </fieldset>
+          </section>
 
           <div css={s.BottomButtonContainer}>
             <button type="button" css={s.secondaryButton} onClick={handlePrevPage}>
