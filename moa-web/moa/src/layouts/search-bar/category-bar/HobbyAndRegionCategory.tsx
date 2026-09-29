@@ -1,54 +1,55 @@
 /** @jsxImportSource @emotion/react */
 import * as s from "../style";
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import useCategoryBarStore from "../../../stores/categoryBar.store";
+import React from "react";
+import { IoGridOutline, IoLocationOutline } from "react-icons/io5";
 
-const HobbyAndRegionCategory = () => {
-  const [groupCategory, setGroupCategory] = useState<string>("");
-  const [region, setRegion] = useState<string>("");
-  const navigator = useNavigate();
-  const category = useCategoryBarStore((state) => state.isOpen);
-  const setCategory = useCategoryBarStore((state) => state.setIsOpen);
+interface HobbyAndRegionCategoryProps {
+  groupCategory: string;
+  region: string;
+  onCategoryChange: (value: string) => void;
+  onRegionChange: (value: string) => void;
+}
+
+const HobbyAndRegionCategory = ({
+  groupCategory,
+  region,
+  onCategoryChange,
+  onRegionChange,
+}: HobbyAndRegionCategoryProps) => {
 
   const handleHobbyFilterClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const selectCategory = e.currentTarget.value;
-    setGroupCategory((current) => current === selectCategory ? "" : selectCategory);
+    onCategoryChange(groupCategory === selectCategory ? "" : selectCategory);
   };
 
   const handleRegionFilterClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const selectCategory = e.currentTarget.value;
-    setRegion((current) => current === selectCategory ? "" : selectCategory);
+    onRegionChange(region === selectCategory ? "" : selectCategory);
   };
 
   const categoryButtonStyle = (button: string) => ({
     backgroundColor:
-      groupCategory === button ? "#FF7B54" : "rgb(224, 224, 224)",
-    color: groupCategory === button ? "white" : "black",
+      groupCategory === button ? "var(--moa-primary)" : "var(--moa-chip-bg)",
+    color: groupCategory === button ? "white" : "var(--moa-chip-ink)",
   });
 
   const regionButtonStyle = (button: string) => ({
-    backgroundColor: region === button ? "#FF7B54" : "rgb(224, 224, 224)",
-    color: region === button ? "white" : "black",
+    backgroundColor: region === button ? "var(--moa-primary)" : "var(--moa-chip-bg)",
+    color: region === button ? "white" : "var(--moa-chip-ink)",
   });
-
-  const handleFetchCategoryBtn = async (
-    e: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    if (!groupCategory || !region) {
-      alert("취미 혹은 지역을 선택해주세요.");
-    } else {
-      navigator(`/main/search/categoryresult/${groupCategory}/${region}`);
-    }
-    setCategory(false);
-  };
 
   return (
     <div css={s.mainContainer}>
-      {category ? (
-        <div css={s.categoryBox}>
+      <div css={s.categoryBox}>
+          <div css={s.categoryHeader}>
+            <div>
+              <strong>카테고리로 모임 찾기</strong>
+              <p>관심 분야와 지역을 선택하면 조건에 맞는 모임을 보여드려요.</p>
+            </div>
+          </div>
+          <div css={s.filterRows}>
           <div css={s.categoryTitle}>
-            <p>카테고리</p>
+            <p><IoGridOutline /> 카테고리</p>
             <ul css={s.ulStyle}>
               {[
                 "취미",
@@ -75,7 +76,7 @@ const HobbyAndRegionCategory = () => {
             </ul>
           </div>
           <div css={s.categoryTitle}>
-            <p>지역</p>
+            <p><IoLocationOutline /> 지역</p>
             <ul css={s.ulStyle}>
               {[
                 "서울",
@@ -110,18 +111,8 @@ const HobbyAndRegionCategory = () => {
               ))}
             </ul>
           </div>
-          {category && (
-            <div css={s.buttonDiv}>
-              <button
-                css={s.categorySearchBtn}
-                onClick={handleFetchCategoryBtn}
-              >
-                검색
-              </button>
-            </div>
-          )}
-        </div>
-      ) : null}
+          </div>
+      </div>
     </div>
   );
 };

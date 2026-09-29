@@ -94,25 +94,48 @@ export const mainContainer = css`
 export const categoryBox = css`
   position: relative;
   background-color: #fff;
-  width: auto;
-  min-height: 300px;
+  width: min(calc(100% - 48px), 1440px);
   box-sizing: border-box;
-  margin: 20px clamp(20px, 4vw, 56px) 0;
+  margin: 18px auto 0;
   border:1px solid var(--moa-line);
   border-radius: var(--moa-radius-lg);
   display: flex;
   flex-direction: column;
   align-items: stretch;
   justify-content: center;
-  padding:24px;
-  box-shadow: var(--moa-shadow-md);
-  @media (max-width:720px) { margin:12px; padding:18px 14px; }
+  padding:20px 26px;
+  box-shadow: var(--moa-shadow);
+  @media (max-width:720px) { width:calc(100% - 24px); margin:12px auto 0; padding:14px 12px; }
+`;
+export const categoryHeader = css`
+  display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px;
+  strong { font-size:16px; color:var(--moa-ink); }
+  p { margin:3px 0 0; color:var(--moa-muted); font-size:12px; }
+`;
+export const filterRows = css`
+  display:grid; gap:10px; padding-top:2px;
+`;
+export const categoryCloseButton = css`
+  width:34px; height:34px; display:grid; place-items:center; padding:0; border:1px solid var(--moa-line);
+  border-radius:10px; background:var(--moa-surface); color:var(--moa-ink-subtle); font-size:20px; cursor:pointer;
+  &:hover { color:var(--moa-primary-dark); border-color:var(--moa-primary); background:var(--moa-primary-soft); }
+`;
+export const filterToggleRow = css`
+  width:min(calc(100% - 40px), 820px); margin:18px auto -30px; display:flex; justify-content:flex-end;
+  position:relative; z-index:2;
+  @media (max-width:720px) { width:calc(100% - 24px); margin:12px auto -22px; }
+`;
+export const filterToggleButton = css`
+  min-height:38px; display:flex; align-items:center; gap:7px; padding:0 13px; border:1px solid var(--moa-chip-line);
+  border-radius:10px; background:var(--moa-chip-bg); color:var(--moa-chip-ink); font-size:13px; font-weight:800; cursor:pointer;
+  &:hover { background:var(--moa-chip-hover); border-color:var(--moa-primary); }
 `;
 export const ulStyle = css`
   list-style: none;
   width: 100%;
   display: flex;
   flex-wrap: wrap;
+  gap: 6px;
   margin: 0px;
   padding: 0px;
 `;
@@ -121,25 +144,35 @@ export const buttonStyle = css`
   align-items: center;
   justify-content: center;
   border: none;
-  border: 1px solid var(--moa-line);
+  border: 1px solid var(--moa-chip-line);
   border-radius: 10px;
   font-size: 13px;
-  min-height: 40px;
-  margin: 4px;
-  padding: 0 13px;
+  min-height: 32px;
+  margin: 0;
+  padding: 0 10px;
   font-weight:700;
+  background:var(--moa-chip-bg);
+  color:var(--moa-chip-ink);
+  cursor:pointer;
+  transition:background 150ms ease, border-color 150ms ease, transform 150ms ease;
+  &:hover { background:var(--moa-chip-hover); border-color:var(--moa-primary); transform:translateY(-1px); }
 `;
 export const categoryTitle = css`
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin: 0 0 12px;
-  > p { margin:0 0 8px; font-weight:800; color:var(--moa-ink); }
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  align-items: start;
+  gap:12px;
+  margin:0;
+  padding:10px 0;
+  border-top:1px solid var(--moa-line);
+  > p { min-height:32px; margin:0; display:flex; align-items:center; gap:7px; font-size:13px; font-weight:800; color:var(--moa-ink); }
+  > p svg { color:var(--moa-primary); font-size:16px; }
+  @media (max-width:720px) { grid-template-columns:1fr; gap:6px; }
 `;
 export const categorySearchBtn = css`
   min-width: 92px;
-  margin: 10px;
+  margin: 4px;
   border: none;
   border-radius: 10px;
   background-color: var(--moa-primary);

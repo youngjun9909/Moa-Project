@@ -2,7 +2,7 @@ import { css } from "@emotion/react";
 
 export const container = css`width: min(100%, 1320px); margin: 0 auto; padding: 34px clamp(20px, 4vw, 56px) 56px;`;
 export const mainBox = css`width: 100%;`;
-export const filterBar = css`display:flex; flex-wrap:wrap; gap:8px; margin-bottom:30px;`;
+export const filterBar = css`display:flex; flex-wrap:wrap; gap:8px;`;
 export const filter = css`min-height:40px; padding:0 15px; border:1px solid var(--moa-line-strong); border-radius:11px; background:#fff; color:var(--moa-ink-subtle); font-weight:750; cursor:pointer;`;
 export const activeFilter = css`${filter}; background:var(--moa-ink); color:#fff; border-color:var(--moa-ink);`;
 export const sectionHeading = css`display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:16px; >h2{margin:0;font-size:22px;letter-spacing:-.03em;} >span{color:var(--moa-muted);font-size:13px;}`;

@@ -1,79 +1,17 @@
 /** @jsxImportSource @emotion/react */
-import React, { useEffect, useState } from "react";
-import * as s from "../resultStyle";
-import { useParams } from "react-router-dom";
-import PaginationScroll from "../../../components/pagination-scroll/PaginationScroll";
+import { css } from "@emotion/react";
 import { CATEGORY_GET_API } from "../../../apis";
-import usePaginationScrollSearchHook from "../../../components/pagination-scroll/usePaginationScrollSearchHook";
+import { MeetingListPage } from "../../../components/meeting-list/MeetingListPage";
+import { Button } from "../../../components/ui";
+import { useNavigate } from "react-router-dom";
 
-function CategorySearchList() {
-  const { groupCategory, region } = useParams<{
-    groupCategory?: string;
-    region?: string;
-  }>();
-  const groupCategoryWord = groupCategory || "";
-  const regionWord = region || "";
-  const { data, loading, resetAndFetchData, updateParams } =
-    usePaginationScrollSearchHook({
-      apiUrl: CATEGORY_GET_API,
-      limit: 10,
-      extraParams: { groupCategory: groupCategoryWord, region: regionWord },
-    });
+interface CategorySearchListProps { groupCategory?: string; region?: string; onReset?: () => void; }
+const selectedStyle = css`display:flex;align-items:center;flex-wrap:wrap;gap:7px; span{padding:7px 10px;border:1px solid var(--moa-chip-line);border-radius:999px;background:var(--moa-chip-bg);color:var(--moa-chip-ink);font-size:12px;font-weight:800;}`;
 
-  const [btnStatus, setBtnStatus] = useState<string>("default");
-
-  const handleSortChange = (sortBy: string) => {
-    setBtnStatus(sortBy);
-    resetAndFetchData(sortBy);
-  };
-
-  useEffect(() => {
-    updateParams({ groupCategory: groupCategoryWord, region: regionWord });
-  }, [groupCategoryWord, regionWord]);
-
-  const btnStyle = (button: string) => ({
-    color: btnStatus === button ? "#FF7B54" : "black",
-  });
-
-  const buttons = [
-    { label: "기본순", sortBy: "default" },
-    { label: "최신순", sortBy: "recent" },
-    { label: "과거순", sortBy: "past" },
-    { label: "추천순", sortBy: "recommendation" },
-  ];
-
-  return (
-    <div css={s.container}>
-      <div css={s.mainBox}>
-        <h3>카테고리 검색결과</h3>
-        <ul css={s.selectCategory}>
-          <li css={s.category}>{groupCategory}</li>
-          <li>|</li>
-          <li css={s.category}>{region}</li>
-        </ul>
-        <div css={s.buttonContainer}>
-          <div css={s.buttonDiv}>
-            {buttons.map((button, index) => (
-              <div key={index}>
-                <button
-                  style={btnStyle(button.sortBy)}
-                  value={button.sortBy}
-                  onClick={() => handleSortChange(button.sortBy)}
-                >
-                  {button.label}
-                </button>
-                {index < buttons.length - 1 && <span>|</span>}
-              </div>
-            ))}
-          </div>
-        </div>
-        <div css={s.resultLine}></div>
-        <div>
-          {loading ? <p>로딩 중...</p> : <PaginationScroll datas={data} />}
-        </div>
-      </div>
-    </div>
-  );
+function CategorySearchList({ groupCategory = "", region = "", onReset }: CategorySearchListProps) {
+  const navigate = useNavigate();
+  const filtered = Boolean(groupCategory || region);
+  const selected = filtered ? <div css={selectedStyle} aria-label="선택한 필터">{groupCategory && <span>{groupCategory}</span>}{region && <span>{region}</span>}{onReset && <Button variant="ghost" onClick={onReset}>필터 초기화</Button>}</div> : undefined;
+  return <MeetingListPage eyebrow="BROWSE BY CATEGORY" title={filtered ? "필터링된 모임" : "전체 모임"} description={filtered ? "선택한 관심 분야와 지역에 맞는 모임이에요." : "처음에는 모든 모임을 보여드리고, 선택 즉시 목록을 좁혀드려요."} apiUrl={CATEGORY_GET_API} params={{ ...(groupCategory ? { groupCategory } : {}), ...(region ? { region } : {}) }} filters={selected} emptyCopy={{ title: filtered ? "선택한 조건의 모임이 없어요" : "아직 등록된 모임이 없어요", description: filtered ? "다른 카테고리나 지역을 선택해보세요." : "첫 번째 모임을 만들어 새로운 만남을 시작해보세요.", action: filtered && onReset ? <Button variant="secondary" onClick={onReset}>다른 조건 보기</Button> : <Button onClick={() => navigate("/main/create-group")}>첫 모임 만들기</Button> }} />;
 }
-
 export default CategorySearchList;
