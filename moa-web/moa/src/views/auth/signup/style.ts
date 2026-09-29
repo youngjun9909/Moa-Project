@@ -26,7 +26,10 @@ export const signUpBox = css`
   padding-bottom: 50px;
   margin: 0;
   background-color: #fff;
-  min-width: 590px;
+  width: min(100%, 760px);
+  min-width: 0;
+  padding-inline: clamp(18px, 4vw, 48px);
+  box-sizing: border-box;
 `;
 
 export const pageStateBox = css`

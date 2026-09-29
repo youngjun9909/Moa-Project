@@ -12,6 +12,10 @@ export const fullBox = css`
   flex-direction: column;
   min-width: var(--moa-rail-width);
   min-height: 0;
+  @media (max-width: 720px) {
+    width:100%; height:68px; min-height:68px; flex-direction:row; order:2; position:fixed;
+    left:0; right:0; bottom:0; z-index:50; border-right:0; border-top:1px solid var(--moa-line);
+  }
 `;
 
 export const headerBox = css`
@@ -22,6 +26,7 @@ export const headerBox = css`
   padding: 10px 0;
   align-items: center;
   justify-content: center;
+  @media (max-width:720px) { width:auto; height:68px; padding:8px; border:0; }
 `;
 
 export const logoImage = css`
@@ -77,6 +82,7 @@ export const imageBox = css`
     transform: translateY(-2px);
     box-shadow: 0 8px 18px rgba(23, 42, 58, 0.15);
   }
+  @media (max-width:720px) { width:48px; min-width:48px; height:48px; min-height:48px; margin:0 4px !important; }
 `;
 
 export const middleBox = css`
@@ -97,6 +103,7 @@ export const middleBox = css`
   &::-webkit-scrollbar {
     display: none;
   }
+  @media (max-width:720px) { flex-direction:row; overflow-x:auto; overflow-y:hidden; padding:8px; }
 `;
 
 export const bottomBox = css`
@@ -106,6 +113,7 @@ export const bottomBox = css`
   align-items: center;
   justify-content: center;
   border-top: 1px solid var(--moa-line);
+  @media (max-width:720px) { width:auto; height:68px; padding:8px; border:0; }
 `;
 
 export const createBox = css`
@@ -129,41 +137,5 @@ export const createIcon = css`
 `;
 
 export const responsiveFullBox = css`
-  @media (max-width: 720px) {
-    width: 100%;
-    height: 68px;
-    min-height: 68px;
-    flex-direction: row;
-    border-radius: 0;
-    order: 2;
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 50;
-    border-right: 0;
-    border-top: 1px solid var(--moa-line);
-
-    ${headerBox}, ${bottomBox} {
-      width: auto;
-      height: 68px;
-      padding: 8px;
-      border: 0;
-    }
-
-    ${middleBox} {
-      flex-direction: row;
-      overflow-x: auto;
-      overflow-y: hidden;
-      padding: 8px;
-    }
-
-    ${imageBox} {
-      width: 48px;
-      min-width: 48px;
-      height: 48px;
-      min-height: 48px;
-      margin: 0 4px !important;
-    }
-  }
+  width:100%;
 `;

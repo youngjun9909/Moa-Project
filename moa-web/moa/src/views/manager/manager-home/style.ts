@@ -194,8 +194,8 @@ export const listItem = css`
       width: 100px;
       min-height: 38px;
       background-color: #fff;
-      color: #E50914;
-      border: 1px solid #E50914;
+      color: var(--moa-ink-subtle);
+      border: 1px solid var(--moa-line-strong);
       border-radius: 10px;
       cursor: pointer;
 
@@ -221,8 +221,8 @@ export const btnBox = css`
     font-size: 14px;
     text-align: center;
     background-color: #fff;
-    color: #E50914;
-    border: 1px solid #E50914;
+    color: var(--moa-ink-subtle);
+    border: 1px solid var(--moa-line-strong);
     border-radius: 10px;
     cursor: pointer;
 

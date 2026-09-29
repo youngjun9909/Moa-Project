@@ -92,16 +92,12 @@ export const mainContainer = css`
 `;
 
 export const categoryBox = css`
-  position: absolute;
-  z-index: 20;
-  top: 16px;
-  left: clamp(20px, 4vw, 56px);
-  right: clamp(20px, 4vw, 56px);
+  position: relative;
   background-color: #fff;
   width: auto;
   min-height: 300px;
   box-sizing: border-box;
-  margin-top: 0px;
+  margin: 20px clamp(20px, 4vw, 56px) 0;
   border:1px solid var(--moa-line);
   border-radius: var(--moa-radius-lg);
   display: flex;
@@ -110,6 +106,7 @@ export const categoryBox = css`
   justify-content: center;
   padding:24px;
   box-shadow: var(--moa-shadow-md);
+  @media (max-width:720px) { margin:12px; padding:18px 14px; }
 `;
 export const ulStyle = css`
   list-style: none;

@@ -14,6 +14,9 @@ export const infoNaviBar = css`
   justify-content: space-between;
   align-items: center;
   min-width: 0;
+  @media (max-width: 720px) {
+    width:100%; margin-left:0; min-height:64px; height:auto; padding:10px 12px; gap:8px;
+  }
 `;
 
 export const serviceSidebar = css`
@@ -21,11 +24,15 @@ export const serviceSidebar = css`
   inset: 0 auto 0 0;
   z-index: 5;
   width: var(--moa-sidebar-width);
-  height: 100%;
+  height: 100vh;
   background: #fbfcfd;
   border-right: 1px solid var(--moa-line);
   display: flex;
   flex-direction: column;
+  @media (max-width: 720px) {
+    display:none;
+    &[data-open="true"] { display:flex; position:fixed; width:min(84vw,300px); box-shadow:var(--moa-shadow-lg); }
+  }
 `;
 
 export const serviceBrand = css`
@@ -52,11 +59,18 @@ export const globalSearch = css`
   width:min(48vw,520px); height:44px; display:flex; align-items:center; gap:10px; padding:0 15px;
   border:1px solid transparent; border-radius:12px; background:#f2f5f7; color:var(--moa-muted); cursor:pointer;
   &:hover { border-color:var(--moa-line-strong); background:#fff; }
+  @media (max-width: 720px) { width:44px; padding:0; justify-content:center; > span { display:none; } }
+`;
+
+export const mobileMenuButton = css`
+  display:none; width:44px; height:44px; border:1px solid var(--moa-line); border-radius:11px; background:#fff; color:var(--moa-ink); font-size:22px;
+  @media (max-width:720px) { display:grid; place-items:center; }
 `;
 
 export const createGroupButton = css`
   min-height:44px; padding:0 16px; border:0; border-radius:11px; background:var(--moa-primary); color:#fff; font-weight:800; cursor:pointer;
   &:hover { background:var(--moa-primary-dark); }
+  @media (max-width: 900px) { width:44px; padding:0; overflow:hidden; white-space:nowrap; color:transparent; &::first-letter { color:#fff; font-size:20px; } }
 `;
 
 export const userInfoBox = css`
@@ -64,6 +78,7 @@ export const userInfoBox = css`
   padding: 10px;
   display: flex;
   align-items: center;
+  min-width: 0;
 `;
 
 export const userImgBox = css`
@@ -94,6 +109,8 @@ export const userNameBox = css`
   color: var(--moa-ink);
   font-weight: 600;
   padding: 10px;
+  max-width:140px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  @media (max-width: 900px) { display:none; }
 `;
 
 export const userBox = css`
@@ -108,6 +125,9 @@ export const userBox = css`
   margin: 0 10px;
   border-radius: 5px;
   cursor: pointer;
+  border:0;
+  color:inherit;
+  @media (max-width: 720px) { margin:0; padding:6px; }
 `;
 
 export const innerInfoBox = css`
@@ -157,6 +177,7 @@ export const signBtn = css`
 export const naviBox = css`
   display: flex;
   align-items: center;
+  gap:8px;
 `;
 
 export const naviDiv = css`
@@ -227,40 +248,5 @@ export const naviModal = css`
 `;
 
 export const responsiveInfo = css`
-  @media (max-width: 720px) {
-    ${serviceSidebar} { display:none; }
-    ${infoNaviBar} {
-      width:100%;
-      margin-left:0;
-      height: auto;
-      min-height: 64px;
-      padding: 10px 12px;
-      gap: 8px;
-    }
-
-    ${naviBox} {
-      gap: 4px;
-      overflow-x: auto;
-    }
-
-    ${globalSearch} { width:44px; padding:0; justify-content:center; > span { display:none; } }
-    ${createGroupButton} { width:44px; padding:0; font-size:0; &::first-letter { font-size:20px; } }
-
-    ${fontSt} {
-      display: none;
-    }
-
-    ${naviDiv} {
-      padding: 8px;
-    }
-
-    ${userBox} {
-      margin: 0;
-      padding: 6px;
-    }
-
-    ${userNameBox} {
-      display: none;
-    }
-  }
+  width:100%;
 `;

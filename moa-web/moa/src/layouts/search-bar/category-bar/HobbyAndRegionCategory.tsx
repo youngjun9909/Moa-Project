@@ -13,12 +13,12 @@ const HobbyAndRegionCategory = () => {
 
   const handleHobbyFilterClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const selectCategory = e.currentTarget.value;
-    setGroupCategory(selectCategory);
+    setGroupCategory((current) => current === selectCategory ? "" : selectCategory);
   };
 
   const handleRegionFilterClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const selectCategory = e.currentTarget.value;
-    setRegion(selectCategory);
+    setRegion((current) => current === selectCategory ? "" : selectCategory);
   };
 
   const categoryButtonStyle = (button: string) => ({

@@ -12,7 +12,12 @@ export function FormField({ label, error, hint, required, children }: FormFieldP
   const fallbackId = useId();
   const id = children.props.id || `field-${fallbackId.replace(/:/g, "")}`;
   const describedBy = [hint && `${id}-hint`, error && `${id}-error`].filter(Boolean).join(" ") || undefined;
-  const control = cloneElement(children, { id, required, "aria-invalid": error ? "true" : undefined, "aria-describedby": describedBy });
+  const mergedDescription = [children.props["aria-describedby"], describedBy].filter(Boolean).join(" ") || undefined;
+  const control = cloneElement(children, {
+    id,
+    required: required ?? children.props.required,
+    "aria-invalid": error ? "true" : children.props["aria-invalid"],
+    "aria-describedby": mergedDescription,
+  });
   return <div css={wrap}><label css={labelStyle} htmlFor={id}>{label}{required ? " *" : ""}</label>{control}{hint && <p css={help} id={`${id}-hint`}>{hint}</p>}{error && <p css={errorStyle} id={`${id}-error`} role="alert">{error}</p>}</div>;
 }
-

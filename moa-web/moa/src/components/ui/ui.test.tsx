@@ -32,6 +32,19 @@ describe("MOA UI primitives", () => {
     expect(input).toHaveAttribute("aria-invalid", "true");
   });
 
+  test("form field preserves control accessibility attributes while adding help text", () => {
+    render(
+      <FormField label="소개" hint="모임을 소개해주세요.">
+        <textarea id="intro" required aria-describedby="existing-help" aria-invalid="false" />
+      </FormField>
+    );
+
+    const input = screen.getByLabelText("소개");
+    expect(input).toBeRequired();
+    expect(input).toHaveAttribute("aria-invalid", "false");
+    expect(input).toHaveAttribute("aria-describedby", "existing-help intro-hint");
+  });
+
   test("empty state keeps the suggested next action available", () => {
     render(<EmptyState title="아직 모임이 없어요" description="새로운 모임을 찾아보세요." action={<Button>모임 찾기</Button>} />);
     expect(screen.getByRole("button", { name: "모임 찾기" })).toBeInTheDocument();

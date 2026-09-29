@@ -4,7 +4,7 @@ export const container = css`
   width: 80%;
   margin: 0 auto;
   max-width: 500px;
-  min-width: 400px;
+  min-width: 0;
   margin: 0 auto;
   padding: 0;
   display: flex;
