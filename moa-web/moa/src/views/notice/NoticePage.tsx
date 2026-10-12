@@ -5,20 +5,25 @@ import { Notice } from "../../types";
 import axios from "axios";
 import { format } from "date-fns";
 import { NOTICE_API } from "../../apis";
-import { EmptyState } from "../../components/ui/EmptyState";
+import { AsyncState } from "../../components/ui/AsyncState";
+import { Button } from "../../components/ui/Button";
 
 export default function NoticePage() {
   const [noticeData, setNoticeData] = useState<Notice[]>([]);
+  const [status, setStatus] = useState<"loading" | "success" | "empty" | "error">("loading");
 
-  useEffect(() => {
+  const loadNotices = async () => {
+    setStatus("loading");
     try {
-      axios.get(NOTICE_API, {}).then((response) => {
-        setNoticeData(response.data.data);
-      });
+      const response = await axios.get(NOTICE_API);
+      const data = response.data.data || [];
+      setNoticeData(data);
+      setStatus(data.length ? "success" : "empty");
     } catch (error) {
-      console.error(error);
+      setStatus("error");
     }
-  }, []);
+  };
+  useEffect(() => { loadNotices(); }, []);
 
   return (
     <div css={s.fullBox}>
@@ -29,7 +34,7 @@ export default function NoticePage() {
       </div>
 
       <div css={s.mainBox}>
-        {noticeData.length === 0 && <EmptyState title="등록된 공지사항이 없어요" description="새로운 소식이 등록되면 이곳에서 알려드릴게요." />}
+        <AsyncState status={status} empty={{title:"등록된 공지사항이 없어요", description:"새로운 소식이 등록되면 이곳에서 알려드릴게요."}} error={{title:"공지사항을 불러오지 못했어요", description:"연결을 확인한 뒤 다시 시도해주세요.", action:<Button onClick={loadNotices}>다시 시도</Button>}}>
         {noticeData.map((notice) => (
           <div css={s.noticeBox} key={notice.noticeId}>
             <div>
@@ -41,6 +46,7 @@ export default function NoticePage() {
             <time dateTime={String(notice.noticeDate)}>{format(notice.noticeDate, "yyyy.MM.dd")}</time>
           </div>
         ))}
+        </AsyncState>
       </div>
     </div>
   );

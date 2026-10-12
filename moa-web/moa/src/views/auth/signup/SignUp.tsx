@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as s from "./style";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Gender, Hobby, Region, User } from "../../../types";
@@ -20,7 +20,6 @@ import {
 } from "@mui/material";
 import userImg from "../../../images/userImg.png";
 import axios from "axios";
-import { format } from "date-fns";
 import {
   SIGN_UP_DUPLICATION_NICKNAME_API,
   SIGN_UP_DUPLICATION_USERID_API,
@@ -70,6 +69,11 @@ export default function SignUp() {
 
   const [page, setPage] = useState<number>(0);
   const [hobbies, setHobbies] = useState<Hobby[]>([]);
+  const [hobbyError, setHobbyError] = useState(false);
+  const loadHobbies = () => {
+    setHobbyError(false);
+    return axios.get(SIGN_UP_HPBBY_GET_API).then(response => setHobbies(response.data.data || [])).catch(() => setHobbyError(true));
+  };
   const [region, setRegion] = useState<Region | null>(null);
   const [userProfileImg, setUserProfileImg] = useState<any>(null);
   const [clearModal, setClearModal] = useState<boolean>(false);
@@ -90,15 +94,17 @@ export default function SignUp() {
 
   const [duplicateIdMs, setDuplicateIdMs] = useState<string>("");
   const [duplicateNickNameMs, setDuplicateNickNameMs] = useState<string>("");
+  const [stepErrors, setStepErrors] = useState<Record<string, string>>({});
+  const duplicateRequests = useRef({ userId: 0, nickName: 0 });
 
-  const [signUpData, setSignUpData] = useState<User>({
+  const [signUpData, setSignUpData] = useState<Omit<User, "userBirthDate"> & { userBirthDate: string }>({
     userId: "",
     password: "",
     confirmPassword: "",
     userName: "",
     nickName: "",
     userGender: null,
-    userBirthDate: new Date(),
+    userBirthDate: "",
     hobbies: [],
     profileImage: null,
     region: null,
@@ -109,9 +115,7 @@ export default function SignUp() {
   });
 
   useEffect(() => {
-    axios.get(SIGN_UP_HPBBY_GET_API).then((response) => {
-      setHobbies(response.data.data);
-    });
+    void loadHobbies();
 
     if (path === "1") {
       setPage(1);
@@ -119,12 +123,23 @@ export default function SignUp() {
   }, [path]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const element = e.target;
-
-    setSignUpData({
-      ...signUpData,
-      [element.name]: element.value,
-    });
+    const { name, value } = e.target;
+    const normalized = name === "phoneNumber" || name === "userBirthDate"
+      ? value.replace(/[\s-]/g, "") : value;
+    setStepErrors({});
+    if (name === "userId") {
+      duplicateRequests.current.userId += 1;
+      setDuplicateId(false);
+      setDuplicateIdMs("아이디를 변경했어요. 중복 확인을 다시 해주세요.");
+      setValidId("");
+    }
+    if (name === "nickName") {
+      duplicateRequests.current.nickName += 1;
+      setDuplicateNickName(false);
+      setDuplicateNickNameMs("닉네임을 변경했어요. 중복 확인을 다시 해주세요.");
+      setValidNickName("");
+    }
+    setSignUpData(prev => ({ ...prev, [name]: normalized }));
   };
 
   const handleHobbyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -173,100 +188,82 @@ export default function SignUp() {
   };
 
   const handleNextPage = () => {
-    let valid = true;
-
+    const errors: Record<string, string> = {};
     if (!signUpData.userId || !idRegex.test(signUpData.userId)) {
-      valid = false;
-      setValidId("※ 아이디 8~14자의 영문, 숫자 포함 입력");
-    } else if (validId !== "") {
-    } else {
-      setValidId("");
+      errors.userId = "아이디는 영문 또는 숫자 8~14자로 입력해주세요.";
+    } else if (!duplicateId) {
+      errors.userId = "현재 아이디의 중복 확인을 완료해주세요.";
     }
-
     if (!signUpData.password || !passwordRegex.test(signUpData.password)) {
-      valid = false;
-      setValidPassword("※ 비밀번호 8~16자의 영문, 숫자, 특수문자 포함 입력");
-    } else {
-      setValidPassword("");
+      errors.password = "비밀번호는 영문, 숫자, 특수문자를 모두 포함해 8~16자로 입력해주세요.";
+    } else if (signUpData.password !== signUpData.confirmPassword) {
+      errors.confirmPassword = "비밀번호 확인이 일치하지 않습니다.";
     }
-
-    if (signUpData.password !== signUpData.confirmPassword) {
-      valid = false;
-      setValidPassword("※ 비밀번호가 일치하지 않습니다.");
-    } else {
-      setValidPassword("");
-    }
-
-    if (
-      !signUpData.userBirthDate ||
-      !birthDateRegex.test(signUpData.userBirthDate.toString())
-    ) {
-      valid = false;
-      setValidBirthDay("※ 하이픈(-) 없이 8자");
-    } else {
-      setValidBirthDay("");
-    }
-
-    if (!signUpData.userName || !nameRegex.test(signUpData.userName)) {
-      valid = false;
-      setValidName("※ 한글, 영문의 이름 입력");
-    } else {
-      setValidName("");
-    }
-
-    if (!signUpData.phoneNumber || !phoneRegex.test(signUpData.phoneNumber)) {
-      valid = false;
-      setValidPhone("※ 하이픈 제외 입력");
-    } else {
-      setValidPhone("");
-    }
-
     if (!signUpData.nickName || !nicknameRegex.test(signUpData.nickName)) {
-      valid = false;
-      setValidNickName("※ 1~10자의 한글, 영문, 숫자 입력 (특수문자 불가)");
-    } else {
-      setValidNickName("");
+      errors.nickName = "닉네임은 한글, 영문, 숫자로 1~10자 입력해주세요.";
+    } else if (!duplicateNickName) {
+      errors.nickName = "현재 닉네임의 중복 확인을 완료해주세요.";
     }
-
-    if (!signUpData.email || !emailRegex.test(signUpData.email)) {
-      valid = false;
-      setValidEmail("※ 이메일 입력해주세요");
-    } else {
-      setValidEmail("");
+    if (!signUpData.userName || !nameRegex.test(signUpData.userName)) {
+      errors.userName = "성명은 한글 또는 영문으로 입력해주세요.";
     }
-
+    if (!signUpData.phoneNumber || !phoneRegex.test(signUpData.phoneNumber)) {
+      errors.phoneNumber = "휴대폰 번호를 확인해주세요. 예: 01012345678";
+    }
+    if (!birthDateRegex.test(signUpData.userBirthDate)) {
+      errors.userBirthDate = "생년월일은 숫자 8자리로 입력해주세요. 예: 19950102";
+    }
     if (!signUpData.userGender) {
-      valid = false;
-      setValidGender("※ 성별을 선택해주세요");
-    } else {
-      setValidGender("");
+      errors.male = "성별을 선택해주세요.";
     }
-
-    if (valid && duplicateId && duplicateNickName) {
-      setPage((prev) => prev + 1);
-    } else {
-      setClearModal(true);
-      setModalMessage("정보입력 or 중복검사를 진행해주세요!!");
+    if (!signUpData.email || !emailRegex.test(signUpData.email)) {
+      errors.email = "필수 항목인 이메일을 올바른 형식으로 입력해주세요.";
     }
+    setValidId(errors.userId || "");
+    setValidPassword(errors.password || errors.confirmPassword || "");
+    setValidNickName(errors.nickName || "");
+    setValidName(errors.userName || "");
+    setValidPhone(errors.phoneNumber || "");
+    setValidBirthDay(errors.userBirthDate || "");
+    setValidGender(errors.male || "");
+    setValidEmail(errors.email || "");
+    setStepErrors(errors);
+    const firstInvalid = Object.keys(errors)[0];
+    if (firstInvalid) {
+      const field = document.getElementById(firstInvalid);
+      field?.focus();
+      field?.scrollIntoView?.({ block: "center", behavior: "smooth" });
+      return;
+    }
+    setPage(2);
   };
 
   const handlePreviousPage = () => setPage((prev) => prev - 1);
 
   const handleDuplicateId = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    const request = ++duplicateRequests.current.userId;
+    setDuplicateId(false);
+    setDuplicateIdMs("");
     try {
       if (signUpData.userId && idRegex.test(signUpData.userId)) {
         setValidId("");
         const result = await axios.get(
-          `${SIGN_UP_DUPLICATION_USERID_API}${signUpData.userId}`
+          `${SIGN_UP_DUPLICATION_USERID_API}${encodeURIComponent(signUpData.userId)}`
         );
-
+        if (request !== duplicateRequests.current.userId) return;
+        if (result.data.result === false || typeof result.data.data !== "boolean") throw new Error("Invalid duplicate response");
         if (result.data.data === true) {
           setDuplicateIdMs("※ 아이디가 중복되었습니다.");
           setDuplicateId(false);
         } else {
           setDuplicateIdMs("아이디 중복확인 완료✅");
           setDuplicateId(true);
+          setStepErrors(previous => {
+            const next = { ...previous };
+            delete next.userId;
+            return next;
+          });
         }
       } else {
         setValidId("※ 아이디 8~14자의 영문, 숫자 포함 입력");
@@ -274,7 +271,9 @@ export default function SignUp() {
         setDuplicateId(false);
       }
     } catch (error) {
-      console.error(error);
+      if (request !== duplicateRequests.current.userId) return;
+      setDuplicateId(false);
+      setDuplicateIdMs("아이디 중복 확인에 실패했어요. 다시 시도해주세요.");
     }
   };
 
@@ -282,27 +281,38 @@ export default function SignUp() {
     e: React.MouseEvent<HTMLButtonElement>
   ) => {
     e.preventDefault();
+    const request = ++duplicateRequests.current.nickName;
+    setDuplicateNickName(false);
+    setDuplicateNickNameMs("");
     try {
       if (signUpData.nickName && nicknameRegex.test(signUpData.nickName)) {
         setValidNickName("");
         const result = await axios.get(
-          `${SIGN_UP_DUPLICATION_NICKNAME_API}${signUpData.nickName}`
+          `${SIGN_UP_DUPLICATION_NICKNAME_API}${encodeURIComponent(signUpData.nickName)}`
         );
-
+        if (request !== duplicateRequests.current.nickName) return;
+        if (result.data.result === false || typeof result.data.data !== "boolean") throw new Error("Invalid duplicate response");
         if (result.data.data === true) {
           setDuplicateNickNameMs("※ 닉네임이 중복되었습니다.");
           setDuplicateNickName(false);
         } else {
           setDuplicateNickNameMs("닉네임 중복확인 완료 ✅");
           setDuplicateNickName(true);
+          setStepErrors(previous => {
+            const next = { ...previous };
+            delete next.nickName;
+            return next;
+          });
         }
       } else {
-        setValidNickName("※ 아이디 8~14자의 영문, 숫자 포함 입력");
+        setValidNickName("닉네임은 한글, 영문, 숫자로 1~10자 입력해주세요.");
         setDuplicateNickNameMs("");
         setDuplicateNickName(false);
       }
     } catch (error) {
-      console.error(error);
+      if (request !== duplicateRequests.current.nickName) return;
+      setDuplicateNickName(false);
+      setDuplicateNickNameMs("닉네임 중복 확인에 실패했어요. 다시 시도해주세요.");
     }
   };
 
@@ -360,6 +370,8 @@ export default function SignUp() {
   return (
     <div css={s.fullBox}>
       <div css={s.signUpBox}>
+        {hobbyError && <div role="alert" css={s.errorMessage}>취미 목록을 불러오지 못했어요. 연결을 확인해주세요. <button type="button" css={s.validBtn} onClick={loadHobbies}>다시 시도</button></div>}
+        {page > 0 && <header css={s.headerBox}><img src={logo} alt="MOA" /><h1>{page === 1 ? "나의 기본 정보" : "나의 취향 소개"}</h1></header>}
         {page === 0 && (
           <>
             <Box sx={{ width: "100%", padding: "20px 0" }}>
@@ -377,7 +389,7 @@ export default function SignUp() {
                 <h1>회원가입</h1>
               </div>
               <div css={s.allSignUpBox}>
-                <div
+                <button type="button" aria-label="Moa 계정으로 회원가입"
                   css={s.anotherSignInBox}
                   className="moa"
                   onClick={() => setPage(1)}
@@ -388,8 +400,8 @@ export default function SignUp() {
                   <div>
                     <p>Moa 계정으로 회원가입</p>
                   </div>
-                </div>
-                <div
+                </button>
+                <button type="button" aria-label="Naver 계정으로 회원가입"
                   css={s.anotherSignInBox}
                   className="naver"
                   onClick={() => onSnsButtonClickHandler("naver")}
@@ -400,8 +412,8 @@ export default function SignUp() {
                   <div>
                     <p>Naver 계정으로 회원가입</p>
                   </div>
-                </div>
-                <div
+                </button>
+                <button type="button" aria-label="Kakao 계정으로 회원가입"
                   css={s.anotherSignInBox}
                   className="kakao"
                   onClick={() => onSnsButtonClickHandler("kakao")}
@@ -412,7 +424,7 @@ export default function SignUp() {
                   <div>
                     <p>Kakao 계정으로 회원가입</p>
                   </div>
-                </div>
+                </button>
               </div>
             </div>
           </>
@@ -478,6 +490,7 @@ export default function SignUp() {
                 css={s.passwordBottom}
                 type="password"
                 name="confirmPassword"
+                aria-label="비밀번호 확인"
                 id="confirmPassword"
                 value={signUpData.confirmPassword}
                 onChange={handleInputChange}
@@ -535,12 +548,13 @@ export default function SignUp() {
               <div css={s.rowFieldBox}>
                 <label htmlFor="phoneNumber" css={s.labelBox}>
                   <p css={s.label}>휴대폰 번호*</p>{" "}
-                  {validName ? <p css={s.errorMessage}>{validPhone}</p> : <></>}
+                  {validPhone ? <p css={s.errorMessage}>{validPhone}</p> : <></>}
                 </label>
                 <input
                   css={s.input}
                   type="text"
                   name="phoneNumber"
+                  inputMode="tel"
                   id="phoneNumber"
                   value={signUpData.phoneNumber}
                   onChange={handleInputChange}
@@ -564,6 +578,8 @@ export default function SignUp() {
                   type="text"
                   name="userBirthDate"
                   id="userBirthDate"
+                  value={signUpData.userBirthDate}
+                  inputMode="numeric"
                   onChange={handleInputChange}
                   placeholder="하이픈(-) 제외 8자 입력 "
                 />
@@ -583,6 +599,7 @@ export default function SignUp() {
                     type="radio"
                     id="male"
                     value="MALE"
+                    checked={signUpData.userGender === "MALE"}
                     name="gender"
                     onChange={(e) =>
                       setSignUpData({
@@ -596,6 +613,7 @@ export default function SignUp() {
                     type="radio"
                     id="female"
                     value="FEMALE"
+                    checked={signUpData.userGender === "FEMALE"}
                     name="gender"
                     onChange={(e) =>
                       setSignUpData({
@@ -610,8 +628,8 @@ export default function SignUp() {
             </div>
 
             <div css={s.fieldBox}>
-              <label htmlFor="password" css={s.labelBox}>
-                <p css={s.label}>이메일</p>{" "}
+              <label htmlFor="email" css={s.labelBox}>
+                <p css={s.label}>이메일*</p>{" "}
                 {validEmail ? <p css={s.errorMessage}>{validEmail}</p> : <></>}
               </label>
               <input
@@ -625,6 +643,10 @@ export default function SignUp() {
               />
             </div>
 
+            {Object.keys(stepErrors).length > 0 && <div role="alert" css={s.validationSummary}>
+              <strong>아래 항목을 확인해주세요.</strong>
+              <ul>{Object.entries(stepErrors).map(([field, message]) => <li key={field}>{message}</li>)}</ul>
+            </div>}
             <div css={s.fieldBox}>
               <div css={s.btnBox}>
                 <button onClick={handlePreviousPage}>이전</button>

@@ -11,9 +11,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import jakarta.validation.Valid;
 
 import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping(ApiMappingPattern.GROUP)
@@ -27,6 +30,14 @@ public class MeetingGroupController {
     private static final String GET_MEETING_GROUP_HOME = "/home-recommendation";
     private static final String EXISTS_CREATOR = "/exists/{groupId}";
     private static final String GET_MEETING_GROUP = "/{groupId}";
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ResponseDto<Map<String, String>>> invalidMeetingInput(MethodArgumentNotValidException exception) {
+        Map<String, String> errors = new LinkedHashMap<>();
+        exception.getBindingResult().getFieldErrors().forEach(error ->
+                errors.putIfAbsent(error.getField(), error.getDefaultMessage()));
+        return ResponseEntity.badRequest().body(ResponseDto.set(false, "입력 내용을 확인해주세요.", errors));
+    }
 
     @PostMapping
     public ResponseEntity<ResponseDto<ResponseGroupDto>> createGroupMeeting(

@@ -183,6 +183,7 @@ function CreateReview() {
       </div>
       <div css={s.mainBox}>
         <div css={s.mainHeader}>
+          <label htmlFor="groupId">후기를 남길 모임</label>
           <select
             name="groupId"
             id="groupId"

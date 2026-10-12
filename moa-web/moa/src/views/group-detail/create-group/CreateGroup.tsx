@@ -1,10 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import * as s from "./style";
-import React, { ChangeEvent, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import axios from "axios";
 import { CREATE_GROUP_API } from "../../../apis";
+import { SIGN_IN_PAGE } from "../../../constants";
 import groupImage from "../../../images/group.jpg";
 
 declare global {
@@ -37,6 +38,8 @@ export default function CreateGroup() {
     groupQuestion: "",
   });
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [saving, setSaving] = useState(false);
+  const saveLock = useRef(false);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({
@@ -73,13 +76,14 @@ export default function CreateGroup() {
   }, [groupImg]);
 
   useEffect(() => {
+    if (!cookies.token) return;
     if (window.kakao?.Postcode || document.getElementById(POSTCODE_SCRIPT_ID)) return;
     const script = document.createElement("script");
     script.id = POSTCODE_SCRIPT_ID;
     script.src = POSTCODE_SCRIPT_SRC;
     script.async = true;
     document.head.appendChild(script);
-  }, []);
+  }, [cookies.token]);
 
   const handleAddressSearch = () => {
     if (!window.kakao?.Postcode) {
@@ -96,29 +100,40 @@ export default function CreateGroup() {
   };
 
   const handleNextPage = () => {
-    if (!formData.groupType) {
-      alert("모임 유형을 선택해주세요.");
+    const requiredFields: [keyof typeof formData, string][] = [["groupType", "모임 유형"], ["groupCategory", "모임 카테고리"], ["groupDate", "모임 날짜"], ["meetingType", "진행 방식"], ["groupAddress", "모임 주소"]];
+    const missing = requiredFields.find(([key]) => !formData[key].trim());
+    if (missing) {
+      setErrors({form: `${missing[1]}를 입력하거나 선택해주세요.`});
       return;
     }
-    if (!formData.groupDate) {
-      alert("모임 날짜를 입력해주세요.");
-      return;
-    }
-    if (!formData.meetingType) {
-      alert("모임 장소를 선택해주세요.");
-      return;
-    }
-    if (!formData.groupAddress) {
-      alert("모임 주소를 입력해주세요.");
-      return;
-    }
-
+    setErrors({});
     setPage((prev) => prev + 1);
   };
 
   const handlePrevPage = () => setPage((prev) => prev - 1);
 
   const handlePostGroup = async () => {
+    if (saveLock.current) return;
+    if (!cookies.token) {
+      navigate(SIGN_IN_PAGE, { replace: true });
+      return;
+    }
+    const requiredIntro = [
+      ["groupTitle", "모임 제목", "group-title"],
+      ["groupContent", "모임 소개", "group-content"],
+      ["groupQuestion", "가입 질문", "group-question"],
+    ] as const;
+    const missing = requiredIntro.find(([key]) => !formData[key].trim());
+    if (missing) {
+      const [key, label, id] = missing;
+      const message = `${label}${key === "groupContent" ? "를" : "을"} 입력해주세요.`;
+      setErrors({ [key]: message, submit: message });
+      document.getElementById(id)?.focus();
+      return;
+    }
+    saveLock.current = true;
+    setSaving(true);
+    setErrors(prev => ({ ...prev, submit: "" }));
     const postGroupRequestDto = new FormData();
     Object.keys(formData).forEach((key) => {
       const value = formData[key as keyof typeof formData];
@@ -135,16 +150,36 @@ export default function CreateGroup() {
           "Content-Type": "multipart/form-data",
         },
       });
-      if (response.status === 200) {
-        alert("모임이 성공적으로 등록되었습니다!");
-        navigate("/main");
-        window.location.reload();
+      const savedGroupId = response.data?.data?.groupId;
+      if (response.data?.result !== true || !Number.isInteger(savedGroupId) || savedGroupId <= 0) {
+        setErrors(prev => ({ ...prev, submit: "서버에서 모임 등록 결과를 확인하지 못했어요. 입력 내용을 유지한 채 다시 시도해주세요." }));
+        return;
       }
+      alert("모임이 성공적으로 등록되었습니다!");
+      navigate("/main");
     } catch (error) {
-      console.error(error);
-      alert("모임 등록에 실패했습니다. 다시 시도해주세요.");
+      const status = (error as { response?: { status?: number } }).response?.status;
+      if (status === 401) {
+        navigate(SIGN_IN_PAGE, { replace: true });
+        return;
+      }
+      const fieldErrors = (error as { response?: { data?: { data?: Record<string, unknown> } } }).response?.data?.data;
+      const invalidField = requiredIntro.find(([key]) => typeof fieldErrors?.[key] === "string");
+      if (status === 400 && invalidField) {
+        const [key, , id] = invalidField;
+        const message = fieldErrors![key] as string;
+        setErrors({ [key]: message, submit: message });
+        document.getElementById(id)?.focus();
+        return;
+      }
+      setErrors(prev => ({ ...prev, submit: "모임 등록에 실패했습니다. 입력 내용과 연결 상태를 확인한 뒤 다시 시도해주세요." }));
+    } finally {
+      saveLock.current = false;
+      setSaving(false);
     }
   };
+
+  if (!cookies.token) return <Navigate to={SIGN_IN_PAGE} replace />;
 
   return (
     <div css={s.createPage}>
@@ -224,6 +259,7 @@ export default function CreateGroup() {
             </div>
           </section>
 
+          {errors.form && <p role="alert" css={s.sectionDescription}>{errors.form}</p>}
           <div css={s.BottomButtonContainer}>
             <button type="button" css={s.MoveButton} onClick={handleNextPage}>
               다음
@@ -236,11 +272,14 @@ export default function CreateGroup() {
         <div css={s.CreatorBox}>
           <section css={s.formSection} role="group" aria-labelledby="meeting-intro-title">
             <h2 id="meeting-intro-title">모임을 소개해주세요</h2>
-            <p css={s.sectionDescription}>누구나 모임의 분위기와 활동을 쉽게 이해할 수 있도록 작성해주세요.</p>
+            <p css={s.sectionDescription}>모임 제목, 모임 소개, 가입 질문은 필수 항목입니다. 준비물과 대표 이미지는 선택이에요.</p>
           <div css={s.fieldGroup}>
             <label htmlFor="group-title">모임 제목</label>
             <input
               id="group-title"
+              required
+              aria-invalid={Boolean(errors.groupTitle)}
+              aria-describedby={errors.groupTitle ? "registration-error" : undefined}
               type="text"
               css={s.TitleInput}
               placeholder="모임 제목"
@@ -252,6 +291,9 @@ export default function CreateGroup() {
             <label htmlFor="group-content">모임 소개</label>
             <textarea
               id="group-content"
+              required
+              aria-invalid={Boolean(errors.groupContent)}
+              aria-describedby={errors.groupContent ? "registration-error" : undefined}
               css={s.ContentBox}
               placeholder="모임에 대한 소개말"
               value={formData.groupContent}
@@ -278,9 +320,12 @@ export default function CreateGroup() {
             <label htmlFor="group-question">가입 질문</label>
             <input
               id="group-question"
+              required
+              aria-invalid={Boolean(errors.groupQuestion)}
+              aria-describedby={errors.groupQuestion ? "registration-error" : undefined}
               type="text"
               css={s.TitleInput}
-              placeholder="설정하고 싶은 모입 가입 질문"
+              placeholder="예: 이 모임에서 함께 하고 싶은 활동은 무엇인가요?"
               value={formData.groupQuestion}
               onChange={(e) =>
                 handleInputChange("groupQuestion", e.target.value)
@@ -307,12 +352,13 @@ export default function CreateGroup() {
           </div>
           </section>
 
+          {errors.submit && <p id="registration-error" role="alert" css={s.sectionDescription}>{errors.submit}</p>}
           <div css={s.BottomButtonContainer}>
-            <button type="button" css={s.secondaryButton} onClick={handlePrevPage}>
+            <button type="button" css={s.secondaryButton} onClick={handlePrevPage} disabled={saving}>
               이전
             </button>
-            <button type="button" css={s.MoveButton} onClick={handlePostGroup}>
-              완료
+            <button type="button" css={s.MoveButton} onClick={handlePostGroup} disabled={saving}>
+              {saving ? "등록 중…" : "완료"}
             </button>
           </div>
         </div>

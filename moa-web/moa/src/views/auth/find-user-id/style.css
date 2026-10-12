@@ -10,7 +10,9 @@
   box-sizing: border-box;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 1000;
-  width: 420px;
+  width: min(420px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
   border: none;
 }
 
@@ -26,13 +28,14 @@
 .closeModalBtn {
   padding: 5px;
   box-sizing: border-box;
-  border-radius: 5px;
+  border-radius: 11px;
   border: none;
   color: #fff;
   padding: 10px 15px;
-  background-color: #FF7B54;
+  min-height: 44px;
+  background-color: var(--moa-primary);
   &:hover {
-    background-color: #e5673b;
+    background-color: var(--moa-primary-dark);
   }
 }
 

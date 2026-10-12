@@ -14,6 +14,7 @@ import {
 } from "../../../apis";
 import { GetUserListResponseDto } from "../../../types/dto/response.dto";
 import { useNavigate } from "react-router-dom";
+import { EmptyState } from "../../../components/ui";
 
 interface ManagerHomeProps {
   parseToNumGroupId: number;
@@ -152,6 +153,8 @@ const ManagerHome: React.FC<ManagerHomeProps> = ({ parseToNumGroupId }) => {
     }
   }
 
+  if (!userList.length) return <EmptyState title="표시할 멤버가 없어요" description="가입한 멤버의 정보와 활동을 이곳에서 관리할 수 있어요." />;
+
   return (
     <div css={s.box}>
       <div css={s.headerBox}>
@@ -159,7 +162,7 @@ const ManagerHome: React.FC<ManagerHomeProps> = ({ parseToNumGroupId }) => {
       </div>
         {/* 매니저저 */}
         <h3 css={s.userLabel}>
-          관리자
+          모임 주최자
         </h3>
         {manager ? (
       <ul css={s.ulBox}>

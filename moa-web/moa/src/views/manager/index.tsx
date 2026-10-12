@@ -44,7 +44,7 @@ const Tab = styled(BaseTab)`
   }
 
   &.${tabClasses.selected} {
-    background-color: var(--moa-ink);
+    background-color: var(--moa-primary);
     color: #fff;
   }
 
@@ -76,6 +76,7 @@ const TabsList = styled(BaseTabsList)<{ theme?: Theme }>(
   display: flex;
   align-items: center;
   gap: 4px;
+  flex-wrap: wrap;
   `
 );
 

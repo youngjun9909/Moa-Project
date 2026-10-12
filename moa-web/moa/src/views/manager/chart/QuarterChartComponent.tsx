@@ -8,6 +8,7 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
+  ResponsiveContainer,
 } from "recharts";
 
 interface QuarterChartProps {
@@ -20,9 +21,7 @@ interface QuarterChartProps {
 
 const QuarterChartComponent: React.FC<QuarterChartProps> = ({ data }) => {
   return (
-    <ComposedChart
-      width={500}
-      height={400}
+    <ResponsiveContainer width="100%" height={300}><ComposedChart
       data={data}
       margin={{
         top: 20,
@@ -38,7 +37,7 @@ const QuarterChartComponent: React.FC<QuarterChartProps> = ({ data }) => {
       <Legend />
       <Bar dataKey="userCount" barSize={20} fill="#413ea0" />
       <Line type="monotone" dataKey="ratio" stroke="#ff7300" />
-    </ComposedChart>
+    </ComposedChart></ResponsiveContainer>
   );
 };
 export default QuarterChartComponent;

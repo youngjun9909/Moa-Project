@@ -31,9 +31,11 @@ export const serviceSidebar = css`
   flex-direction: column;
   @media (max-width: 720px) {
     display:none;
-    &[data-open="true"] { display:flex; position:fixed; width:min(84vw,300px); box-shadow:var(--moa-shadow-lg); }
+    &[data-open="true"] { display:flex; position:fixed; height:100dvh; overflow-y:auto; width:min(84vw,300px); z-index:101; box-shadow:var(--moa-shadow-lg); }
   }
 `;
+export const mobileBackdrop = css`display:none;@media(max-width:720px){display:block;position:fixed;inset:0;z-index:100;border:0;background:rgba(31,43,61,.3);cursor:pointer;}`;
+export const mobileClose = css`display:none;@media(max-width:720px){display:grid;place-items:center;position:absolute;right:12px;top:10px;width:40px;height:40px;border:1px solid var(--moa-chip-line);border-radius:11px;background:white;color:var(--moa-primary-dark);font-size:28px;cursor:pointer;}`;
 
 export const serviceBrand = css`
   height: var(--moa-header-height);
@@ -52,20 +54,20 @@ export const serviceItem = css`
   width:100%; min-height:44px; padding:0 12px; display:flex; align-items:center; gap:11px;
   border:0; border-radius:11px; background:transparent; color:var(--moa-ink-subtle); font-weight:700; text-align:left; cursor:pointer;
   > svg { font-size:19px; flex:0 0 auto; }
-  &:hover { background:var(--moa-primary-soft); color:var(--moa-primary-dark); }
+  &:hover, &[aria-current="page"] { background:var(--moa-primary-soft); color:var(--moa-primary-dark); }
 `;
 
 export const globalSearch = css`
-  width:min(48vw,520px); height:40px; display:flex; align-items:center; gap:10px; padding:0 14px;
+  width:100%; max-width:520px; min-width:0; height:40px; display:flex; align-items:center; gap:10px; padding:0 14px;
   border:1px solid var(--moa-chip-line); border-radius:12px; background:var(--moa-surface-muted); color:var(--moa-chip-ink); cursor:pointer;
   &:focus-within { border-color:var(--moa-primary); background:#fff; box-shadow:0 0 0 4px var(--moa-primary-soft); }
   > button { display:grid; place-items:center; padding:0; border:0; background:transparent; color:var(--moa-primary); font-size:19px; cursor:pointer; }
   > input { min-width:0; flex:1; border:0; outline:0; background:transparent; color:var(--moa-ink); }
-  @media (max-width: 720px) { width:min(62vw,360px); }
+  @media (max-width: 720px) { width:100%; padding:0 10px; gap:6px; >input{font-size:13px;} }
 `;
 
 export const mobileMenuButton = css`
-  display:none; width:44px; height:44px; border:1px solid var(--moa-line); border-radius:11px; background:#fff; color:var(--moa-ink); font-size:22px;
+  display:none; flex:0 0 40px; width:40px; height:40px; border:1px solid var(--moa-line); border-radius:11px; background:#fff; color:var(--moa-ink); font-size:22px;
   @media (max-width:720px) { display:grid; place-items:center; }
 `;
 
@@ -76,6 +78,8 @@ export const createGroupButton = css`
 `;
 
 export const userInfoBox = css`
+  flex-shrink:0;
+  gap:6px;
   box-sizing: border-box;
   padding: 10px;
   display: flex;
@@ -130,7 +134,7 @@ export const userBox = css`
   cursor: pointer;
   border:0;
   color:inherit;
-  @media (max-width: 720px) { margin:0; padding:6px; }
+  @media (max-width: 720px) { margin:0; padding:4px; width:40px; height:40px; border-radius:11px; >svg{display:none;} >div:first-of-type{width:32px;height:32px;flex-shrink:0;} }
 `;
 
 export const innerInfoBox = css`
@@ -188,6 +192,8 @@ export const signBtn = css`
 `;
 
 export const naviBox = css`
+  flex:1;
+  min-width:0;
   display: flex;
   align-items: center;
   gap:8px;

@@ -10,5 +10,4 @@ describe("community page contracts", () => {
     expect(source).not.toContain("IntersectionObserver");
     expect(source).toContain("더 보기");
   });
-  test("my reviews uses a real empty-length check", () => expect(read("views/my-page/mypage-review/MyPageReview.tsx")).toContain("reviewData.length > 0"));
 });

@@ -1,5 +1,5 @@
 import React from "react";
-import { PieChart, Pie, Cell } from "recharts";
+import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import { CategoricalChartFunc } from "recharts/types/chart/generateCategoricalChart";
 
 interface GetGenderChartProps {
@@ -16,7 +16,7 @@ const GenderChartComponent: React.FC<GetGenderChartProps> = ({ data }) => {
   const onPieEnter: CategoricalChartFunc = (nextState, event) => {};
 
   return (
-    <PieChart width={400} height={200} onMouseEnter={onPieEnter}>
+    <ResponsiveContainer width="100%" height={240}><PieChart onMouseEnter={onPieEnter}>
       <Pie
         data={data}
         innerRadius={60}
@@ -29,7 +29,7 @@ const GenderChartComponent: React.FC<GetGenderChartProps> = ({ data }) => {
           <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
         ))}
       </Pie>
-    </PieChart>
+    </PieChart></ResponsiveContainer>
   );
 };
 

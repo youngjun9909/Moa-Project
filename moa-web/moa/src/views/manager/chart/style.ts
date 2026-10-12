@@ -1,35 +1,6 @@
 import { css } from "@emotion/react";
-
-export const AllBox = css`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-`;
-
-export const GenderChartBox = css`
-  position: relative;
-  width: auto;
-  height: auto;
-  display: flex;
-  flex-direction: column;
-  margin-top: 20px;
-  align-items: center;
-`;
-
-export const QuarterBox = css`
-  position: relative;
-  width: auto;
-  height: auto;
-  border-radius: 5px;
-  padding: 15px;
-  margin-bottom: 40px;
-  display: flex;
-  flex-direction: column;
-`;
-
-export const QuartChartName = css`
-  text-align :center;
-`;
+export const AllBox = css`width:100%;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;@media(max-width:960px){grid-template-columns:1fr;}`;
+export const GenderChartBox = css`min-width:0;padding:24px;border:1px solid var(--moa-line);border-radius:20px;background:white;display:flex;flex-direction:column;align-items:center;h1{font-size:22px;letter-spacing:-.035em;}`;
+export const QuarterBox = GenderChartBox;
+export const QuartChartName = css`text-align:center;font-size:22px;`;
 

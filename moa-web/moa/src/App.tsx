@@ -32,6 +32,7 @@ import AuthRedirectHandler from "./views/auth/signup/AuthRedirectHandler";
 import SnsSuccess from "./views/auth/signin/SnsSuccess";
 import ParticipationStatusPage from "./views/my-page/participation-status-page/ParticipationStatusPage";
 import SearchBar from "./layouts/search-bar/index";
+import FavoriteMeetings from "./views/my-page/favorite-meetings/FavoriteMeetings";
 
 function App() {
   const theme = createTheme({
@@ -175,6 +176,8 @@ function App() {
                   }
                 />
                 <Route path={p.GROUP_DETAIL} element={<GroupDetailPage />} />
+                <Route path="/mypage/password" element={cookies.token ? <FindPassword account /> : <Navigate to={p.SIGN_IN_PAGE} replace />} />
+                <Route path="/mypage/favorites" element={cookies.token ? <FavoriteMeetings /> : <Navigate to={p.SIGN_IN_PAGE} replace />} />
                 <Route
                   path={p.PARTICIPATION_STATUS_PAGE}
                   element={

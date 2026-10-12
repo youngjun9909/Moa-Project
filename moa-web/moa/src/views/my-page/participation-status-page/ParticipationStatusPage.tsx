@@ -17,19 +17,26 @@ import { FaSignsPost } from "react-icons/fa6";
 import { useCookies } from "react-cookie";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { EmptyState } from "../../../components/ui/EmptyState";
+import { AsyncState } from "../../../components/ui/AsyncState";
+import { AccountNav } from "../AccountNav";
+import { Button } from "../../../components/ui/Button";
 
 export default function ParticipationStatusPage() {
   const [cookies] = useCookies(["token"]);
   const navigate = useNavigate();
+  const [status, setStatus] = useState<"loading" | "success" | "error">("loading");
+  const [retry, setRetry] = useState(0);
+  const [notice, setNotice] = useState("");
+  const [deleting, setDeleting] = useState<number | null>(null);
 
   const [participationStatusData, setParticipationStatusData] = useState<
     ParticipationStatusDataDto[]
   >([]);
 
   useEffect(() => {
+    let active = true;
     if (!!cookies.token) {
-      try {
+      setStatus("loading");
         axios
           .get(GROUP_PARTICIPATION_STATUS, {
             headers: {
@@ -37,19 +44,22 @@ export default function ParticipationStatusPage() {
             },
           })
           .then((response) => {
-            setParticipationStatusData(response.data.data);
-          });
-      } catch (error) {
-        console.error(error);
-      }
+            if (!active) return;
+            setParticipationStatusData(response.data.data || []);
+            setStatus("success");
+          }).catch(() => { if (active) setStatus("error"); });
     } else {
       navigate("/signIn");
     }
-  }, []);
+    return () => { active = false; };
+  }, [cookies.token, navigate, retry]);
 
   const handleCancellationRequest = async (answerId: number) => {
+    if (deleting !== null || !window.confirm("이 신청 내역을 취소하거나 삭제할까요?")) return;
+    setDeleting(answerId);
+    setNotice("");
     try {
-      axios
+      await axios
         .delete(`${GROUP_GET_PARTICIPATION_STATUS}${answerId}`, {
           headers: {
             Authorization: `Bearer ${cookies.token}`,
@@ -62,8 +72,8 @@ export default function ParticipationStatusPage() {
           );
         });
     } catch (error) {
-      console.error(error);
-    }
+      setNotice("내역을 변경하지 못했어요. 잠시 후 다시 시도해주세요.");
+    } finally { setDeleting(null); }
   };
 
   return (
@@ -74,8 +84,12 @@ export default function ParticipationStatusPage() {
         <p>내가 신청한 모임의 승인 상태와 일정을 확인하세요.</p>
       </div>
 
+      <AccountNav />
+      {notice && <p role="alert">{notice}</p>}
+      <AsyncState status={status === "success" && participationStatusData.length === 0 ? "empty" : status}
+        empty={{title:"아직 신청한 모임이 없어요",description:"관심 있는 모임을 찾아 새로운 활동을 시작해보세요.",action:<Button onClick={() => navigate('/main')}>모임 둘러보기</Button>}}
+        error={{title:"신청 내역을 불러오지 못했어요",description:"연결 상태를 확인한 뒤 다시 시도해주세요.",action:<Button onClick={() => setRetry(value => value + 1)}>다시 시도</Button>}}>
       <div css={s.mainBox}>
-        {participationStatusData.length === 0 && <EmptyState title="아직 신청한 모임이 없어요" description="관심 있는 모임을 찾아 새로운 활동을 시작해보세요." />}
         {participationStatusData.map((data) => (
           <div css={s.reviewBox} key={data.answerId}>
             <div css={s.reviewMain}>
@@ -116,12 +130,14 @@ export default function ParticipationStatusPage() {
                   <div>
                     {data.isApproved === 2 ? (
                       <button
+                        disabled={deleting !== null}
                         onClick={() => handleCancellationRequest(data.answerId)}
                       >
                         신청 취소
                       </button>
                     ) : (
                       <button
+                        disabled={deleting !== null}
                         onClick={() => handleCancellationRequest(data.answerId)}
                       >
                         내역 삭제
@@ -150,6 +166,7 @@ export default function ParticipationStatusPage() {
           </div>
         ))}
       </div>
+      </AsyncState>
     </div>
   );
 }

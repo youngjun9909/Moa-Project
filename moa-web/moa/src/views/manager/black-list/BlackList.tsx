@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import * as s from "./style";
+import { EmptyState } from "../../../components/ui";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import userImg from "../../../images/userImg.png";
@@ -128,6 +129,7 @@ const BlackList: React.FC<BlackListProps> = ({ parseToNumGroupId }) => {
         </button>
       </div>
       
+      {!blackUserList.length && <EmptyState title="이용이 제한된 멤버가 없어요" description="모임의 이용 제한 내역을 이곳에서 관리해요." />}
       <ul>
         {blackUserList.map((data) => (
           <li key={data.blackListId} css={s.list}>

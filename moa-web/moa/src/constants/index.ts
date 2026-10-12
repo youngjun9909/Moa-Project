@@ -1,7 +1,7 @@
-export const REQUEST_URL = "http://localhost:4040";
+export const REQUEST_URL = "http://localhost:6060";
 
 //& 테이블 경로 상수 선언
-export const WEB_MAIN = '/';
+export const WEB_MAIN = "/";
 export const WEB_APP_MAIN = "/main/*";
 
 // 회원 매핑핑
@@ -24,7 +24,7 @@ const STANDALONE_AUTH_PREFIXES = [
 
 export const isStandaloneAuthPath = (pathname: string) =>
   STANDALONE_AUTH_PREFIXES.some(
-    (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`)
+    (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`),
   );
 
 // 리뷰 매핑
@@ -62,5 +62,5 @@ export const CREATE_GROUP = "/main/create-group";
 // 유저 리스트 페이지
 export const USER_LIST_PAGE = "/main/manager/user-list/:groupId";
 
-// 리뷰 페이지 
+// 리뷰 페이지
 export const REVIEW_PAGE = "/review/*";

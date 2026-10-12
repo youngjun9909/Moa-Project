@@ -1,134 +1,16 @@
-import { css } from '@emotion/react';
-
-export const fullBox = css`
-  width: 100%;
-  min-height: 100dvh;
-  padding:28px 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
-export const innerBox = css`
-  box-sizing: border-box;
-  width:min(100%,460px);
-  min-height:0;
-  padding:32px;
-  border:1px solid var(--moa-line);
-  border-radius:24px;
-  background:#fff;
-  box-shadow:var(--moa-shadow-md);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-export const mainBox = css`
-  width: 100%;
-  height:auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-
-  > h1 { margin:18px 0 6px; color:var(--moa-ink); font-size:24px; letter-spacing:-.04em; }
-
-  > div {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-  }
-`;
-
-export const topInput = css`
-  width: 100%;
-  height: 50px;
-  font-size: 17px;
-  padding:0 13px;
-  border-radius: 11px;
-  border: 1px solid var(--moa-chip-line);
-
-  &:focus {
-    outline: none;
-    border: 1px solid var(--moa-primary);
-    z-index: 1;
-    transition: border 0.5s ease;
-  }
-`;
-
-export const bottomInput = css`
-  width: 100%;
-  height: 50px;
-  font-size: 17px;
-  padding:0 13px;
-  border-radius: 11px;
-  border: 1px solid var(--moa-chip-line);
-  margin-bottom: 10px;
-
-  &:focus {
-    outline: none;
-    border: 1px solid var(--moa-primary);
-    z-index: 1;
-    transition: border 0.5s ease;
-  }
-`;
-
-export const bottomBox = css`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  > button {
-    width: 100%;
-    min-height: 48px;
-    padding: 0 5px;
-    font-size: 17px;
-    border-radius: 11px;
-    border: none;
-    background-color: var(--moa-primary);
-    color: #fff;
-    cursor: pointer;
-
-    &:hover, :active{
-    background-color: var(--moa-primary-dark);
-    border: none;
-    outline: none;
-  }
-  }
-`;
-
-export const mailBox = css`
-  width: 100%;
-  height: 50%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--moa-radius-lg);
-  border:1px solid var(--moa-line);
-  box-shadow: var(--moa-shadow-sm);
-
-  > h2 {
-    margin: 0;
-  }
-`;
-
-export const errorMessage = css`
-  margin:8px 0 0; color:var(--moa-danger); font-size:13px;
-`;
-
-export const description = css`margin:0 0 24px; color:var(--moa-muted); font-size:14px; line-height:1.6; text-align:center;`;
-export const fieldLabel = css`width:100%; margin:0 0 7px; color:var(--moa-ink-subtle); font-size:13px; font-weight:750;`;
-
-export const mainBox2 = css`
-  width: 100%;
-  min-height:0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  > h1 { margin:18px 0 6px; color:var(--moa-ink); font-size:24px; letter-spacing:-.04em; }
-`;
+import { css } from "@emotion/react";
+export const fullBox = css`width:100%;height:100dvh;overflow-y:auto;padding:28px 20px;display:grid;place-items:center;`;
+export const innerBox = css`width:min(100%,460px);padding:32px;border:1px solid var(--moa-line);border-radius:24px;background:white;box-shadow:var(--moa-shadow-sm);display:flex;flex-direction:column;align-items:center;@media(max-width:520px){padding:24px 20px;}`;
+export const brandButton = css`border:0;background:none;cursor:pointer;max-width:180px;img{width:100%;}`;
+export const mainBox = css`width:100%;display:flex;flex-direction:column;gap:18px;h1,h2{font-size:25px;letter-spacing:-.04em;margin:16px 0 0;} >div{width:100%;display:flex;flex-direction:column;}`;
+export const mainBox2 = css`${mainBox};gap:0; input + label{margin-top:18px;} h1{margin-bottom:12px;}`;
+export const topInput = css`width:100%;min-height:48px;padding:11px 14px;border:1px solid var(--moa-line-strong);border-radius:11px;background:white;font-size:16px;&:focus{outline:0;border-color:var(--moa-primary);box-shadow:0 0 0 3px var(--moa-primary-soft);}`;
+export const bottomInput = css`${topInput};margin-bottom:14px;`;
+export const fieldLabel = css`display:block;width:100%;margin:0 0 8px;font-size:14px;font-weight:750;`;
+export const description = css`margin:0 0 18px;color:var(--moa-muted);line-height:1.7;font-size:14px;`;
+export const bottomBox = css`width:100%;margin-top:10px;>button{width:100%;min-height:48px;padding:10px 16px;border:0;border-radius:11px;background:var(--moa-primary);color:white;font-weight:750;cursor:pointer;&:hover{background:var(--moa-primary-dark);}&:disabled{opacity:.55;cursor:wait;}}`;
+export const mailBox = css`width:100%;padding:28px 0;text-align:center;h1,h2{font-size:24px;margin:0 0 16px;}p{font-size:14px;line-height:1.8;color:var(--moa-muted);}`;
+export const errorMessage = css`margin:8px 0;color:var(--moa-danger);font-size:13px;line-height:1.6;`;
+export const backLink = css`border:0;background:none;color:var(--moa-primary-dark);font-size:13px;cursor:pointer;padding:20px 0 0;`;
+export const accountPage = css`width:min(100%,1240px);margin:0 auto;padding:36px clamp(20px,4vw,56px) 64px;`;
+export const accountCard = css`${innerBox};width:min(100%,640px);margin:0 auto;padding:36px;`;

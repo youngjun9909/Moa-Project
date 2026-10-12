@@ -83,6 +83,14 @@ public class WebSecurityConfig {
                         )
                         .permitAll()
                         .anyRequest().authenticated())
+                .exceptionHandling(exceptions -> exceptions.defaultAuthenticationEntryPointFor(
+                        (request, response, exception) -> {
+                            response.setStatus(401);
+                            response.setContentType("application/json");
+                            response.setCharacterEncoding("UTF-8");
+                            response.getWriter().write("{\"result\":false,\"message\":\"Authentication required\",\"data\":null}");
+                        },
+                        new AntPathRequestMatcher("/api/**")))
                 .oauth2Login(oauth2 -> oauth2
                         .redirectionEndpoint(endpoint -> endpoint.baseUri("/oauth2/callback/*"))
                         .authorizationEndpoint(endpoint -> endpoint.baseUri("/api/v1/auth/sns-sign-in"))

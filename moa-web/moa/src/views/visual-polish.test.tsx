@@ -4,6 +4,8 @@ import axios from "axios";
 import CreateGroup from "./group-detail/create-group/CreateGroup";
 import ReviewMain from "./review/review-main/ReviewMain";
 
+jest.mock("react-cookie", () => ({ useCookies: () => [{ token: "fixture-token" }] }));
+
 jest.mock("axios", () => ({
   __esModule: true,
   default: { get: jest.fn(), post: jest.fn() },

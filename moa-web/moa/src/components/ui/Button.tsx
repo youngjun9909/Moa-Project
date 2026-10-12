@@ -21,7 +21,8 @@ const buttonStyle = css`
   &:disabled { opacity: .5; cursor: not-allowed; }
   &[data-variant="primary"] { background: var(--moa-primary); color: #fff; box-shadow: 0 7px 16px rgba(242, 105, 73, .2); }
   &[data-variant="primary"]:hover:not(:disabled) { background: var(--moa-primary-dark); }
-  &[data-variant="secondary"] { background: var(--moa-surface); color: var(--moa-ink); border-color: var(--moa-line-strong); }
+  &[data-variant="secondary"] { background: var(--moa-surface); color: var(--moa-chip-ink); border-color: var(--moa-chip-line); }
+  &[data-variant="secondary"]:hover:not(:disabled) { background: var(--moa-chip-bg); }
   &[data-variant="ghost"] { background: transparent; color: var(--moa-ink-subtle); }
   &[data-variant="destructive"] { background: var(--moa-danger-soft); color: var(--moa-danger); border-color: var(--moa-danger-line); }
 `;
@@ -29,4 +30,3 @@ const buttonStyle = css`
 export function Button({ variant = "primary", type = "button", ...props }: ButtonProps) {
   return <button css={buttonStyle} type={type} data-variant={variant} {...props} />;
 }
-

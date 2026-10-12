@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import * as s from "./style";
+import { EmptyState } from "../../../components/ui";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
@@ -168,7 +169,7 @@ const Approved: React.FC<ApprovedProps> = ({ parseToNumGroupId }) => {
             </li>
           ))
         ) : (
-          <li>표시할 항목이 없습니다</li>
+          <li><EmptyState title="확인할 가입 신청이 없어요" description="새로운 참여 신청이 도착하면 이곳에서 확인할 수 있어요." /></li>
         )}
       </ul>
     </div>

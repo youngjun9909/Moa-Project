@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 
 export const findUserIdContainer = css`
-  width:100%; min-height:100dvh; padding:28px 20px; display:grid; place-items:center; overflow:auto;
+  width:100%; height:100dvh; padding:28px 20px; display:grid; place-items:center; overflow:auto;
 `
 
 export const findUserIdTitle = css`

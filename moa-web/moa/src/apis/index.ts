@@ -9,9 +9,6 @@ export const PAGINATION_RECOMMENDATION_POST_API = `${REQUEST_URL}/api/v1/recomme
 export const PAGINATION_RECOMMENDATION_DELETE_API = `${REQUEST_URL}/api/v1/recommendation/user-id`;
 export const PAGINATION_GROUP_IMG_API = `${REQUEST_URL}/image/`
 
-//NaverMap
-export const NAVER_MAP_API = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=`;
-
 //GroupNaviBar
 export const GROUP_NAV_GET_API = `${REQUEST_URL}/api/v1/user-list`;
 export const GROUP_NAV_IMG = `${REQUEST_URL}/image/`;

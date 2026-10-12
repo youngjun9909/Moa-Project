@@ -11,6 +11,7 @@ import { AllBox, GenderChartBox, QuartChartName, QuarterBox } from "./style";
 import GenderChartComponent from "./GenderChartComponent";
 import QuarterChartComponent from "./QuarterChartComponent";
 import { GENDER_CHART_GET_API, USER_CHART_API } from "../../../apis";
+import { EmptyState } from "../../../components/ui/EmptyState";
 
 interface ChartProps {
   parseToNumGroupId: number;
@@ -74,16 +75,15 @@ const Chart: React.FC<ChartProps> = ({ parseToNumGroupId }) => {
   return (
     <div css={AllBox}>
       <div css={GenderChartBox}>
-        <h1>성별 차트</h1>
-        <GenderChartComponent data={genderChart} />
-        <div>
+        <h1>멤버 구성</h1>
+        {genderChart.length ? <><GenderChartComponent data={genderChart} /><div>
           <div>남성 : 💙</div>
           <div>여성 : 🍎 </div>
-        </div>
+        </div></> : <EmptyState title="표시할 통계가 없어요" description="멤버 통계가 준비되면 이곳에서 확인할 수 있어요." />}
       </div>
       <div css={QuarterBox}>
-        <h1 css={QuartChartName}>분기별 유입율 </h1>
-        <QuarterChartComponent data={quarterChart} />
+        <h1 css={QuartChartName}>분기별 참여 현황</h1>
+        {quarterChart.length ? <QuarterChartComponent data={quarterChart} /> : <EmptyState title="아직 표시할 기록이 없어요" description="모임의 참여 기록을 분기별로 확인할 수 있어요." />}
       </div>
     </div>
   );

@@ -12,21 +12,24 @@ import { EmptyState } from "../../../components/ui/EmptyState";
 
 export default function ReviewMain() {
   const [reviewData, setReviewData] = useState<Review[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [failed, setFailed] = useState(false);
+  const [retry, setRetry] = useState(0);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
+    let active = true;
     const fetchReviews = async () => {
-      if (loading) return;
-
       setLoading(true);
+      setFailed(false);
       try {
         const response = await axios.get(CREATE_REVIEW_GET_API, {
           params: { page, size: 5 },
         });
 
+        if (!active) return;
         setReviewData((prev) => {
           const newData = [...prev, ...response.data.data];
           const uniqueData = Array.from(
@@ -37,14 +40,15 @@ export default function ReviewMain() {
 
         setHasMore(response.data.data.length === 5);
       } catch (error) {
-        console.error(error);
+        if (active) setFailed(true);
       } finally {
-        setLoading(false);
+        if (active) setLoading(false);
       }
     };
 
     fetchReviews();
-  }, [page]);
+    return () => { active = false; };
+  }, [page, retry]);
 
   const handlePostReviewPage = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -65,7 +69,9 @@ export default function ReviewMain() {
       </div>
 
       <div css={s.mainBox}>
-        {!loading && reviewData.length === 0 && (
+        {failed && <div role="alert" css={s.emptyWrap}><EmptyState title="후기를 불러오지 못했어요" description="연결을 확인한 뒤 다시 시도해주세요." action={<Button onClick={() => setRetry(value => value + 1)}>다시 시도</Button>} /></div>}
+        {loading && <p role="status">후기를 불러오는 중이에요…</p>}
+        {!loading && !failed && reviewData.length === 0 && (
           <div css={s.emptyWrap}>
             <EmptyState
               title="아직 등록된 후기가 없어요"
@@ -103,7 +109,7 @@ export default function ReviewMain() {
           </article>
         ))}
         </div>
-        {reviewData.length > 0 && hasMore && (
+        {reviewData.length > 0 && hasMore && !failed && (
           <button css={s.loadMore} type="button" disabled={loading} onClick={() => setPage((current) => current + 1)}>
             {loading ? "불러오는 중..." : "더 보기"}
           </button>

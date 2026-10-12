@@ -97,6 +97,7 @@ export default function VerifyToken() {
                 id="new-password"
                 type="password"
                 name="newPassword"
+                autoComplete="new-password"
                 value={resetData.newPassword}
                 placeholder="새 비밀번호"
                 onChange={handleInputChange}
@@ -107,6 +108,7 @@ export default function VerifyToken() {
                 id="confirm-password"
                 type="password"
                 name="confirmPassword"
+                autoComplete="new-password"
                 value={resetData.confirmPassword}
                 placeholder="비밀번호 확인"
                 onChange={handleInputChange}

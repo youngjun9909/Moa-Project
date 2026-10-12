@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import axios from "axios";
@@ -11,7 +11,7 @@ import {
   GET_DUPLICATION_NICK_NAME_API,
   GET_USER_INFO_API,
 } from "../../../apis";
-import { IoCall } from "react-icons/io5";
+import { AccountNav } from "../AccountNav";
 import "./style.css";
 import userAuthStore from "../../../stores/auth.store";
 
@@ -21,8 +21,12 @@ const GetUserInfo = () => {
   const [userInfo, setUserInfo] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [userProfileImg, setUserProfileImg] = useState<any>(null);
-  const [isChanged, setIsChanged] = useState(false);
+  const savedUser = useRef<User | null>(null);
   const [initialNickName, setInitialNickName] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [saveMessage, setSaveMessage] = useState("");
+  const saveLock = useRef(false);
+  const latestNickname = useRef("");
 
   const [duplicatoinNickName, setDuplicationNickName] =
     useState<boolean>(false);
@@ -47,11 +51,13 @@ const GetUserInfo = () => {
         },
       });
       const updateUser = response.data.data;
+      savedUser.current = updateUser;
       setUserInfo(updateUser);
       setUserProfileImg(
-        `${GET_USER_INFO_IMG_API}${response.data.data.profileImage}`
+        updateUser.profileImage ? `${GET_USER_INFO_IMG_API}${updateUser.profileImage}` : null
       );
       setInitialNickName(response.data.data.nickName);
+      latestNickname.current = updateUser.nickName;
 
       userAuthStore.getState().login({
         userId: updateUser.userId,
@@ -68,19 +74,28 @@ const GetUserInfo = () => {
 
   const updateUserInfo = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-
+    if (saveLock.current) return;
+    const editableFields = ["userName", "nickName", "region", "phoneNumber", "email", "profileImage"] as const;
+    const isChanged = userInfo && savedUser.current && editableFields.some(key =>
+      (userInfo[key] ?? "") !== (savedUser.current![key] ?? "")
+    );
     if (!isChanged) {
-      alert("수정된 내용이 없습니다.");
-    } else {
-      const comfirmed = window.confirm("수정 하시겠습니까?");
-      if (!comfirmed) return;
-    }
-
-    if (!userInfo) {
-      alert("수정할 사용자 정보가 없습니다.");
+      setSaveMessage("수정된 내용이 없습니다.");
       return;
     }
 
+    if (!userInfo) {
+      setSaveMessage("수정할 사용자 정보가 없습니다.");
+      return;
+    }
+    if (!duplicatoinNickName && userInfo.nickName !== initialNickName) {
+      setSaveMessage("닉네임 중복 확인을 완료해주세요.");
+      return;
+    }
+    if (!window.confirm("변경사항을 저장할까요?")) return;
+    saveLock.current = true;
+    setSaving(true);
+    setSaveMessage("");
     try {
       const formData = new FormData();
       Object.entries(userInfo).forEach(([key, value]) => {
@@ -93,24 +108,31 @@ const GetUserInfo = () => {
       const response = await axios.put(PUT_USER_INFO_API, formData, {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
-          withCredentials: true,
         },
+        withCredentials: true,
       });
-      if (!duplicatoinNickName && userInfo.nickName !== initialNickName) {
-        alert("닉네임 중복 확인을 완료해주세요.");
-        return;
-      }
-      setUserInfo(response.data.data);
-      if (isChanged && userInfo) {
-        alert("수정완료 되었습니다.");
-      }
+      if (response.data.result === false) throw new Error("Save failed");
+      const updated = response.data.data || userInfo;
+      setUserInfo(updated);
+      setInitialNickName(updated.nickName);
+      savedUser.current = updated;
+      setSaveMessage("변경사항을 저장했어요.");
+      userAuthStore.getState().login({userId:updated.userId,nickName:updated.nickName,profileImage:updated.profileImage instanceof File ? null : updated.profileImage});
     } catch (error) {
-      console.error(error);
-      alert("정보 수정에 실패했습니다. 다시 시도해주세요.");
+      setSaveMessage("정보 수정에 실패했습니다. 다시 시도해주세요.");
+    } finally {
+      saveLock.current = false;
+      setSaving(false);
     }
   };
 
   const handleDulicationNickName = async () => {
+    const requestedNickname = userInfo?.nickName || "";
+    if (!/^[가-힣a-zA-Z0-9]{1,10}$/.test(requestedNickname)) {
+      setDuplicationNickName(false);
+      setDuplicationNickNameMs("닉네임을 한글, 영문, 숫자로 1~10자 입력해주세요.");
+      return;
+    }
     if (userInfo?.nickName === initialNickName) {
       setDuplicationNickName(true);
       setDuplicationNickNameMs("닉네임이 변경되지 않았습니다.");
@@ -119,13 +141,14 @@ const GetUserInfo = () => {
 
     try {
       const response = await axios.get(
-        `${GET_DUPLICATION_NICK_NAME_API}${userInfo?.nickName}`,
+        `${GET_DUPLICATION_NICK_NAME_API}${encodeURIComponent(requestedNickname)}`,
         {
           headers: {
             Authorization: `Bearer ${cookies.token}`,
           },
         }
       );
+      if (latestNickname.current !== requestedNickname) return;
       const isDuplicate = response.data.data;
       if (isDuplicate) {
         setDuplicationNickName(false);
@@ -135,7 +158,8 @@ const GetUserInfo = () => {
         setDuplicationNickNameMs("✅ 닉네임을 사용할 수 있습니다.");
       }
     } catch (error) {
-      console.error(error);
+      if (latestNickname.current !== requestedNickname) return;
+      setDuplicationNickName(false);
       setDuplicationNickNameMs("오류가 발생했습니다. 다시 시도해주세요.");
     }
   };
@@ -150,7 +174,6 @@ const GetUserInfo = () => {
         setUserProfileImg(e.target?.result || null);
       };
       reader.readAsDataURL(file);
-      setIsChanged(true);
     }
   };
 
@@ -158,6 +181,8 @@ const GetUserInfo = () => {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
+    setSaveMessage("");
+    if (name === "nickName") latestNickname.current = value;
 
     setUserInfo((prev) => ({ ...prev!, [name]: value }));
 
@@ -166,170 +191,36 @@ const GetUserInfo = () => {
       setDuplicationNickNameMs("중복 확인이 필요합니다.");
     }
 
-    setIsChanged(true);
   };
 
   return (
-    <div>
-      <header className="mypageHeader"><span>MY MOA</span><h1>프로필 수정</h1><p>모임에서 보여질 정보와 연락처를 관리하세요.</p></header>
-      <div className="userInfoBox">
-        <div className="innerBox">
-          {loading ? (
-            <p>로딩 중...</p>
-          ) : userInfo ? (
-            <ul className="userInfoUl">
-              <li className="imgBox">
-                  <h2>프로필 이미지</h2>
-                <div className="imgDiv">
-                  <div className="imgBackroundColor">
-                    {!userProfileImg ? (
-                      <img src={userImg} alt="userImage" className="userImg" />
-                    ) : (
-                      <img
-                        src={userProfileImg}
-                        alt="profileImage"
-                        className="userImg"
-                      />
-                    )}
-                  </div>
-                  <label className="imgUpdateBtn" htmlFor="profileImage">
-                    <span className="photoIconSpan">
-                      <MdOutlineAddPhotoAlternate className="photoIcon" />
-                    </span>
-                  </label>
-                  <input
-                    type="file"
-                    id="profileImage"
-                    name="profileImage"
-                    className="profileInput"
-                    onChange={handleImgFileChange}
-                  />
-                </div>
-              </li>
-              <li className="userInfoUldetail">
-                <div className="divInLI">
-                  <span className="userTitleli">아이디</span>
-                  <span className="userliSmall">{userInfo.userId}</span>
-                </div>
-                <div className="divInLI">
-                  <span className="userTitleli">이름</span>
-                  <input
-                    className="userliSmall"
-                    type="text"
-                    name="userName"
-                    value={userInfo.userName}
-                    placeholder="한글,영문 이름 입력 "
-                    onChange={handleChangeInfo}
-                  />
-                </div>
-              </li>
-              <li className="userInfoUldetail">
-                <div className="divInLI">
-                  <span className="userTitleli">성별</span>
-                  <span className="userliSmall">{userInfo.userGender}</span>
-                </div>
-                <div className="divInLI">
-                  <span className="userTitleli">주소</span>
-                  <select
-                    className="userliSmall addressSelectUI"
-                    name="region"
-                    value={userInfo.region || ""}
-                    onChange={handleChangeInfo}
-                  >
-                    <option value="" disabled>
-                      선택하세요
-                    </option>
-                    {[
-                      "서울",
-                      "인천",
-                      "대전",
-                      "광주",
-                      "세종",
-                      "울산",
-                      "부산",
-                      "대구",
-                      "경기",
-                      "충북",
-                      "충남",
-                      "강원",
-                      "전북",
-                      "전남",
-                      "경북",
-                      "경남",
-                      "제주",
-                    ].map((region) => (
-                      <option key={region} value={region}>
-                        {region}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </li>
-              <li className="duplicationMsgLi">
-                <div className="nickNameDiv">
-                  <span className="nickNameBox">닉네임</span>
-                  <div className="nickNameInputBtn">
-                    <input
-                      className="userli nickNameInput"
-                      type="text"
-                      name="nickName"
-                      value={userInfo.nickName}
-                      placeholder={"1~10자 한글, 영어, 숫자 입력"}
-                      onChange={handleChangeInfo}
-                    />
-                    <button
-                      className="duplicationNickNameBtn"
-                      onClick={handleDulicationNickName}
-                    >
-                      중복확인
-                    </button>
-                  </div>
-                </div>
-                <span className="duplicationMsg">{duplicatoinNickNameMs}</span>
-              </li>
-              <li className="userInfoUldetail">
-                <span className="userTitleli">
-                  <IoCall />
-                </span>
-                <input
-                  className="userli"
-                  type="text"
-                  name="phoneNumber"
-                  value={userInfo.phoneNumber}
-                  placeholder={"(-)을 제외한 휴대폰번호 입력"}
-                  onChange={handleChangeInfo}
-                />
-              </li>
-              <li className="userInfoUldetail">
-                <span className="userTitleli">E-mail</span>
-                <input
-                  className="userli"
-                  type="text"
-                  name="email"
-                  value={userInfo.email}
-                  placeholder={"이메일 입력"}
-                  onChange={handleChangeInfo}
-                />
-              </li>
-              <li className="userInfoButtons">
-                <button className="updateBtn" onClick={updateUserInfo}>
-                  수정
-                </button>
-                <button
-                  className="updateCancel"
-                  onClick={() => navigate("/mypage/userInfo")}
-                >
-                  취소
-                </button>
-              </li>
-            </ul>
-          ) : (
-            <p>사용자 정보를 가져올 수 없습니다.</p>
-          )}
-        </div>
-      </div>
-    </div>
+    <main className="accountPage">
+      <header className="mypageHeader"><span>MY PROFILE</span><h1>프로필 수정</h1><p>모임에서 만나는 사람들에게 나를 소개해보세요.</p></header>
+      <AccountNav />
+      <section className="userInfoBox">
+        {loading ? <p role="status">내 정보를 불러오고 있어요…</p> : userInfo ? <>
+          <fieldset className="profileEditor" disabled={saving} style={{border:0,padding:0,margin:0,minWidth:0}}>
+            <aside className="profilePhoto">
+              <h2>프로필 이미지</h2>
+              <img src={userProfileImg || userImg} alt="내 프로필" className="profileAvatar" onError={e => { e.currentTarget.onerror = null; e.currentTarget.src = userImg; }} />
+              <label className="profileUpload"><MdOutlineAddPhotoAlternate /> 사진 변경<input aria-label="프로필 사진 변경" type="file" accept="image/*" onChange={handleImgFileChange} /></label>
+              <p>나를 잘 표현하는 사진을 올려주세요.<br />JPG, PNG 등 이미지 파일</p>
+            </aside>
+            <div className="profileFields">
+              <div className="profileField"><label>아이디</label><span className="profileReadOnly">{userInfo.userId}</span></div>
+              <div className="profileField"><label htmlFor="profile-name">이름</label><input id="profile-name" name="userName" autoComplete="name" value={userInfo.userName || ""} onChange={handleChangeInfo} /></div>
+              <div className="profileField full"><label htmlFor="profile-nickname">닉네임</label><div className="profileNickname"><input id="profile-nickname" name="nickName" maxLength={10} value={userInfo.nickName || ""} placeholder="모임에서 사용할 이름" onChange={handleChangeInfo} /><button className="accountSecondary" onClick={handleDulicationNickName}>중복 확인</button></div><span className="profileHelp" aria-live="polite">{duplicatoinNickNameMs || "한글, 영문, 숫자로 1~10자 이내로 입력해주세요."}</span></div>
+              <div className="profileField"><label>성별</label><span className="profileReadOnly">{userInfo.userGender || "미입력"}</span></div>
+              <div className="profileField"><label htmlFor="profile-region">활동 지역</label><select id="profile-region" name="region" value={userInfo.region || ""} onChange={handleChangeInfo}><option value="" disabled>지역 선택</option>{["서울","인천","대전","광주","세종","울산","부산","대구","경기","충북","충남","강원","전북","전남","경북","경남","제주"].map(region => <option key={region}>{region}</option>)}</select></div>
+              <div className="profileField full"><label htmlFor="profile-phone">휴대폰 번호</label><input id="profile-phone" type="tel" autoComplete="tel" name="phoneNumber" value={userInfo.phoneNumber || ""} placeholder="'-' 없이 입력해주세요" onChange={handleChangeInfo} /></div>
+              <div className="profileField full"><label htmlFor="profile-email">이메일</label><input id="profile-email" type="email" autoComplete="email" name="email" value={userInfo.email || ""} placeholder="이메일 주소" onChange={handleChangeInfo} /></div>
+            </div>
+          </fieldset>
+          {saveMessage && <p role="status" className="profileHelp">{saveMessage}</p>}
+          <footer className="profileActions"><button className="accountSecondary" disabled={saving} onClick={() => navigate("/mypage/userInfo")}>취소</button><button className="accountPrimary" disabled={saving} onClick={updateUserInfo}>{saving ? "저장 중…" : "변경사항 저장"}</button></footer>
+        </> : <p role="alert">사용자 정보를 가져올 수 없습니다.</p>}
+      </section>
+    </main>
   );
 };
-
 export default GetUserInfo;

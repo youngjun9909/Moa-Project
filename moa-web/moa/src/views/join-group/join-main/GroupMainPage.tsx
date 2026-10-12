@@ -17,10 +17,10 @@ const GroupMainPage: React.FC<MainBoxProps> = ({ groupInfo, isLoading }) => {
         {groupInfo?.groupImage ? (
           <img
             src={`${GROUP_MAIN_IMG_API}${groupInfo.groupImage}`}
-            alt="GROUP IMAGE"
+            alt="모임 대표 사진"
           />
         ) : (
-          <img src={img} alt="DEFAULT IMAGE" className="default" />
+          <img src={img} alt="MOA" className="default" />
         )}
       </div>
 
@@ -48,7 +48,7 @@ const GroupMainPage: React.FC<MainBoxProps> = ({ groupInfo, isLoading }) => {
               {groupInfo?.groupSupplies ? (
                 <p>{groupInfo?.groupSupplies}</p>
               ) : (
-                <p>x</p>
+                <p>별도 준비물 없음</p>
               )}
             </div>
           </div>

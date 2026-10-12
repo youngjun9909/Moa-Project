@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import * as s from "./style";
+import { EmptyState } from "../../../components/ui";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
@@ -124,6 +125,7 @@ const Report: React.FC<ReportProps> = ({ parseToNumGroupId }) => {
 
 
       <ul css={s.ulSt}>
+        {!reportList.length && <li><EmptyState title="접수된 신고가 없어요" description="안전하고 즐거운 모임을 함께 만들어가요." /></li>}
         {reportList.map((data) => (
           <li key={data.reportId}>
             <div css={s.header}>

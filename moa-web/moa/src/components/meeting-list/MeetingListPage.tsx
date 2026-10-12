@@ -4,6 +4,7 @@ import { AsyncState, Pagination, ResultToolbar, SortTabs } from "../ui";
 import { MeetingCard } from "./MeetingCard";
 import { useMeetingList } from "./useMeetingList";
 import * as s from "./style";
+import { Button } from "../ui/Button";
 
 interface MeetingListPageProps {
   title: string;
@@ -38,7 +39,7 @@ export function MeetingListPage({ title, description, eyebrow, apiUrl, params, f
         <AsyncState
           status={list.status}
           empty={{ title: emptyCopy?.title || "조건에 맞는 모임이 아직 없어요", description: emptyCopy?.description || "다른 조건을 선택하거나 새로운 모임을 만들어보세요.", action: emptyCopy?.action }}
-          error={{ title: "모임을 불러오지 못했어요", description: "잠시 후 다시 시도해주세요.", action: <button type="button" onClick={list.reload}>다시 불러오기</button> }}
+          error={{ title: "모임을 불러오지 못했어요", description: "잠시 후 다시 시도해주세요.", action: <Button type="button" onClick={list.reload}>다시 불러오기</Button> }}
         >
           <div css={s.grid}>{list.data.slice(0, 12).map(group => <MeetingCard key={group.groupId} group={group} />)}</div>
         </AsyncState>

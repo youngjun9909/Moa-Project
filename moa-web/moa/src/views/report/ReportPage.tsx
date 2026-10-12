@@ -148,6 +148,7 @@ export default function ReportPage() {
           </div>
           <div>
             <select
+              aria-label="신고 사유"
               name="reportType"
               id="reportReason"
               value={reportData.reportType}

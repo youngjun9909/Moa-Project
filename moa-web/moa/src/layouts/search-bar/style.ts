@@ -84,8 +84,9 @@ export const searchTitleList = css`
 
 export const mainContainer = css`
   position: relative;
-  width: 100%;
-  margin: 0;
+  width: min(100%, 1440px);
+  margin: 18px auto 0;
+  padding: 0 clamp(18px,4vw,56px);
   display: flex;
   justify-content: center;
   box-sizing: border-box;
@@ -94,9 +95,9 @@ export const mainContainer = css`
 export const categoryBox = css`
   position: relative;
   background-color: #fff;
-  width: min(calc(100% - 48px), 1440px);
+  width: 100%;
   box-sizing: border-box;
-  margin: 18px auto 0;
+  margin: 0;
   border:1px solid var(--moa-line);
   border-radius: var(--moa-radius-lg);
   display: flex;
@@ -105,7 +106,7 @@ export const categoryBox = css`
   justify-content: center;
   padding:20px 26px;
   box-shadow: var(--moa-shadow);
-  @media (max-width:720px) { width:calc(100% - 24px); margin:12px auto 0; padding:14px 12px; }
+  @media (max-width:720px) { padding:14px 12px; }
 `;
 export const categoryHeader = css`
   display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px;

@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import * as s from "./style";
+import { EmptyState } from "../../../components/ui";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
@@ -308,7 +309,7 @@ const Vote: React.FC<VoteProps> = ({ parseToNumGroupId }) => {
               </div>
             </li>
           ) : (
-            <li>투표 데이터를 불러오는 중이거나 데이터가 없습니다.</li>
+            <li style={{ listStyle: "none" }}><EmptyState title="아직 등록된 투표가 없어요" description="멤버들과 함께 결정할 이야기를 투표로 나눠보세요." /></li>
           )}
         </ul>
       )}

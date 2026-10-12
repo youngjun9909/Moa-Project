@@ -11,18 +11,18 @@ import userAuthStore from '../stores/auth.store';
 import { useNavigate } from 'react-router-dom';
 
 const boxSt = css`
-  width: 200px;
-  max-width: 300px;
+  width: min(260px, calc(100vw - 32px));
   position: absolute;
   top: 100%; 
-  right: 50px; 
+  right: 20px;
   z-index: 3; 
-  border-radius: 10px;
-  padding: 2;
-
-  @media (max-width: 1240px) {
-    right: calc(100% - 750px); 
-  }
+  border: 1px solid var(--moa-line);
+  border-radius: 16px;
+  padding: 8px;
+  box-shadow: var(--moa-shadow-md);
+  .MuiListItemButton-root { border-radius:10px; min-height:44px; }
+  .MuiListItemButton-root:hover { background:var(--moa-primary-soft); }
+  .MuiListItemText-primary { font-size:14px; font-weight:650; }
 `;
 
 const leaveBtnSt = css`
@@ -78,6 +78,11 @@ export default function HamburgerMenu() {
           <ListItem disablePadding>
             <ListItemButton onClick={() => navigator("/review/myPage")}>
               <ListItemText css={defaultBtnSt} primary="내 후기 관리" />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton onClick={() => navigator('/mypage/password')}>
+              <ListItemText css={defaultBtnSt} primary="비밀번호 변경" />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>

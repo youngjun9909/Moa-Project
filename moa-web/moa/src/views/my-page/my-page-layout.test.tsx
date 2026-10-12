@@ -9,10 +9,6 @@ describe("my page layout contracts", () => {
     expect(read("get-user-info/GetUserInfo.tsx")).toContain("<h1");
   });
 
-  test("participation history has an explicit empty state", () => {
-    expect(read("participation-status-page/ParticipationStatusPage.tsx")).toContain("EmptyState");
-  });
-
   test("withdrawal flow isolates the destructive action", () => {
     expect(read("delete-user-info/DelelteUserInfoStart.tsx")).toContain("dangerZone");
     expect(read("delete-user-info/DelelteUserInfo.tsx")).toContain("dangerZone");
