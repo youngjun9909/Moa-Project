@@ -123,7 +123,7 @@ export default function GroupDetailPage() {
             alt="그룹 이미지"
           />
         ) : (
-          <img src={img} alt="defaultImage" />
+          <img src={img} alt="MOA 기본 이미지" className="default" />
         )}
       </div>
       <div css={s.tapBox}>
@@ -173,13 +173,12 @@ export default function GroupDetailPage() {
       </div>
 
       <div ref={locationRef} css={s.mapBox}>
-        <div>
-          {groupData?.groupAddress ? (
-            <NaverMapComponent address={groupData?.groupAddress || ""} />
-          ) : (
-            <p>모임에서 장소를 제공하지 않습니다.</p>
-          )}
-        </div>
+        <h2>모임 장소</h2>
+        {groupData?.groupAddress ? (
+          <NaverMapComponent address={groupData.groupAddress} />
+        ) : (
+          <p>모임에서 장소를 제공하지 않습니다.</p>
+        )}
       </div>
       <div ref={joinRef} css={s.joinBox}>
         <button onClick={handleJoinBtn}>모임 참여 신청</button>

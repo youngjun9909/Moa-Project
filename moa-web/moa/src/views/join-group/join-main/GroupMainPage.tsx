@@ -59,7 +59,7 @@ const GroupMainPage: React.FC<MainBoxProps> = ({ groupInfo, isLoading }) => {
             {isLoading ? (
               <p>로딩 중...</p>
             ) : groupInfo?.groupAddress ? (
-              <NaverMapComponent address={groupInfo?.groupAddress || ""} />
+              <NaverMapComponent address={groupInfo.groupAddress} showAddress={false} />
             ) : (
               <p>모임에서 장소를 제공하지 않습니다.</p>
             )}

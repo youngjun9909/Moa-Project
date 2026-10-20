@@ -32,7 +32,8 @@ const Tab = styled(BaseTab)`
   border: 1px solid transparent;
   border-radius: 11px;
   display: flex;
-  justify-content: space-evenly;
+  align-items: center;
+  justify-content: center;
 
   &:hover {
     background-color: var(--moa-primary-soft);

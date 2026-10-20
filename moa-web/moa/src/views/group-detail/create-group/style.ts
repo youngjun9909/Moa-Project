@@ -32,8 +32,8 @@ export const fieldGroup = css`
   &:first-of-type{margin-top:0;}
   > h4, > label { display:block; margin:0 0 9px; color:var(--moa-ink); font-size:14px; font-weight:800; }
 `;
-export const placeGrid = css`display:grid; grid-template-columns:minmax(240px,.7fr) minmax(320px,1.3fr); gap:24px; align-items:end; @media(max-width:760px){grid-template-columns:1fr; gap:2px;}`;
-export const twoColumnFields = css`display:grid; grid-template-columns:1fr 1fr; gap:18px; @media(max-width:680px){grid-template-columns:1fr; gap:2px;}`;
+export const placeGrid = css`display:grid; grid-template-columns:minmax(240px,.7fr) minmax(320px,1.3fr); gap:24px; align-items:start; > div { margin-top:0; } @media(max-width:760px){grid-template-columns:1fr; gap:20px;}`;
+export const twoColumnFields = css`display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:20px; > div { margin-top:0; } @media(max-width:680px){grid-template-columns:1fr; gap:20px;}`;
 export const addressInputRow = css`display:grid; grid-template-columns:minmax(0,1fr) auto; gap:9px; @media(max-width:520px){grid-template-columns:1fr;}`;
 export const addressSearchButton = css`
   min-width:104px; min-height:48px; padding:0 16px; border:1px solid var(--moa-primary); border-radius:11px;
@@ -104,7 +104,7 @@ export const DateContainer = css`
 export const DateBox = css`
   width:min(100%,320px);
   height:48px;
-  text-align: center;
+  text-align: left;
   border:1px solid var(--moa-line-strong); border-radius:11px; padding:0 13px;
 `;
 

@@ -1,18 +1,26 @@
 import { css } from "@emotion/react";
-import { field, chip } from "../../../styles/theme";
-export const totalContainer = css`width:100%;padding:clamp(20px,3vw,32px);display:flex;flex-direction:column;gap:24px;background:white;border:1px solid var(--moa-line);border-radius:20px;header p{color:var(--moa-primary-dark);font-size:11px;font-weight:800;letter-spacing:.1em;}header h1{font-size:26px;letter-spacing:-.04em;margin:8px 0;}header span{color:var(--moa-muted);font-size:14px;line-height:1.7;}img{max-width:100%;object-fit:cover;border-radius:14px;}`;
-export const Container = css`display:flex;flex-direction:column;gap:8px;`;
-export const AllBox = css`display:flex;flex-wrap:wrap;gap:8px;`;
-export const buttonBox = css`display:flex;gap:8px;flex-wrap:wrap;`;
-export const TitleInput = css`${field};min-height:48px;padding:12px 14px;resize:vertical;`;
-export const ContentBox = css`${TitleInput};min-height:180px;line-height:1.8;`;
-export const bottomBox = css`display:flex;gap:12px;align-items:end;`;
-export const DateContainer = css`display:flex;`;
-export const DateBox = css`${field};width:min(100%,320px);`;
-export const Tab = css`${chip};min-width:96px;font-size:14px;cursor:pointer;`;
-export const activeTab = css`${Tab};background:var(--moa-primary);border-color:var(--moa-primary);color:white;`;
-export const rowFieldBox = css`display:flex;flex-direction:column;gap:8px;min-width:0;flex:1;`;
-export const labelBox = css`display:flex;gap:8px;`;
-export const genderBox = buttonBox;
-export const label = css`font-size:14px;font-weight:750;margin:0 0 10px;color:var(--moa-ink);`;
-export const MoveButton = css`min-height:44px;min-width:112px;padding:0 20px;border:0;border-radius:11px;background:var(--moa-primary);color:white;font-size:15px;font-weight:750;cursor:pointer;&:last-child{background:var(--moa-danger-soft);color:var(--moa-danger);border:1px solid var(--moa-danger-line);}`;
+import { field } from "../../../styles/theme";
+
+export {
+  formSection,
+  sectionDescription,
+  fieldGroup,
+  twoColumnFields,
+  addressInputRow,
+  addressSearchButton,
+  AllBox,
+  Tab,
+  activeTab,
+  previewImage,
+  fileButton,
+  hiddenFileInput,
+  imageUpload,
+  uploadAction,
+} from "../../group-detail/create-group/style";
+
+export const totalContainer = css`width:100%;display:flex;flex-direction:column;gap:18px;`;
+export const intro = css`margin:0 0 2px;h2{margin:0 0 6px;font-size:22px;letter-spacing:-.04em;color:var(--moa-ink);}p{margin:0;color:var(--moa-muted);font-size:14px;line-height:1.7;}`;
+export const input = css`${field};`;
+export const textarea = css`${field};padding:12px 14px;line-height:1.7;resize:vertical;min-height:120px;`;
+export const dateInput = css`${field};width:min(100%,260px);`;
+export const actionBar = css`display:flex;justify-content:flex-end;gap:10px;padding-top:4px;@media(max-width:520px){flex-direction:column-reverse;>*{width:100%;}}`;

@@ -1,11 +1,16 @@
 /** @jsxImportSource @emotion/react */
 import * as s from "./style";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import groupImage from "../../../images/group.jpg";
 import { GROUP_UPDATE_API, MANGE_HOME_IMG_API } from "../../../apis";
+import { Button, DangerZone } from "../../../components/ui";
+
+const POSTCODE_SCRIPT_ID = "kakao-postcode-script";
+const POSTCODE_SCRIPT_SRC = "https://t1.kakaocdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
+const CATEGORIES = ["취미", "문화_예술", "스포츠_운동", "푸드_맛집", "자기계발", "힐링", "연애", "여행"];
 
 interface GroupUpdateProps {
   parseToNumGroupId: number;
@@ -15,6 +20,8 @@ const GroupUpdate: React.FC<GroupUpdateProps> = ({ parseToNumGroupId }) => {
   const [cookies] = useCookies(["token"]);
   const navigate = useNavigate();
   const [groupImg, setGroupImg] = useState<any>(null);
+  const [saving, setSaving] = useState(false);
+  const saveLock = useRef(false);
   const [previewUrl, setPreviewUrl] = useState<any>(null);
   const [formData, setFormData] = useState({
     groupType: "",
@@ -38,6 +45,28 @@ const GroupUpdate: React.FC<GroupUpdateProps> = ({ parseToNumGroupId }) => {
       if (previewUrl) URL.revokeObjectURL(previewUrl);
     };
   }, [previewUrl]);
+
+  useEffect(() => {
+    if (window.kakao?.Postcode || document.getElementById(POSTCODE_SCRIPT_ID)) return;
+    const script = document.createElement("script");
+    script.id = POSTCODE_SCRIPT_ID;
+    script.src = POSTCODE_SCRIPT_SRC;
+    script.async = true;
+    document.head.appendChild(script);
+  }, []);
+
+  const handleAddressSearch = () => {
+    if (!window.kakao?.Postcode) {
+      alert("주소 검색 서비스를 불러오는 중입니다. 잠시 후 다시 시도해주세요.");
+      return;
+    }
+    new window.kakao.Postcode({
+      oncomplete: (data) => {
+        const selected = data.userSelectedType === "R" ? data.roadAddress : data.jibunAddress;
+        setFormData((prev) => ({ ...prev, groupAddress: selected }));
+      },
+    }).open();
+  };
 
   const handleInputChange = (field: string, value: any) => {
     setFormData({
@@ -109,6 +138,9 @@ const GroupUpdate: React.FC<GroupUpdateProps> = ({ parseToNumGroupId }) => {
   };
 
   const handleUpdateGroup = async () => {
+    if (saveLock.current) return;
+    saveLock.current = true;
+    setSaving(true);
     const putGroupRequestDto = new FormData();
     Object.entries(formData).forEach(([key, value]) => {
       if (value) {
@@ -163,11 +195,18 @@ const GroupUpdate: React.FC<GroupUpdateProps> = ({ parseToNumGroupId }) => {
       } catch (error) {
         console.error(error);
         alert("수정에 실패했습니다. 다시 시도해주세요.");
+      } finally {
+        saveLock.current = false;
+        setSaving(false);
       }
+    } else {
+      saveLock.current = false;
+      setSaving(false);
     }
   };
 
   const handleDeleteGroup = async () => {
+    if (!window.confirm("모임을 삭제하면 되돌릴 수 없어요. 정말 삭제할까요?")) return;
     const url = `${GROUP_UPDATE_API}${parseToNumGroupId}`;
     if (cookies.token) {
       try {
@@ -186,166 +225,118 @@ const GroupUpdate: React.FC<GroupUpdateProps> = ({ parseToNumGroupId }) => {
     }
   };
 
+  const isOffline = formData.meetingType === "오프라인";
+
   return (
     <div css={s.totalContainer}>
-      <header><p>MEETING SETTINGS</p><h1>모임 정보 수정</h1><span>멤버에게 보이는 모임 정보를 최신 상태로 관리하세요.</span></header>
-      <div css={s.Container}>
-        <strong>
-          <label css={s.label} htmlFor="update-title">제목</label>
-        </strong>
-        <textarea
-          id="update-title"
-          placeholder="모임 제목 설정"
-          css={s.TitleInput}
-          value={formData.groupTitle}
-          onChange={(e) => handleInputChange("groupTitle", e.target.value)}
-        />
+      <div css={s.intro}>
+        <h2>모임 정보 수정</h2>
+        <p>멤버에게 보이는 모임 정보를 최신 상태로 관리하세요.</p>
       </div>
-      <div css={s.Container}>
-        <strong>
-          <h2 css={s.label}>준비물</h2>
-        </strong>
-        <textarea
-          placeholder="준비물"
-          css={s.TitleInput}
-          value={formData.groupSupplies}
-          onChange={(e) => handleInputChange("groupSupplies", e.target.value)}
-          />
-      </div>
-      <div css={s.Container}>
-        <strong>
-          <h2 css={s.label}>내용</h2>
-        </strong>
-        <textarea
-          placeholder="모임 내용"
-          css={s.ContentBox}
-          value={formData.groupContent}
-          onChange={(e) => handleInputChange("groupContent", e.target.value)}
-        />
-      </div>
-      <div css={s.Container}>
-        <strong>
-          <h2 css={s.label}>모임 날짜</h2>
-        </strong>
-        <input
-          type="date"
-          css={s.DateBox}
-          value={formData.groupDate || ""}
-          onChange={(e) => handleInputChange("groupDate", e.target.value)}
-        />
-      </div>
-      <div>
-        <strong>
-        <h2 css={s.label}>모임 유형</h2>
-      </strong>
-      <div css={s.buttonBox}>
-        <button
-          css={formData.groupType === "단기모임" ? s.activeTab : s.Tab}
-          value="단기모임"
-          onClick={() => handleInputChange("groupType", "단기모임")}
-        >
-          단기 모임
-        </button>
-        <button
-          css={formData.groupType === "정기모임" ? s.activeTab : s.Tab}
-          value="정기모임"
-          onClick={() => handleInputChange("groupType", "정기모임")}
-        >
-          정기 모임
-        </button>
-      </div>
-      </div>
-      <div css={s.Container}>
-        <h2 css={s.label}>모임 카테고리</h2>{" "}
-        <div css={s.AllBox}>
-          {[
-            "취미",
-            "문화_예술",
-            "스포츠_운동",
-            "푸드_맛집",
-            "자기계발",
-            "힐링",
-            "연애",
-            "여행",
-          ].map((category) => (
-            <button
-              key={category}
-              css={formData.groupCategory === category ? s.activeTab : s.Tab}
-              onClick={() => handleInputChange("groupCategory", category)}
-            >
-              {category}
-            </button>
-          ))}
+
+      <section css={s.formSection} aria-labelledby="update-basic-title">
+        <h2 id="update-basic-title">기본 정보</h2>
+        <p css={s.sectionDescription}>모임을 소개하는 제목과 설명이에요.</p>
+        <div css={s.fieldGroup}>
+          <label htmlFor="update-title">제목</label>
+          <input id="update-title" type="text" css={s.input} placeholder="모임 제목" value={formData.groupTitle} onChange={(e) => handleInputChange("groupTitle", e.target.value)} />
         </div>
-      </div>
-      <div css={s.Container}>
-        <strong>
-          <h2 css={s.label}>만남 타입</h2>
-        </strong>
-        <div css={s.buttonBox}>
-          <button
-            css={formData.meetingType === "온라인" ? s.activeTab : s.Tab}
-            value="온라인"
-            onClick={() => handleInputChange("meetingType", "온라인")}
-          >
-            온라인
-          </button>
-          <button
-            css={formData.meetingType === "오프라인" ? s.activeTab : s.Tab}
-            value="오프라인"
-            onClick={() => handleInputChange("meetingType", "오프라인")}
-          >
-            오프라인
-          </button>
+        <div css={s.fieldGroup}>
+          <label htmlFor="update-content">내용</label>
+          <textarea id="update-content" css={s.textarea} placeholder="모임 소개" value={formData.groupContent} onChange={(e) => handleInputChange("groupContent", e.target.value)} />
         </div>
-      </div>
-      <div css={s.Container}>
-        <strong>
-          <h2 css={s.label}>모임 주소</h2>
-        </strong>
-        <textarea
-          css={s.TitleInput}
-          placeholder="모임 주소"
-          value={formData.groupAddress}
-          onChange={(e) => handleInputChange("groupAddress", e.target.value)}
-        />
-      </div>
-      <div css={s.Container}>
-        <strong>
-          <h2 css={s.label}>질문</h2>
-        </strong>
-        <textarea
-          css={s.TitleInput}
-          placeholder="모임가입시 질문"
-          value={formData.groupQuestion}
-          onChange={(e) => handleInputChange("groupQuestion", e.target.value)}
-        />
-      </div>
-      <div>
-        <strong>
-          <h2 css={s.label}>모임사진</h2>
-        </strong>
-        <div css={s.Container}>
-          <img
-            src={previewUrl || groupImage}
-            alt="미리보기"
-            style={{ width: "400px", height: "200px" }}
-          />
-        </div>
-        <div>
-          <input type="file" id="groupImg" onChange={handleFileChange} />
-        </div>
-        <div css={s.Container}>
-          <div css={s.buttonBox}>
-            <button css={s.MoveButton} onClick={handleUpdateGroup}>
-              수정
-            </button>
-            <button css={s.MoveButton} onClick={handleDeleteGroup}>
-              삭제
-            </button>
+        <div css={s.twoColumnFields}>
+          <div css={s.fieldGroup}>
+            <label htmlFor="update-supplies">준비물</label>
+            <input id="update-supplies" type="text" css={s.input} placeholder="모임에 필요한 준비물" value={formData.groupSupplies} onChange={(e) => handleInputChange("groupSupplies", e.target.value)} />
+          </div>
+          <div css={s.fieldGroup}>
+            <label htmlFor="update-question">가입 질문</label>
+            <input id="update-question" type="text" css={s.input} placeholder="가입 신청자에게 물어볼 질문" value={formData.groupQuestion} onChange={(e) => handleInputChange("groupQuestion", e.target.value)} />
           </div>
         </div>
+      </section>
+
+      <section css={s.formSection} aria-labelledby="update-kind-title">
+        <h2 id="update-kind-title">모임 분류</h2>
+        <p css={s.sectionDescription}>운영 방식과 관심 주제를 선택해주세요.</p>
+        <div css={s.fieldGroup}>
+          <h4>모임 유형</h4>
+          <div css={s.AllBox}>
+            {["단기모임", "정기모임"].map((type) => (
+              <button type="button" key={type} aria-pressed={formData.groupType === type} css={formData.groupType === type ? s.activeTab : s.Tab} onClick={() => handleInputChange("groupType", type)}>
+                {type === "단기모임" ? "단기 모임" : "정기 모임"}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div css={s.fieldGroup}>
+          <h4>모임 카테고리</h4>
+          <div css={s.AllBox}>
+            {CATEGORIES.map((category) => (
+              <button type="button" key={category} aria-pressed={formData.groupCategory === category} css={formData.groupCategory === category ? s.activeTab : s.Tab} onClick={() => handleInputChange("groupCategory", category)}>
+                {category}
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section css={s.formSection} aria-labelledby="update-place-title">
+        <h2 id="update-place-title">일정과 장소</h2>
+        <p css={s.sectionDescription}>진행 방식을 고르고 날짜와 만날 장소(또는 접속 링크)를 알려주세요.</p>
+        <div css={s.fieldGroup}>
+          <label htmlFor="update-date">모임 날짜</label>
+          <input id="update-date" type="date" css={s.dateInput} value={formData.groupDate || ""} onChange={(e) => handleInputChange("groupDate", e.target.value)} />
+        </div>
+        <div css={s.fieldGroup}>
+          <h4>진행 방식</h4>
+          <div css={s.AllBox}>
+            {["온라인", "오프라인"].map((type) => (
+              <button type="button" key={type} aria-pressed={formData.meetingType === type} css={formData.meetingType === type ? s.activeTab : s.Tab} onClick={() => handleInputChange("meetingType", type)}>
+                {type}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div css={s.fieldGroup}>
+          <label htmlFor="update-address">모임 주소</label>
+          <div css={s.addressInputRow}>
+            <input
+              id="update-address"
+              type="text"
+              css={s.input}
+              placeholder={isOffline ? "주소 찾기로 주소를 선택해주세요" : "온라인 접속 링크를 입력해주세요"}
+              value={formData.groupAddress}
+              onChange={(e) => handleInputChange("groupAddress", e.target.value)}
+            />
+            {isOffline && <button type="button" css={s.addressSearchButton} onClick={handleAddressSearch}>주소 찾기</button>}
+          </div>
+        </div>
+      </section>
+
+      <section css={s.formSection} aria-labelledby="update-image-title">
+        <h2 id="update-image-title">대표 이미지</h2>
+        <p css={s.sectionDescription}>모임의 분위기가 잘 드러나는 가로 이미지를 추천해요.</p>
+        <div css={s.imageUpload}>
+          <img src={previewUrl || groupImage} alt="대표 이미지 미리보기" css={s.previewImage} />
+          <div css={s.uploadAction}>
+            <label css={s.fileButton} htmlFor="groupImg">대표 이미지 선택</label>
+            <span>{groupImg ? groupImg.name : "JPG, PNG 등의 이미지 파일"}</span>
+            <input css={s.hiddenFileInput} type="file" id="groupImg" accept="image/*" onChange={handleFileChange} />
+          </div>
+        </div>
+      </section>
+
+      <div css={s.actionBar}>
+        <Button onClick={handleUpdateGroup} disabled={saving}>{saving ? "저장 중…" : "변경 사항 저장"}</Button>
       </div>
+
+      <DangerZone
+        title="모임 삭제"
+        description="모임과 관련된 정보가 모두 삭제되며 되돌릴 수 없어요."
+        actions={<Button variant="destructive" onClick={handleDeleteGroup}>모임 삭제</Button>}
+      />
     </div>
   );
 };
