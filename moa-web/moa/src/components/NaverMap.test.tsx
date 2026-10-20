@@ -1,6 +1,4 @@
-import { render, screen } from "@testing-library/react";
-import { readFileSync } from "fs";
-import path from "path";
+import { render, screen, waitFor } from "@testing-library/react";
 
 const previousApiKey = process.env.REACT_APP_NAVER_API;
 process.env.REACT_APP_NAVER_API = "test-key-not-a-secret";
@@ -11,30 +9,26 @@ afterAll(() => {
   else process.env.REACT_APP_NAVER_API = previousApiKey;
 });
 
-test("app HTML does not request the retired map SDK on page load", () => {
-  const html = readFileSync(path.join(process.cwd(), "public/index.html"), "utf8");
-  const page = new DOMParser().parseFromString(html, "text/html");
-  const mapScripts = Array.from(page.scripts).filter(script => /map\.naver\.com/.test(script.src));
-  expect(mapScripts).toHaveLength(0);
+test("loads the SDK with ncpKeyId and the geocoder submodule", () => {
+  const append = jest.spyOn(document.head, "appendChild");
+  render(<NaverMapComponent address="서울 마포구 월드컵로 1" />);
+  const script = append.mock.calls
+    .map(([node]) => node)
+    .find((node): node is HTMLScriptElement => node instanceof HTMLScriptElement);
+  expect(script?.src).toContain("oapi.map.naver.com/openapi/v3/maps.js");
+  expect(script?.src).toContain("ncpKeyId=test-key-not-a-secret");
+  expect(script?.src).toContain("submodules=geocoder");
+  expect(script?.src).not.toContain("ncpClientId");
+  expect(screen.getByText("서울 마포구 월드컵로 1")).toBeInTheDocument();
+  append.mockRestore();
 });
 
-test("location remains readable without geocoding or loading a map SDK", () => {
-  const geocode = jest.fn();
-  const previousNaver = window.naver;
-  window.naver = { maps: { Service: { geocode } } } as any;
-  const append = jest.spyOn(document.head, "appendChild");
-  try {
-    const { rerender } = render(<NaverMapComponent address="서울 마포구 월드컵로 1" />);
-    expect(geocode).not.toHaveBeenCalled();
-    expect(screen.getByText("서울 마포구 월드컵로 1")).toBeInTheDocument();
-    rerender(<NaverMapComponent address="부산 해운대구" />);
-    expect(screen.getByText("부산 해운대구")).toBeInTheDocument();
-    expect(geocode).not.toHaveBeenCalled();
-    expect(append.mock.calls.some(([node]) => node instanceof HTMLScriptElement)).toBe(false);
-  } finally {
-    window.naver = previousNaver;
-    append.mockRestore();
-  }
+test("shows a readable fallback when the SDK fails to load", async () => {
+  render(<NaverMapComponent address="부산 해운대구" />);
+  const script = document.getElementById("naver-maps-sdk") as HTMLScriptElement;
+  script.onerror?.(new Event("error"));
+  await waitFor(() => expect(screen.getByText(/지도를 불러오지 못했어요/)).toBeInTheDocument());
+  expect(screen.getByText("부산 해운대구")).toBeInTheDocument();
 });
 
 test("missing location has an understandable fallback", () => {
