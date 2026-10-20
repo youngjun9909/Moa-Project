@@ -11,6 +11,6 @@ RUN ./gradlew --no-daemon bootJar -x test
 FROM eclipse-temurin:17-jre
 WORKDIR /app
 COPY --from=build /app/build/libs/*-SNAPSHOT.jar app.jar
-ENV JAVA_TOOL_OPTIONS="-Xmx320m -XX:+UseSerialGC -XX:MaxMetaspaceSize=128m"
+ENV JAVA_TOOL_OPTIONS="-Xmx320m -XX:+UseSerialGC -XX:MaxMetaspaceSize=128m -XX:TieredStopAtLevel=1"
 EXPOSE 6060
 ENTRYPOINT ["java", "-jar", "app.jar"]
