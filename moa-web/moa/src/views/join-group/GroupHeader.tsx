@@ -12,6 +12,7 @@ import {
 import { LuVote, LuDoorOpen, LuCopy } from "react-icons/lu";
 import { AiOutlineHome } from "react-icons/ai";
 import { PiUserList } from "react-icons/pi";
+import { FRONTEND_URL } from "../../constants";
 import VoteComponent from "../../components/vote-component/VoteComponent";
 import GroupMainPage from "./join-main/GroupMainPage";
 import UserListPage from "./user-list/UserListPage";
@@ -22,7 +23,7 @@ import {
   GROUP_HEADER_USER_LIST_DELETE_API,
 } from "../../apis";
 
-const baseUrl = "http://localhost:3000/meeting-group/";
+const baseUrl = `${FRONTEND_URL}/meeting-group/`;
 
 export default function GroupHeader() {
   const [groupInfo, setGroupInfo] = useState<MeetingGroup>();

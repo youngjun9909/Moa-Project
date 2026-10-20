@@ -1,5 +1,5 @@
 // DB 저장 주소
-import { REQUEST_URL } from "../constants";
+import { FRONTEND_URL, REQUEST_URL } from "../constants";
 
 export const emp = '';
 
@@ -37,6 +37,7 @@ export const Find_USERID_GET_API = `${REQUEST_URL}/api/v1/mails/verification/use
 
 //SignIn
 export const SIGN_IN_API = `${REQUEST_URL}/api/v1/auth/signin`;
+export const OAUTH_EXCHANGE_API = `${REQUEST_URL}/api/v1/auth/oauth-exchange`;
 export const SIGN_IN_SNS_API = `${REQUEST_URL}/api/v1/auth/sns-sign-in/`
 
 //SignUp
@@ -76,7 +77,7 @@ export const USER_LIST_PAGE_GET_API = `${REQUEST_URL}/api/v1/user-list/`;
 export const USER_LIST_PAGE_IMG_API = `${REQUEST_URL}/image/`;
 
 //GroupHeader
-export const GROUP_HEADER_BASE_URL_API = `http://localhost:3000/meeting-group/`;
+export const GROUP_HEADER_BASE_URL_API = `${FRONTEND_URL}/meeting-group/`;
 export const GROUP_HEADER_GET_API = `${REQUEST_URL}/api/v1/auth/meeting-group/`;
 export const GROUP_HEADER_EXIST_VOTE_GET_API = `${REQUEST_URL}/api/v1/votes/exists-vote/`;
 export const GROUP_HEADER_EXIST_GET_API = `${REQUEST_URL}/api/v1/meeting-group/exists/`;

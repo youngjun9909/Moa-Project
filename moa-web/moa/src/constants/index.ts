@@ -1,4 +1,6 @@
-export const REQUEST_URL = "http://localhost:6060";
+export const REQUEST_URL = process.env.REACT_APP_API_URL ?? "http://localhost:6060";
+export const FRONTEND_URL =
+  process.env.REACT_APP_FRONTEND_URL ?? window.location.origin;
 
 //& 테이블 경로 상수 선언
 export const WEB_MAIN = "/";
