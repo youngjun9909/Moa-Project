@@ -1,6 +1,7 @@
 package com.korit.moa.moa.config;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -13,6 +14,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 
 @Configuration
+// With Supabase storage, /image/** is served by ImageRedirectController instead.
+@ConditionalOnProperty(name = "app.storage.type", havingValue = "local", matchIfMissing = true)
 public class WebMvcConfig implements WebMvcConfigurer {
 
     @Value("${root.path:./image/}")
