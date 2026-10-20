@@ -26,8 +26,11 @@ public class FindUserIdMailServiceImplement implements FindUserIdMailService {
     private final JwtProvider jwtProvider;
     private final UserRepository userRepository;
 
+    @Value("${app.frontend-url}")
+    private String frontendUrl;
+
     @Value("${spring.mail.username}")
-    private static String senderEmail;
+    private String senderEmail;
 
     @Override
     public MimeMessage createMail(String mail, String token) throws MessagingException {
@@ -38,7 +41,7 @@ public class FindUserIdMailServiceImplement implements FindUserIdMailService {
 
         String body = "";
         body += "<h2> 이메일 인증 링크 입니다.</h2>";
-        body += "<a href=\"http://localhost:3000/findUserId/verify-find-userId?token="
+        body += "<a href=\"" + frontendUrl + "/findUserId/verify-find-userId?token="
                 + token + "\">여기를 클릭해 인중해주세요.</a>";
         body += "<p>이용해주셔서 감사합니다.</p>";
 

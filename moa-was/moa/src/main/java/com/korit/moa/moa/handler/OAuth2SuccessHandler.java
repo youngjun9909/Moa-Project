@@ -3,11 +3,13 @@ package com.korit.moa.moa.handler;
 import com.korit.moa.moa.common.object.CustomOAuth2User;
 import com.korit.moa.moa.entity.user.User;
 import com.korit.moa.moa.provider.JwtProvider;
+import com.korit.moa.moa.provider.OAuthLoginCodeStore;
 import com.korit.moa.moa.repository.UserRepository;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -22,6 +24,10 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
     private final JwtProvider jwtProvider;
     private final UserRepository userRepository;
+    private final OAuthLoginCodeStore loginCodeStore;
+
+    @Value("${app.frontend-url}")
+    private String frontendUrl;
 
     @Override
     public void onAuthenticationSuccess(
@@ -40,14 +46,15 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
             String accessToken = jwtProvider.generateJwtToken(customOAuth2User.getName(), user.getNickName(),user.getProfileImage());
             int expirTime = jwtProvider.getExpiration();
-            response.sendRedirect("http://localhost:3000/sns-success?accessToken=" + accessToken + "&expiration= + " + expirTime);
+            String code = loginCodeStore.issue(accessToken, expirTime);
+            response.sendRedirect(frontendUrl + "/sns-success?code=" + code);
         }
         else {
             String snsId = (String) attributes.get("snsId");
             String joinPath = (String) attributes.get("joinPath");
             System.out.println("snsId: " + snsId);
             System.out.println("joinPath: " + joinPath);
-            response.sendRedirect("http://localhost:3000/auth?snsId=" + snsId + "&joinPath=" + joinPath);
+            response.sendRedirect(frontendUrl + "/auth?snsId=" + snsId + "&joinPath=" + joinPath);
         }
 
     }

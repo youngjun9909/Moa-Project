@@ -5,6 +5,7 @@ import com.korit.moa.moa.entity.user.Region;
 import com.korit.moa.moa.entity.user.User;
 import com.korit.moa.moa.entity.user.UserHobbies;
 import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.util.Date;
@@ -16,6 +17,7 @@ public class SignInResponseDto {
 
     private String userId;
 
+    @JsonIgnore
     private String password;
 
     private Date userBirthDate;
@@ -38,7 +40,6 @@ public class SignInResponseDto {
 
     public SignInResponseDto(User user, String token, int exprTime) {
         this.userId = user.getUserId();
-        this.password = user.getPassword();
         this.userBirthDate = user.getUserBirthDate();
         this.userGender = user.getUserGender();
         this.userName = user.getUserName();

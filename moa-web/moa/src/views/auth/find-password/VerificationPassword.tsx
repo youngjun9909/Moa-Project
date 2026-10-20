@@ -8,6 +8,9 @@ import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { RESET_PASSWORD_PUT_API } from "../../../apis";
 
+const PASSWORD_RULE = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_])[a-zA-Z\d\W_]{8,16}$/;
+const PASSWORD_RULE_TEXT = "비밀번호는 영문, 숫자, 특수문자를 모두 포함해 8~16자로 입력해주세요.";
+
 type ResetPassword = {
   newPassword: string;
   confirmPassword: string;
@@ -21,6 +24,8 @@ export default function VerifyToken() {
 
   const [isPasswordMatch, setIsPasswordMatch] = useState<boolean>(true);
   const [isPasswordSuccess, setIsPasswordSuccess] = useState<boolean>(false);
+  const [errorText, setErrorText] = useState<string>("");
+  const [submitting, setSubmitting] = useState<boolean>(false);
 
   const location = useLocation();
 
@@ -47,6 +52,15 @@ export default function VerifyToken() {
     if (e instanceof KeyboardEvent && e.key !== 'Enter') return;
       e.preventDefault();
 
+    if (submitting) return;
+    setErrorText("");
+
+    if (!PASSWORD_RULE.test(resetData.newPassword)) {
+      setIsPasswordMatch(true);
+      setErrorText(PASSWORD_RULE_TEXT);
+      return;
+    }
+
     if (resetData.newPassword !== resetData.confirmPassword) {
       setIsPasswordMatch(false);
       return;
@@ -54,6 +68,12 @@ export default function VerifyToken() {
       setIsPasswordMatch(true);
     }
 
+    if (!cookies.PasswordResetToken) {
+      setErrorText("인증 링크가 만료되었어요. 비밀번호 찾기를 다시 진행해주세요.");
+      return;
+    }
+
+    setSubmitting(true);
     try {
       await axios.put(RESET_PASSWORD_PUT_API, {
           newPassword: resetData.newPassword,
@@ -77,8 +97,17 @@ export default function VerifyToken() {
     } catch (error) {
       console.error(error);
       setIsPasswordSuccess(false);
+      const status = (error as { response?: { status?: number } }).response?.status;
+      setErrorText(
+        status === 401
+          ? "인증 링크가 만료되었어요. 비밀번호 찾기를 다시 진행해주세요."
+          : status === 400
+          ? PASSWORD_RULE_TEXT
+          : "비밀번호를 변경하지 못했어요. 잠시 후 다시 시도해주세요."
+      );
+    } finally {
+      setSubmitting(false);
     }
-    
   }
 
   return (
@@ -91,7 +120,7 @@ export default function VerifyToken() {
           <>
             <div css={s.mainBox2}>
               <h1>새 비밀번호 설정</h1>
-              <p css={s.description}>안전한 새 비밀번호를 입력해주세요.</p>
+              <p css={s.description}>안전한 새 비밀번호를 입력해주세요. 영문, 숫자, 특수문자를 모두 포함해 8~16자여야 해요.</p>
               <label css={s.fieldLabel} htmlFor="new-password">새 비밀번호</label>
               <input
                 id="new-password"
@@ -114,10 +143,13 @@ export default function VerifyToken() {
                 onChange={handleInputChange}
                 css={s.bottomInput}
               />
-              <div aria-live="polite">{!isPasswordMatch ? <p css={s.errorMessage}>비밀번호가 일치하지 않습니다.</p> : <></>}</div>
+              <div aria-live="polite">
+                {!isPasswordMatch && <p css={s.errorMessage}>비밀번호가 일치하지 않습니다.</p>}
+                {errorText && <p css={s.errorMessage} role="alert">{errorText}</p>}
+              </div>
             </div>
             <div css={s.bottomBox}>
-              <button onClick={handleResetPassword}>비밀번호 변경</button>
+              <button onClick={handleResetPassword} disabled={submitting}>{submitting ? "변경 중…" : "비밀번호 변경"}</button>
             </div>
           </>
         ) : (

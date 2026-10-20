@@ -25,8 +25,11 @@ public class MailServiceImplement implements MailService {
     private final JwtProvider jwtProvider;
     private final UserRepository userRepository;
 
+    @Value("${app.frontend-url}")
+    private String frontendUrl;
+
     @Value("${spring.mail.username}")
-    private static String senderEmail;
+    private String senderEmail;
 
     @Override
     public MimeMessage createMail(String mail, String token) throws MessagingException {
@@ -37,7 +40,7 @@ public class MailServiceImplement implements MailService {
 
         String body = "";
         body += "<h2> 이메일 인증 링크 입니다 </h2>";
-        body += "<a href=\"http://localhost:3000/findPassword/verify?token=" + token + "\"> 여기를 클릭하여 인증 </a>";
+        body += "<a href=\"" + frontendUrl + "/findPassword/verify?token=" + token + "\"> 여기를 클릭하여 인증 </a>";
         body += "<p> 감사합니다. <p>";
 
         message.setText(body, "UTF-8", "html");
@@ -54,11 +57,11 @@ public class MailServiceImplement implements MailService {
                     dto.getUserName()
             );
 
-            User user = userResult.get();
-
             if (userResult.isEmpty()) {
                 return ResponseDto.setFailed(ResponseMessage.NOT_EXIST_DATA);
             }
+
+            User user = userResult.get();
 
             String token = jwtProvider.generateEmailValidToken(dto.getUserId());
 
